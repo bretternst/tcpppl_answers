@@ -28,7 +28,7 @@ public:
 
 MemberA::MemberA()
 {
-	x = ClassB::x.x;
+	x = ClassB::x.x; // <- not yet constructed!
 	std::cout << "MemberA constructor called!" << std::endl;
 }
 
@@ -51,6 +51,6 @@ MemberB ClassB::x;
 // This is why dependencies between static fields should be avoided
 // without careful attention to the order in which they are run.
 // In general: don't do it!
-void main()
+int main()
 {
 }
