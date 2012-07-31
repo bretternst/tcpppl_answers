@@ -11,7 +11,7 @@ using std::string;
 
 // The exercise description is a little unclear whether it is strings or
 // words should be counted. That is, should whitespace be taken into account
-// or should simple strings be matched?
+// or should simple words be matched?
 //
 // I chose to match simple strings, which consequently can overlap. For
 // example, if the string "bcd" and "def" are being searched, they would
@@ -73,14 +73,14 @@ int main(int argc, char* argv[])
 	{
 		cout << "Usage:" << endl;
 		cout << "<executable> <fileName> <word> [<word>,...]" << endl;
-		exit(-1);
-	}
+        return 1;
+    }
 
 	ifstream input(argv[1]);
 	if(!input.is_open())
 	{
 		cerr << "Could not open file: " << argv[1] << endl;
-		exit(-1);
+        return 1;
 	}
 
 	vector<string> strings;

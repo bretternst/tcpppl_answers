@@ -7,47 +7,47 @@ class Entry
 	char* name;
 	Type t;
 	union {
-		char* s;
+		const char* s;
 		int i;
 	};
 public:
 	class InvalidOperationError {};
 
 	Entry() {}
-	Entry(char* s) : t(S), s(s) {}
+	Entry(const char* s) : t(S), s(s) {}
 	Entry(int i) : t(I), i(i) {}
-	char* GetS()
+	const char* get_s()
 	{
 		if(t != S)
 			throw InvalidOperationError();
 		return s;
 	}
-	int GetI()
+	int get_i()
 	{
 		if(t != I)
 			throw InvalidOperationError();
 		return i;
 	}
-	void Set(char* str)
+	void set(const char* str)
 	{
 		t = S;
 		s = str;
 	}
-	void Set(int num)
+	void set(int num)
 	{
 		t = I;
 		i = num;
 	}
 };
 
-void main()
+int main()
 {
 	using namespace std;
 
 	Entry e1("hello");
 	Entry e2(4);
-	cout << e1.GetS() << endl;
-	cout << e2.GetI() << endl;
-	e2.Set("goodbye");
-	cout << e2.GetS() << endl;
+	cout << e1.get_s() << endl;
+	cout << e2.get_i() << endl;
+	e2.set("goodbye");
+	cout << e2.get_s() << endl;
 }

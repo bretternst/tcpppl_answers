@@ -10,7 +10,7 @@ guaranteed to be valid, and since anybody can modify the individual parts of the
 there is no guarantee that they would not become invalid even if they were initially valid.
 
 This extremely simplistic exercises demonstrates many of the benefits of OOP by demonstrating
-the pitfalls of NOT using OOP. 
+the pitfalls of NOT using encapsulation and data hiding. 
 
 
 The solution for 7.10(19) is better encapsulated. It has private vs. public fields, which
