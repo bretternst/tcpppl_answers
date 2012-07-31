@@ -15,8 +15,7 @@ class SymbolTable
 }
 
 SymEntry could represent any of the things listed above, so we'll create a base class with the common
-data. It will store a value indicating which type of element is reprsented. It might also be possible to
-use RTTI (run-time type information) to make this determination, but for now we'll keep it simple.
+data. It will store a value indicating which type of element is reprsented.
 
 class SymEntry
 {

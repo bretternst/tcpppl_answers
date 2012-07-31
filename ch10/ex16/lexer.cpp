@@ -1,12 +1,12 @@
 #include <queue>
 
-#include "Error.hpp"
-#include "Math.hpp"
-#include "Lexer.hpp"
+#include "error.h"
+#include "math.h"
+#include "lexer.h"
 
 using namespace Exercises;
 
-Token Lexer::ReadToken()
+Token Lexer::read_token()
 {
 	char ch = 0;
 
@@ -48,30 +48,30 @@ Token Lexer::ReadToken()
 	}
 }
 
-Token Lexer::Pop()
+Token Lexer::pop()
 {
-	if(queue.size() > 0)
+	if(m_queue.size() > 0)
 	{
-		Token tok = queue.front();
-		queue.pop();
+		Token tok = m_queue.front();
+		m_queue.pop();
 		return tok;
 	}
 	else
 	{
-		return ReadToken();
+		return read_token();
 	}
 }
 
-Token Lexer::Peek()
+Token Lexer::peek()
 {
-	if(queue.size() < 1)
+	if(m_queue.size() < 1)
 	{
-		queue.push(ReadToken());
+		m_queue.push(read_token());
 	}
-	return queue.front();
+	return m_queue.front();
 }
 
-void Lexer::Push(Token tok)
+void Lexer::push(Token tok)
 {
-	queue.push(tok);
+	m_queue.push(tok);
 }

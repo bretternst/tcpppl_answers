@@ -53,8 +53,8 @@ namespace Exercises
 		map<string, SymEntry*> items;
 
 	public:
-		bool Exists(const string& name) const { return items.count(name) > 0; }
-		void Set(string& name, SymEntry* symbol) { items[name] = symbol; }
+		bool exists(const string& name) const { return items.count(name) > 0; }
+		void set(string& name, SymEntry* symbol) { items[name] = symbol; }
 		SymEntry* Get(string& name) { return items[name]; }
 		~SymbolTable() { for(map<string,SymEntry*>::const_iterator i = items.begin(); i != items.end(); i++)delete i->second; }
 	};
@@ -66,7 +66,7 @@ namespace Exercises
 	//
 	// I could also have had some kind of "state table" that the caller passes in, but
 	// it seemed cleaner simply to modify Expr to evaluate a number of expressions in
-	// sequence. Therefore, Eval now takes a string.
+	// sequence. Therefore, eval now takes a string.
 	//
 	// I have also streamlined some of the internals, so that tokens are not stored as
 	// a field, and passed using a queue instead of a linked list.
@@ -77,7 +77,7 @@ namespace Exercises
 	{
 		SymbolTable symTab;
 
-		Token getToken(istream* input);
+		Token get_token(istream* input);
 		int prim(TokenQueue& tq);
 		int term(TokenQueue& tq);
 		int expr(TokenQueue& tq);
@@ -86,17 +86,17 @@ namespace Exercises
 		class SyntaxError
 		{
 		public:
-			char* message;
+			const char* message;
 			SyntaxError() : message("") {}
-			SyntaxError(char* message) : message(message) {}
+			SyntaxError(const char* message) : message(message) {}
 		};
 
 		class DivideByZeroError {};
 
-		int Eval(string expr);
+		int eval(string expr);
 	};
 
-	int Expr::Eval(string expr)
+	int Expr::eval(string expr)
 	{
 		istringstream istr(expr);
 
@@ -104,7 +104,7 @@ namespace Exercises
 
 		for(;;)
 		{
-			Token tok = getToken(&istr);
+			Token tok = get_token(&istr);
 			tq.push(tok);
 			if(tok.token == Token::END) break;
 		}
@@ -114,7 +114,7 @@ namespace Exercises
 		return i;
 	}
 
-	Token Expr::getToken(istream* input)
+	Token Expr::get_token(istream* input)
 	{
 		char ch = 0;
 		do
@@ -178,15 +178,15 @@ namespace Exercises
 				{
 					tq.pop();
 					int i = expr(tq);
-					if(symTab.Exists(tok.symbol) && symTab.Get(tok.symbol)->type != SymEntry::VAR)
+					if(symTab.exists(tok.symbol) && symTab.Get(tok.symbol)->type != SymEntry::VAR)
 						throw SyntaxError("symbol is not a variable");
 
-					symTab.Set(tok.symbol, new SymVariable(i));
+					symTab.set(tok.symbol, new SymVariable(i));
 					return i;
 				}
 				else
 				{
-					if(!symTab.Exists(tok.symbol)) 
+					if(!symTab.exists(tok.symbol)) 
 						throw SyntaxError("symbol not found");
 
 					SymEntry* sym = symTab.Get(tok.symbol);
@@ -254,7 +254,7 @@ namespace Exercises
 }
 
 
-void main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	using namespace std;
 	using namespace Exercises;
@@ -266,7 +266,7 @@ void main(int argc, char* argv[])
 		cin >> s;
 		try
 		{
-			cout << e.Eval(s) << endl;
+			cout << e.eval(s) << endl;
 		}	
 		catch(Expr::SyntaxError err)
 		{

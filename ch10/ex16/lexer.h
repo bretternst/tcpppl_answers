@@ -1,5 +1,5 @@
-#ifndef LEXER_HPP
-#define LEXER_HPP
+#ifndef LEXER_H
+#define LEXER_H
 
 #include <string>
 #include <iostream>
@@ -33,17 +33,17 @@ namespace Exercises
 	{
 		istream* input;
 		int line;
-		queue<Token> queue;
+		queue<Token> m_queue;
 
-		Token ReadToken();
+		Token read_token();
 
 	public:
 		Lexer(istream* input) : input(input), line(1) {}
-		Token Pop();
-		Token Peek();
-		void Push(Token);
-		int GetLine() { return line; }
-		void Clear() { queue = std::queue<Token>(); }
+		Token pop();
+		Token peek();
+		void push(Token);
+		int get_line() { return line; }
+		void clear() { m_queue = std::queue<Token>(); }
 	};
 }
 

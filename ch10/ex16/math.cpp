@@ -1,6 +1,6 @@
 #include <limits>
-#include "Math.hpp"
-#include "Error.hpp"
+#include "math.h"
+#include "error.h"
 
 double Math::check(double x)
 {

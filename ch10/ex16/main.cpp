@@ -1,7 +1,8 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include "Parser.hpp"
+#include <cstring>
+#include "parser.h"
 
 using namespace std;
 using namespace Exercises;
@@ -9,7 +10,7 @@ using namespace Exercises;
 void interactive()
 {
 	Calculator calc;
-	calc.Eval(&cin, &cout, &cerr);
+	calc.eval(&cin, &cout, &cerr);
 }
 
 string fromString(string expr)
@@ -17,7 +18,7 @@ string fromString(string expr)
 	istringstream istr(expr);
 	ostringstream ostr;
 	Calculator calc;
-	calc.Eval(&istr, &ostr, &ostr);
+	calc.eval(&istr, &ostr, &ostr);
 	ostr.flush();
 	return ostr.str();
 }
@@ -31,7 +32,7 @@ void fromFile(char* inFileName, char* outFileName)
 		out = new ofstream(outFileName);
 	}
 	Calculator calc;
-	calc.Eval(&infile, out, out);
+	calc.eval(&infile, out, out);
 	if (out != &cout) delete out;
 }
 

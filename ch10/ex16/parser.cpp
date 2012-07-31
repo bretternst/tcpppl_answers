@@ -2,8 +2,8 @@
 #include <string>
 #include <sstream>
 #include <cmath>
-#include "Parser.hpp"
-#include "Math.hpp"
+#include "parser.h"
+#include "math.h"
 
 using std::map;
 using std::string;
@@ -12,13 +12,13 @@ using namespace Exercises;
 
 Calculator::Calculator()
 {
-	RegisterVariable("pi", 3.1415926535897932385);
-	RegisterVariable("e", 2.72818284590452354);
+	register_variable("pi", 3.1415926535897932385);
+	register_variable("e", 2.72818284590452354);
 
-	RegisterFunction("sqrt", sqrt);
-	RegisterFunction("log", log);
-	RegisterFunction("sin", sin);
-	RegisterFunction("cos", cos);
+	register_function("sqrt", sqrt);
+	register_function("log", log);
+	register_function("sin", sin);
+	register_function("cos", cos);
 }
 
 ParamList Calculator::parameters(Lexer& lexer)
@@ -26,7 +26,7 @@ ParamList Calculator::parameters(Lexer& lexer)
 	ParamList list;
 	for(;;)
 	{
-		Token tok = lexer.Pop();
+		Token tok = lexer.pop();
 		switch(tok.Type)
 		{
 		case Token::NAME:
@@ -47,14 +47,14 @@ ArgumentList Calculator::arguments(Lexer& lexer)
 	ArgumentList list;
 	for(;;)
 	{
-		Token tok = lexer.Peek();
+		Token tok = lexer.peek();
 		switch(tok.Type)
 		{
 		case Token::RP:
-			lexer.Pop();
+			lexer.pop();
 			return list;
 		case Token::SEP:
-			lexer.Pop();
+			lexer.pop();
 			continue;
 		case Token::PRINT:
 		case Token::END:
@@ -101,10 +101,10 @@ double Calculator::call(Lexer& lexer, string name)
 				if(tok.Type == Token::NAME && argMap.count(tok.StringValue) > 0)
 				{
 					Token val(Token::NUMBER, argMap[tok.StringValue]);
-					lexer.Push(val);
+					lexer.push(val);
 				}
 				else
-					lexer.Push(*i);
+					lexer.push(*i);
 			}
 			return expr(lexer);
 		}
@@ -115,49 +115,49 @@ double Calculator::call(Lexer& lexer, string name)
 
 double Calculator::func(Lexer& lexer)
 {
-	Token tok = lexer.Pop();
+	Token tok = lexer.pop();
 	if(tok.Type != Token::NAME) throw Error::SyntaxError("function name expected");
 	string name = tok.StringValue;
-	tok = lexer.Pop();
+	tok = lexer.pop();
 	if(tok.Type != Token::LP) throw Error::SyntaxError("'(' expected");
 	ParamList params = parameters(lexer);
-	tok = lexer.Pop();
+	tok = lexer.pop();
 	if(tok.Type != Token::ASSIGN) throw Error::SyntaxError("'=' expected");
 
 	TokenList tokens;
-	tok = lexer.Pop();
+	tok = lexer.pop();
 	while(tok.Type != Token::PRINT && tok.Type != Token::END)
 	{
 		tokens.push_back(tok);
-		tok = lexer.Pop();
+		tok = lexer.pop();
 	}
-	lexer.Push(tok);
+	lexer.push(tok);
 	symbols.Set(name, new SymUsrFunc(tokens,params));
 	return 0;
 }
 
 double Calculator::prim(Lexer& lexer)
 {
-	Token tok = lexer.Peek();
+	Token tok = lexer.peek();
 	switch(tok.Type)
 	{
 	case Token::FUNC:
-		lexer.Pop();
+		lexer.pop();
 		return func(lexer);
 	case Token::NUMBER:
-		return lexer.Pop().NumberValue;
+		return lexer.pop().NumberValue;
 	case Token::NAME:
 		{
 			string name = tok.StringValue;
-			lexer.Pop();
-			if(lexer.Peek().Type == Token::LP)
+			lexer.pop();
+			if(lexer.peek().Type == Token::LP)
 			{
-				lexer.Pop();
+				lexer.pop();
 				return call(lexer, name);
 			}
-			else if (lexer.Peek().Type == Token::ASSIGN)
+			else if (lexer.peek().Type == Token::ASSIGN)
 			{
-				lexer.Pop();
+				lexer.pop();
 				SymEntry* sym = symbols.Get(name);
 				if(sym && sym->type != SymEntry::VAR) throw Error::SyntaxError("not a variable: "+name);
 				double v = expr(lexer);
@@ -174,13 +174,13 @@ double Calculator::prim(Lexer& lexer)
 			}
 		}
 	case Token::MINUS:
-		lexer.Pop();
+		lexer.pop();
 		return -prim(lexer);
 	case Token::LP:
 		{
-			lexer.Pop();
+			lexer.pop();
 			double e = expr(lexer);
-			Token tok = lexer.Pop();
+			Token tok = lexer.pop();
 			if(tok.Type != Token::RP) throw Error::SyntaxError("')' expected");
 			return e;
 		}
@@ -195,14 +195,14 @@ double Calculator::term(Lexer& lexer)
 
 	for(;;)
 	{
-		switch(lexer.Peek().Type)
+		switch(lexer.peek().Type)
 		{
 		case Token::MUL:
-			lexer.Pop();
+			lexer.pop();
 			left = Math::mul(left, prim(lexer));
 			break;
 		case Token::DIV:
-			lexer.Pop();
+			lexer.pop();
 			if(double d = prim(lexer))
 			{
 				left = Math::div(left, d);
@@ -221,14 +221,14 @@ double Calculator::expr(Lexer& lexer)
 
 	for(;;)
 	{
-		switch(lexer.Peek().Type)
+		switch(lexer.peek().Type)
 		{
 		case Token::PLUS:
-			lexer.Pop();
+			lexer.pop();
 			left = Math::plus(left, term(lexer));
 			break;
 		case Token::MINUS:
-			lexer.Pop();
+			lexer.pop();
 			left = Math::minus(left, term(lexer));
 			break;
 		default:
@@ -237,23 +237,24 @@ double Calculator::expr(Lexer& lexer)
 	}
 }
 
-void Calculator::RegisterFunction(const string& name, FunctionPtr func)
+void Calculator::register_function(const string& name, FunctionPtr func)
 {
 	symbols.Set(name, new SymSysFunc(func));
 }
 
-void Calculator::RegisterVariable(const string& name, double value)
+void Calculator::register_variable(const string& name, double value)
 {
 	symbols.Set(name, new SymVariable(value));
 }
 
-double Calculator::Eval(const string& expression)
+double Calculator::eval(const string& expression)
 {
 	std::istringstream istr(expression);
-	return expr(Lexer(&istr));
+    Lexer lex(&istr);
+	return expr(lex);
 }
 
-int Calculator::Eval(istream* input, ostream* output, ostream* error)
+int Calculator::eval(istream* input, ostream* output, ostream* error)
 {
 	using std::endl;
 
@@ -265,11 +266,11 @@ int Calculator::Eval(istream* input, ostream* output, ostream* error)
 	{
 		try
 		{
-			Token tok = lexer.Peek();
+			Token tok = lexer.peek();
 			if(tok.Type == Token::END) break;
-			if(tok.Type == Token::PRINT) { lexer.Pop(); continue; }
+			if(tok.Type == Token::PRINT) { lexer.pop(); continue; }
 			double v = expr(lexer);
-			tok = lexer.Peek();
+			tok = lexer.peek();
 			if(tok.Type != Token::END && tok.Type != Token::PRINT)
 				throw Error::SyntaxError("unexpected token");
 			*output << v << endl;
@@ -279,7 +280,7 @@ int Calculator::Eval(istream* input, ostream* output, ostream* error)
 			numErrors++;
 			if(error)
 			{
-				*error << "Line " << lexer.GetLine() << ": attempt to divide by zero" << endl;
+				*error << "Line " << lexer.get_line() << ": attempt to divide by zero" << endl;
 			}
 		}
 		catch(Error::SyntaxError err)
@@ -287,18 +288,18 @@ int Calculator::Eval(istream* input, ostream* output, ostream* error)
 			numErrors++;
 			if(error)
 			{
-				*error << "Line " << lexer.GetLine() << ": syntax error: " << err.errMsg << endl;
+				*error << "Line " << lexer.get_line() << ": syntax error: " << err.errMsg << endl;
 			}
-			if(lexer.Peek().Type != Token::PRINT)
+			if(lexer.peek().Type != Token::PRINT)
 				Error::skip(input);
-			lexer.Clear();
+			lexer.clear();
 		}
 		catch(Error::OverflowError)
 		{
 			numErrors++;
 			if(error)
 			{
-				*error << "Line " << lexer.GetLine() << ": overflow" << endl;
+				*error << "Line " << lexer.get_line() << ": overflow" << endl;
 			}
 		}
 	}

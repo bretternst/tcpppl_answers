@@ -1,12 +1,12 @@
-#ifndef PARSER_HPP
-#define PARSER_HPP
+#ifndef PARSER_H
+#define PARSER_H
 
 #include <string>
 #include <vector>
 #include <map>
 #include <iostream>
-#include "Error.hpp"
-#include "Lexer.hpp"
+#include "error.h"
+#include "lexer.h"
 
 namespace Exercises
 {
@@ -79,10 +79,10 @@ namespace Exercises
 
 	public:
 		Calculator();
-		void RegisterFunction(const string& name, FunctionPtr func);
-		void RegisterVariable(const string& name, double value);
-		double Eval(const string& expr);
-		int Eval(istream* input, ostream* output, ostream* error);
+		void register_function(const string& name, FunctionPtr func);
+		void register_variable(const string& name, double value);
+		double eval(const string& expr);
+		int eval(istream* input, ostream* output, ostream* error);
 	};
 }
 

@@ -1,4 +1,4 @@
-#include "Error.hpp"
+#include "error.h"
 
 void Error::skip(istream* input)
 {

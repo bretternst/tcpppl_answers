@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 
+// comment out to use the linked list implementation
 #define USE_VECTOR
 
 namespace Exercises
@@ -13,16 +14,16 @@ namespace Exercises
 		vector<char> queue;
 
 	public:
-		void Enqueue(char ch);
-		char Dequeue();
+		void enqueue(char ch);
+		char dequeue();
 	};
 
-	void CharQueue::Enqueue(char ch)
+	void CharQueue::enqueue(char ch)
 	{
 		queue.insert(queue.begin(), ch);
 	}
 
-	char CharQueue::Dequeue()
+	char CharQueue::dequeue()
 	{
 		if(queue.begin() == queue.end()) return 0;
 		char ch = *(queue.end()-1);
@@ -47,8 +48,8 @@ namespace Exercises
 		CharQueue() : head(new Node(0)), tail(head) {}
 		~CharQueue();
 
-		void Enqueue(char ch);
-		char Dequeue();
+		void enqueue(char ch);
+		char dequeue();
 	};
 
 	CharQueue::~CharQueue()
@@ -63,13 +64,13 @@ namespace Exercises
 		}
 	}
 
-	void CharQueue::Enqueue(char ch)
+	void CharQueue::enqueue(char ch)
 	{
 		tail->next = new Node(ch);
 		tail = tail->next;
 	}
 
-	char CharQueue::Dequeue()
+	char CharQueue::dequeue()
 	{
 		Node* n = head->next;
 		if(!n) return 0;
@@ -81,7 +82,7 @@ namespace Exercises
 #endif
 }
 
-void main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	using namespace std;
 	using namespace Exercises;
@@ -89,17 +90,17 @@ void main(int argc, char* argv[])
 	if(argc != 2)
 	{
 		cerr << "invalid number of arguments" << endl;
-		exit(-1);
+		return 1;
 	}
 
 	CharQueue queue;
 	char* p = argv[1];
 	while(*p)
 	{
-		queue.Enqueue(*(p++));
+		queue.enqueue(*(p++));
 	}
 
 	char ch;
-	while(ch = queue.Dequeue())
+	while(ch = queue.dequeue())
 		cout << ch << endl;
 }
