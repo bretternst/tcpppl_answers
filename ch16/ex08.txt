@@ -1,0 +1,80 @@
+Forward iteration:
+This type of iterator is relatively simple. In fact, the iterators supplied
+in the previous example would do the trick; they are capable of moving forward
+only with the next() function. By default, this would be the most basic level
+of iteration supported.
+
+Backward iteration:
+This functionality could be provided by inheriting from Itor and simply
+reversing the logic provided by the standard forward iterator. So you'd have
+a separate class, perhaps called Vector_reverse_itor<T>. This may be tricky,
+however, with list classes because each next() operation would have the same
+performance penalty as an indexer. Therefore, the list would need to be modified
+to be a doubly linked list.
+
+Iteration over a container that might change:
+The exercise is not clear on the requirement of the iterator in this case, so I
+will assume that it means an iterator must continue pointing to the same value
+even if that value has changed positions. In this case, iterators get this for
+free when using List<T> because they refer to the Link itself. The link can be
+re-ordered, but the iterator "moves with" the link. Unfortunately, this means
+that if an element has already been iterated over, and the current element is
+then moved before that element, the element in question would be iterated over
+twice. Without having more clearly specified behavior, there's no "perfect" way
+to implement iterators over containers that can be changed.
+
+In terms of a random-access collection like a vector, the iterator would need
+some way to track changes in the elements. If a vector got sorted, a position
+change would need to be reflected in the iterator, possibly by having the container
+notify it somehow. It would be extremely difficult to capture all such cases.
+Elements are not simply swapped, but could be reassigned at will.
+
+If we relax the requirement a bit and say that iterators only need to retain their
+ordinal position and not the value they point to, then it becomes easier for vectors.
+Simply keep the index the same, but throw an exception if the iterator now points
+to an index past the end (if the vector shrunk). Unfortunately, this once again makes
+operations expensive for lists. To implement the "cheapest" form of this kind of
+iterator in each case would mean that iterators would behave differently when the
+containers are changed. That makes this a terrible idea.
+
+In summary, this is too vague a question to answer without knowing what the behavior
+should be for this kind of iterator. It seems that no matter how you slice it, the
+behavior will be expensive for some kind of container and thus cannot be considered
+as a common iterator type.
+
+Iterators over an immutable container:
+This one's easy; just make the iterator return const references to the elements (assuming
+that in this case immutable means the order of elements can't change and the elements
+themselves also can't change). Dereferencing an iterator would return a reference to an
+element that cannot be modified or assigned to, just like std::vector<T>::const_iterator.
+
+Iterator organization:
+All these iterators have some things in common: forward iteration and access to the current
+element. Therefore, for this particular model, something like the following could work:
+Immutable_iterator -> forward_iterator
+                   |-> backward_iterator
+                   |-> iterator -> changing_iterator
+                   |-> immutable_backward_iterator
+
+That sure is a lot of iterators to implement for every container type. Chaos!
+
+Most read-only algorithms could be supported by immutable_forward_iterator and read/write
+algorithms supported by iterator and possibly changing_iterator. I suspect that if
+changing_iterator existed, it would only be suitable for certain container types and therefore
+not implemented for them all.
+
+The approach's only strength is that it might solidify some work in base classes of the
+various iterators, but the downside is that there would always be a virtual function call
+overhead and containers would be restricted to using a specific set of iterator base classes.
+Containers are not free to implement iterators using whatever types are most appropriate
+(e.g. pointers for a vector).
+
+Some other iterators that users might like are perhaps iterators that skip certain kinds
+of elements, or return elements in a pattern (e.g. every fifth element). However, these
+behaviors can easily be programmed using simple algorithms and facilities provided by the
+standard library.
+
+Iterators could also be used in tree structures to return pre-order vs. post-order vs. 
+in-order elements - although these iterators would only be useful when the underlying 
+container is represented as a tree. They would not be universally usable like STL iterators.
+

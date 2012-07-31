@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ch12", "ch12.vcproj", "{060E3298-7C0A-4994-A23E-7CD3C713CA99}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsLib", "GraphicsLib\GraphicsLib.vcproj", "{C9EC982A-5364-4454-A5BF-96FDCD51DBB6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EventSimulator", "EventSimulator\EventSimulator.vcproj", "{924AE239-E15A-4987-ABE5-A59A23078E44}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{060E3298-7C0A-4994-A23E-7CD3C713CA99}.Debug|Win32.ActiveCfg = Debug|Win32
+		{060E3298-7C0A-4994-A23E-7CD3C713CA99}.Debug|Win32.Build.0 = Debug|Win32
+		{060E3298-7C0A-4994-A23E-7CD3C713CA99}.Release|Win32.ActiveCfg = Release|Win32
+		{060E3298-7C0A-4994-A23E-7CD3C713CA99}.Release|Win32.Build.0 = Release|Win32
+		{C9EC982A-5364-4454-A5BF-96FDCD51DBB6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C9EC982A-5364-4454-A5BF-96FDCD51DBB6}.Debug|Win32.Build.0 = Debug|Win32
+		{C9EC982A-5364-4454-A5BF-96FDCD51DBB6}.Release|Win32.ActiveCfg = Release|Win32
+		{C9EC982A-5364-4454-A5BF-96FDCD51DBB6}.Release|Win32.Build.0 = Release|Win32
+		{924AE239-E15A-4987-ABE5-A59A23078E44}.Debug|Win32.ActiveCfg = Debug|Win32
+		{924AE239-E15A-4987-ABE5-A59A23078E44}.Debug|Win32.Build.0 = Debug|Win32
+		{924AE239-E15A-4987-ABE5-A59A23078E44}.Release|Win32.ActiveCfg = Release|Win32
+		{924AE239-E15A-4987-ABE5-A59A23078E44}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

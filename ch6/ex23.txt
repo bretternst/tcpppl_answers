@@ -1,0 +1,2 @@
+There are many different style conventions for C++, here is one prominent one:
+http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml

@@ -1,0 +1,144 @@
+The following is the graphics library base Shape class that I created in chapter 12.
+I will compare its 
+
+	class Shape
+	{
+	public:
+		enum LineStyle { LINE_SOLID, LINE_DASHED, LINE_DOTTED };
+
+	private:
+		<omitted>
+		
+	protected:
+		<omitted>
+
+	public:
+		virtual void Draw(Surface&) const = 0;
+		virtual const Point N() const = 0;
+		virtual const Point S() const = 0;
+		virtual const Point W() const = 0;
+		virtual const Point E() const = 0;
+		virtual const Point NW() const = 0;
+		virtual const Point NE() const = 0;
+		virtual const Point SW() const = 0;
+		virtual const Point SE() const = 0;
+		virtual const Point C() const = 0;
+
+		Shape() : thickness(2), outline(LINE_SOLID), stroke(0xff000000), fill(0xffffffff) {}
+		int Thickness() const { return thickness; }
+		void Thickness(int t) { thickness = t; }
+		LineStyle Outline() const { return outline; }
+		void Outline(LineStyle style) { outline = style; }
+		int Stroke() const { return stroke; }
+		void Stroke(int s) { stroke = s; }
+		int Fill() const { return fill; }
+		void Fill(int f) { fill = f; }
+
+		Line Connect(Shape* s) const;
+	};
+	
+In contrast, here is a base class from one of the only truly object-oriented 2d graphics
+libraries I could find, TOOGL ( http://www.cs.duke.edu/csed/tapestry/graphics.html ).
+
+	class Shape
+	{
+		public:
+		  Shape();
+		  virtual ~Shape() {} 
+	        
+		  virtual void draw(AnimatedCanvas& c)     = 0; 
+		  virtual void setLocation(const Point& p) = 0;
+		  virtual Shape * clone();
+	      
+		  int            id  ()        const {return myCount;}
+		  virtual Point  getLocation() const = 0; 
+		  bool           contains(const Point& p) const;
+		  bool           overlaps(const Shape& s) const;
+	      
+		  virtual Box    bbox()        const = 0;
+		  virtual string tostring()    const;
+	        
+		protected:
+			<omitted>
+	};
+	
+My class provides N, W, S, E, ... functions for determining the bounds of the object. I believe it
+would have been more concise to just provide a function that retrieves a bounding rectangle like
+the TOOGL implementation's bbox function. Additionally, in my library, it is not possible to change
+the position of a shape, whereas TOOGL provides getLocation and setLocation. Both implementations
+provide a draw function. My implementation provides a simple connect() function that draws a line,
+per the exercise, but TOOGL provides the more sophisticated contains() and overlaps() functions that
+allow a shape to determine if a point or shape is in contact with or overlaps the shape.
+
+However, in turn, my library provides some facilities that are more advanced than TOOGL's. Each shape
+has a fill and stroke color as well as a stroke line type (dashed, dotted, solid). TOOGL does not
+provide these facilities in the base class.
+
+Here's my shot at a database base class. Basically, it would provide facilities to serialize the fields
+of a class into name/value pairs for easy storage in a database. Either the names could correspond to
+columns and an object would be a single row, or the names could correspond to key values and objects
+would be stored in several rows. This would be up to some database controller class.
+
+	class DatabaseObject
+	{
+	public:
+		typedef std::map<std::string,DatabaseField> FieldSet;
+		
+		// should be called on construction for each field in the derived class.
+		void RegisterField<class T>(std::string name, T* ptr);
+		virtual FieldSet SaveData();
+		virtual void LoadData(FieldSet& f);
+	};
+	
+We could probably also use static methods and have the fields get registered once per class instead of once per
+instance. Something like the field offsets and sizes would have to be stored in order. However, for the purposes
+of this exercise, I'll take this simpler approach.
+
+I looked at another library called Chuchusoft Serialization Library (http://www.chuchusoft.com/products.html).
+This library doesn't require the use of base classes, but does require you to write some code for classes that
+aren't directly supported. The code consists of methods that would allow the << and >> operator of a stream to
+serialize fields (in the same order). This is a more straightforward way to do it, but is geared more towards
+disk serialization and not databases.
+
+A graphical database object could look like this:
+
+	class Line : public Shape, public DatabaseObject
+	{
+		int x1, y1, x2, y2;
+	public:
+		Line()
+		{
+			RegisterField<int>("x1",&x1);
+			...
+		}
+	};
+	
+Without multiple inheritance, some kind of external helper class would need to be used:
+
+	class DatabaseHelper
+	{
+		static std::map<void* o,FieldSet> objectFields;
+		static void RegisterObject<T>(T* o);
+		static void RegisterField<T>(void* o, T* field);
+		static void Load<T>(T* o); // work of actually saving/loading could be done directly here
+		static void Save<T>(T* o);
+	};
+
+And the individual objects would call into it:
+
+	class Line : public Shape
+	{
+		int x1, y1, x2, y2;
+		Line()
+		{
+			RegisterObjct<Shape>(this);
+			RegisterField<int>(&x1);
+			...
+		}
+	};
+
+Personally, I think either way is equally good. I'm not a big fan of multiple inheritance except
+for using abstract classes for interfaces (like in C#). However, there are obvious merits for both
+approaches. Using multiple inheritance allows the object to own more of its db serialization and even
+override serialization behavior in special cases. This could be particularly useful if there are
+pointers to other objects.

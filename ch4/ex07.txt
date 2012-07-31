@@ -1,0 +1,11 @@
+Standard:
+bool -> char -> short -> int -> long -> long long
+float -> double -> long double
+
+GCC x64:
+bool -> char -> short -> int -> long <-> long long
+float -> double -> long double
+
+Visual C++ (x86):
+bool -> char -> short -> int <-> long -> long long
+float -> double <-> long double

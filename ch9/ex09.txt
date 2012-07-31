@@ -1,0 +1,15 @@
+In the version of the DeskCalc that used error() instead of exceptions, all pieces
+of the calculator are defined in a single file. However, separate namespaces are
+used to represent the modules.
+
+
+
+<iostream> <string> <map> <cctype> <sstream> <queue> <cmath>
+                            ^
+----------------------------|-------------------------------
+dc.cpp                      |
+                            |
+               Error  <---------- Lexer
+                ^^------Parser-----^
+                |         ^
+                --------Driver

@@ -1,0 +1,13 @@
+The SetDefault function is a static member function of the Date class. It can be accessed in several ways:
+
+First, it can be accessed directly using the namespace and class name:
+Calendar::Date::SetDefault(2008, Calendar::Date::Month(1), 31);
+
+Second, it can be accessed with the assistance of a using directive:
+using namespace Calendar; --or-- using Calendar::Date;
+Date::SetDefault(2008, Date::Month(1), 31);
+
+Or it can be accessed from within the Date class; for example, it could
+be called from within the Date class--either from a static function, or an instance
+function. In this case, it can be called without any qualifying names:
+SetDefault(2008, Month(1), 31);

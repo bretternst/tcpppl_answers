@@ -1,0 +1,20 @@
+In this example, the Storable class actually has a field called store.
+However, since virtual inheritance is used, there is still only one base
+class. Therefore, there is only one vtable:
+
+Radio's layout looks like this:
+	Pointer to vtable (Transmitter::Storable)
+	Pointer to vtable (Receiver::Storable)
+	const char* store
+
+Radio's vtable would look like this:
+	vtable: (Storable)
+		Ptr to Radio::get_file()
+		Ptr to Radio::read()
+		Ptr to Radio::write()
+
+The method of invoking the virtual function is much simpler.
+
+1. Get the index for the Storable::read() function in the vtable.
+2. Get the pointer located at that index in the vtable.
+3. The pointer points to Radio::read(), so call it.

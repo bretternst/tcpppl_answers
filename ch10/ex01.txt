@@ -1,0 +1,22 @@
+The add_year function (10.2.2) has a bug whenever the date becomes invalid if the year is increased. This can occur
+if the existing date is February 29 on a leap year (e.g. Feb 29, 2004). Increasing the year by one makes
+the date Feb 29, 2005 which is invalid.
+
+When adding years, the day of the month needs to be checked to ensure that it is still valid, much like when
+months are added.
+
+The add_year function in (10.2.7) attempts to deal with this scenario, but still has a couple of issues. First,
+if the existing year is negaitve (e.g. -1 for 1 BC) then add 1 year, the function results in a year of 0. This is
+not valid. The function should check to see if the operation crosses the BC/AD boundary and adjust by one year
+as necessary.
+
+Secnod, setting the date to March 1 when the old date was Feb 29 on a leap year is not consistent with many
+implementations, both in their handling of years and their handling of months. For example, if the date is Mar 31 
+and one month is added, the resulting date should be Apr 30 (the excess should be truncated).
+
+It is an edge case where the month is changed in addition to the date. For better consistency, the date should be 
+changed to be Feb 28, not Mar 1 when a Feb 29 date is modified from a leap year to a non-leap year.
+
+One additional issue (although not really a bug) is the extra check of m == 2 to determine if the date is a leap day.
+This is unnecessary, since d == 29 means that the day is a leap day; it must be in February unless the invariant
+was broken.

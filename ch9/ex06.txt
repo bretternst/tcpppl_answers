@@ -1,0 +1,27 @@
+On Linux-based systems, dynamic linking is achieved through the use of .so
+(shared object) files, the *nix equivalent of DLL files on windows. The .so
+files may be used in one of two ways:
+
+1) The lib may be referenced during compilation and loaded at startup. This is
+the most common case, and it means that the linker is capable of verifying
+that the library is used appropriately (that the used functions exist
+and are called with appropriate parameters). When the program is executed, the
+.so is loaded into memory and called by the program.
+2) The lib may be dynamically loaded during execution. At compile-time, the
+linker is not aware of the lib and cannot enforce correctness of usage. A
+common example would be a plugin for a browser or a custom module for a web
+server.
+
+Dynamic or shared libraries should be built with the -fPIC GCC option, which
+indicates that position independent code should be emitted. This means that
+the library may be properly loaded at different locations in memory. Other
+flags are required as well; see documentation.
+
+When defining functions for export from a shared library, use the extern "C"
+designator. Consumers of the library will expect to call library functions
+using C calling conventions.
+
+The ld.so (or ld-linux.so) library is responsible for locating and loading
+shared libs. It searches a number of paths, typically defined in ld.so.conf
+and associated files. Search paths can also be added by using the environment
+variable LD_LIBRARY_PATH (colon separated).

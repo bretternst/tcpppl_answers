@@ -1,0 +1,32 @@
+There is both a point and a dot class because points are an abstract concept
+and dots are a concrete concept that uses a point to position itself. Just
+because a point is used in a shape doesn't necessarily mean that a dot will
+be drawn there (consider the NE corner of the bounds of a circle shape which 
+is a point at which no dot will be drawn). Dots also have properties that are
+associated with shapes that points do not have: for example, thickness.
+
+The second part of the question is: 
+Under which circumstances would it be a good idea to augment the Shape classes with concrete versions of key classes such as Line?
+
+I take this to mean: under what circumstances would you create new shape classes
+derived from Shape instead of just using existing objects to construct new shapes?
+
+I would tend to create classes whenever a new type of shape would commonly need to
+be expressed that doesn't already have a class. For example, a square class would not
+be terribly useful as it is easy to create a square using the Rect class (just make
+the sides of equal size). However, a triangle is a very common shape but cannot easily
+be created using an existing class--you would need to use three lines. So, a triangle
+is a good candidate for a new class.
+
+However, one could represent a triangle by a generic "polygon" class with only three
+connect points. In fact, rectangle could be re-designed to inherit from a polygon class
+along with triangle since they are both special cases of polygon. This is a design
+choice that many graphics libraries make.
+
+Some shapes would still not be polygons, such as lines and circles/ellipses. If I were
+to re-design the library I would have Line and Ellipse derive from Shape, and Polygon
+derive from Shape. Then, I would have rectangle, triangle, square, etc. derive from
+Polygon. It would be a judgment call on how many "convenience" classes to supply - 
+trapezoids, octagons, hexagons, etc.? Generally, I would say that the most common shapes
+should be supplied as a convenience and the user can use Polygon to construct the rest
+using an arbitrary number of points.

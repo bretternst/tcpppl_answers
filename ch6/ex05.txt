@@ -1,0 +1,13 @@
+Undefined:
+a[-1];
+a[i++] = i++;
+int i; i++;
+char *p = 0; *p;
+long x = -1; char ch = (char)x;
+
+Implementation specific:
+-1 << 2;
+sizeof(long long) > sizeof(long);
+sizeof(wchar_t);
+int s$;
+int x = numeric_limits<int>::max()+1

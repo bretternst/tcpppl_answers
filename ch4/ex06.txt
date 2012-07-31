@@ -1,0 +1,12 @@
+For GCC/G++, there is no documented limit for local or external variable
+names, but specific platforms may impose a limit. Allowed characters are
+consistent with the C++ standard, unless non-standard language extensions are
+enabled.
+
+For MSVC: Longest local variable name = 2048 significant chars, extra chars
+ignored. The mangled (compiled) name cannot be longer than 2048.  Longest
+external variable name = 2047 significant chars, extra chars ignored. Length
+can be decreased via compiler flag.  No char restrictions beyond standard C++
+restrictions.
+
+http://msdn.microsoft.com/en-us/library/565w213d(VS.71).aspx

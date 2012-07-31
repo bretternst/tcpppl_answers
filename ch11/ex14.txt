@@ -1,0 +1,23 @@
+‘‘Programs are meant to be read by humans, and only incidentally. for computers to execute.’’ 
+- Donald Knuth
+
+I gave my program from exercise 13 to a friend who took one look at it and groaned. He ultimately
+figured out what it did by pre-processing the macros away and then stepping through with a debugger.
+
+There are multiple levels of evil demonstrated by the previous exercise. First, macros should not be
+used unless there's a damned good reason. If you need constant values...use constants. Rarely do
+macros add anything worthwhile, even if they seem to simplify certain pieces of code. Of course,
+exercise 13 is an extreme example, but it's easy to get into a situation where other programmers have
+to search high and low to discover what your code is really doing.
+
+Operator overloading can be used to good effect, but should always be used appropriately. Defining
+mathematical symbols to do things that have nothing to do with their original meaning only creates
+confusion. For example, having the ++ operator of an iterator move forward one position (increment)
+makes sense. However, if the ++ operator were instead used to skip ahead 3 places or reset the
+iterator to the beginning, the reader would not only be misled, but would have to dig through your
+source to discover what was really happening.
+
+In summary:
+Don't use macros.
+Use operator overloads appropriately; don't change their meaning.
+Don't intentionally hide things or be too "clever." Write clear code.

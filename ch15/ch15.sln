@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ch15", "ch15.vcproj", "{91FF615D-4806-4A67-8983-F7D9533AAE14}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Othello", "Othello\Othello.vcproj", "{EA371E6E-7868-4C4E-ACEF-A6AA4FFC274B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91FF615D-4806-4A67-8983-F7D9533AAE14}.Debug|Win32.ActiveCfg = Debug|Win32
+		{91FF615D-4806-4A67-8983-F7D9533AAE14}.Debug|Win32.Build.0 = Debug|Win32
+		{91FF615D-4806-4A67-8983-F7D9533AAE14}.Release|Win32.ActiveCfg = Release|Win32
+		{91FF615D-4806-4A67-8983-F7D9533AAE14}.Release|Win32.Build.0 = Release|Win32
+		{EA371E6E-7868-4C4E-ACEF-A6AA4FFC274B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EA371E6E-7868-4C4E-ACEF-A6AA4FFC274B}.Debug|Win32.Build.0 = Debug|Win32
+		{EA371E6E-7868-4C4E-ACEF-A6AA4FFC274B}.Release|Win32.ActiveCfg = Release|Win32
+		{EA371E6E-7868-4C4E-ACEF-A6AA4FFC274B}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

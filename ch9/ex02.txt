@@ -1,0 +1,10 @@
+As noted in the previous answer, includes are located under /usr/include. Most
+of the include files on a GNU/Linux system are C includes; which can cover
+everything from Qt/GTK to X11 to openSSL (cryptography) and much more.
+
+The POSIX APIs are important on *nix-based systems. Those headers are included
+under /usr/include - e.g. /usr/include/unistd.h and /usr/include/pwd.h.
+
+A program using POSIX sockets would include:
+<sys/types.h> = /usr/include/x86_64-linux-gnu/sys/types.h
+<sys/socket.h> = /usr/include/x86_64-linux-gnu/sys/socket.h

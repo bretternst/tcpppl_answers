@@ -1,0 +1,49 @@
+I am looking at the Boost Date/Time library. Specifically, the boost::gregorian::date class.
+Boost provides many date/time facilties for a number of different date types, including:
+ - Gregorian
+ - Posix time (UNIX/POSIX-compatible)
+ - Local time (localized for time zones)
+ 
+ In addition, the Gregorian category has a number of utility classes to track things like
+ date intervals, and even iterator support. 
+ 
+ The Gregorian date class specifically supports the following kinds of operations:
+  - Construct a date from y/m/d. The order of the parameters is from most-significant
+    to least-significant, which I believe makes logical sense and doesn't tie it to a
+    specific local convention (e.g. m/d/y vs. d/m/y). I implemented my parameters in a
+    similar fashion.
+  - Convert dates to and from strings. The format is yyyy-mm-dd or yyyy/mm/dd. Different
+    orderings do not seem to be supported without the use of other utility classes.
+  - Static functions are exposed to get either the local date (based on your computer's timezone
+    settings) or the universal (UTC) date.
+  - Functions are exposed to retrieve the year/month/day portions, similar to exercise 2. These
+    appear to all return simple numbers, not members of a Month enum type or similar.
+  - Additionally, you can retrieve all at once in a year_month_day struct.
+  - A few nice utility functions are provided as well, including day_of_week, day_of_year, and
+    end_of_month.
+  - One interesting thing about a date object is that it can represent negative or positive infinity,
+    similar to a floating point number. There is also an analog to NaN (not_a_date_time). These
+    states could be useful for signifying different things to an application (e.g. positive infinity
+    could mean "repeat this task forever", negative infinity could mean "this event never took place"
+    and not_a_date_time could signify an invalid or missing date value. However, this might be confusing
+    to consumers of the class and could require additional checking. There are functions designed to
+    check for these states.
+  - Conversion to Julian dates is supported.
+  - A number of operators are overloaded, including stream I/O operators, equality and comparisons (which
+    could be confusing when using infinity values), +/- operators to add/subtract dates, as well as a -
+    operator to find the difference between two dates.
+  - Operators are also supported to add other units of time, such as months. There's no explicit
+    add_months function, the syntax is like this: d += months(5);. This is not as straightforward as
+    a simple function call.
+
+One criticism is that not all date operations are reversible. For example, using the Oracle style 
+"end-of-month" snapping, adding 1 month to 2008-1-30 results in 2008-2-29. Then, subtracting a month
+results in 2008-1-31. This is a problem with the arithmetic involving the months type, but month
+iterators are not affected. This inconsistency could lead to bugs if one is not familiar with the
+library.
+
+Overall, a very rich set of functionality is provided by this library, and the usage of its interface
+is very consistent with STL.
+
+More information can be found here.
+http://www.boost.org/doc/libs/1_36_0/doc/html/date_time/gregorian.html#date_time.gregorian.date_class

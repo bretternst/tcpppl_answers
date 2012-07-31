@@ -1,0 +1,126 @@
+I'll use the C language for this exercise and define a simplified symbol table and symbol table entry.
+There are different types of entries that could exist in a C symbol table:
+1. Built-in keywords
+2. A type name (scalar, enum, or struct), or typedef
+3. A variable name
+4. A constant name
+5. A function
+
+Each of these is identified by a string, so we'll use a simple map<string, SymEntry> structure to allow
+for efficient lookups:
+
+class SymbolTable
+{
+	map<string, SymEntry> entries;
+}
+
+SymEntry could represent any of the things listed above, so we'll create a base class with the common
+data. It will store a value indicating which type of element is reprsented. It might also be possible to
+use RTTI (run-time type information) to make this determination, but for now we'll keep it simple.
+
+class SymEntry
+{
+	enum SymType {
+		KEYWORD, TYPE, TYPEDEF, VAR, CONST, FUNC
+	};
+	SymType type;
+};
+
+class SymKeyword : SymEntry
+{
+	enum Keyword { // Not counting keywords used in type identifiers
+		AUTO, BREAK, CASE, CONST, CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM,
+		EXTERN, FLOAT, FOR, GOTO, IF, REGISTER, RETURN,
+		SIZEOF, STATIC, STRUCT, SWITCH, TYPDEF, UNION, VOLATILE,
+		WHILE
+	};
+	Keyword keyword;
+};
+
+class SymTypeScalar : SymEntry
+{
+	enum TypeKind {
+		SIGNED_CHAR, UNSIGNED_CHAR, SIGNED_INT, UNSIGNED_INT, FLOAT,
+		SIGNED_LONG, UNSIGNED_LONG, SIGNED_SHORT, UNSIGNED_SHORT, VOID
+	};
+	TypeKind kind;	
+};
+
+class SymTypeEnum : SymEntry
+{
+	map<string, int> values;
+}
+
+class SymTypeStruct : SymEntry
+{
+	// field name, and type name
+	map<string, SymType*> fields;
+}
+
+class SymTypeDef : SymEntry
+{
+	SymType* realType;
+};
+
+class SymVariable : SymEntry
+{
+	SymType* type;
+};
+
+class SymConstant : SymEntry
+{
+	SymType* type;
+	string expression;
+};
+
+class SymFunction : SymEntry
+{
+	SymType* returnType;
+	vector<string> paramNames;
+	vector<SymType*> paramTypes;	
+};
+
+I will be comparing my design with the design of the TCC compiler found here:
+http://bellard.org/tcc/
+
+This isn't really a fair comparison because this compiler is written in C, and doesn't take advantage
+of C++ facilities like I do in my design. The first thing I noticed is that the symbols are also retrieved
+from a table structure which is indexed off of token hashes. There seems to be a blending of tokens and symbols
+in the data classes in this implementation. 
+
+/* find an identifier */
+static inline Sym *sym_find(int v)
+{
+    v -= TOK_IDENT;
+    if ((unsigned)v >= (unsigned)(tok_ident - TOK_IDENT))
+        return NULL;
+    return table_ident[v]->sym_identifier;
+}
+
+The sym structures themselves look like this:
+/* token symbol management */
+typedef struct TokenSym {
+    struct TokenSym *hash_next;
+    struct Sym *sym_define; /* direct pointer to define */
+    struct Sym *sym_label; /* direct pointer to label */
+    struct Sym *sym_struct; /* direct pointer to structure */
+    struct Sym *sym_identifier; /* direct pointer to identifier */
+    int tok; /* token number */
+    int len;
+    char str[1];
+} TokenSym;
+
+/* symbol management */
+typedef struct Sym {
+    int v;    /* symbol token */
+    int r;    /* associated register */
+    int c;    /* associated number */
+    CType type;    /* associated type */
+    struct Sym *next; /* next related symbol */
+    struct Sym *prev; /* prev symbol in stack */
+    struct Sym *prev_tok; /* previous symbol for this token */
+} Sym;
+
+As we can see, the various different types of symbols are kind of "mashed together" into the same
+structures. I have to admit that I don't fully understand what's happening in this implementation.
+Much of it is grouped together into one enormous file.

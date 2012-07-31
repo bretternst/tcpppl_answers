@@ -1,0 +1,30 @@
+The Date class from 5.9(13) is extremely simplistic and is really just a container
+for year/month/day. The only facilities it provides are the ability to input and output
+dates, hard-coded to the console streams no less. One huge problem is that the format for
+the date output (yyyy-mm-dd) does not match the required format for input (yyyy mm dd).
+This is because parsing integers from cin, by default, treats the "-" as a unary minus.
+2008-12-31 becomes 2008,-12,-31. This is clearly not a valid date.
+
+However, there is no logic in this class to enforce any invariants. Dates are not
+guaranteed to be valid, and since anybody can modify the individual parts of the date,
+there is no guarantee that they would not become invalid even if they were initially valid.
+
+This extremely simplistic exercises demonstrates many of the benefits of OOP by demonstrating
+the pitfalls of NOT using OOP. 
+
+
+The solution for 7.10(19) is better encapsulated. It has private vs. public fields, which
+actually is cheating a little bit because those concepts were not yet introduced in the book.
+It has some of the same pitfalls as the previous solution. The date input/output formats
+are rigid. The dayOfWeek() function uses some voodoo magic I found on a web site somewhere
+(it may be faster than my subsequent implementation, but it is far more difficult to understand
+and, therefore, debug).
+
+The struct does not used a generalized set of algorithms for date arithmetic, so you can only
+add years and days -- this is per the exercise, but it could have been made to be more flexible
+at the time. The daysFromEpoch() function is extremely inefficient, as much better algorithms
+that run in O(1) time (see chapter 10 solution) are available.
+
+
+The date class from chapter 10 is far better in all aspects: encapsulation, performance,
+flexibility, and maintainability.

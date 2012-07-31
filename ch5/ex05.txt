@@ -1,0 +1,5 @@
+char str[] = "a short string";
+
+The length of the string itself, not including null termination, is 14, but
+the size of the array is 15 because the string is terminated with a 0
+character.

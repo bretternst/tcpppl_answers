@@ -1,0 +1,71 @@
+These are the C++ keywords I was able to think of without using a reference. I consider
+only standard C++ keywords (no extensions) and I do not include preprocessor directives.
+
+new (includes new[])
+delete (includes delete[])
+virtual
+static
+auto (not used until C++0x)
+class
+struct
+enum
+public
+private
+protected
+volatile
+explicit
+extern
+export
+template
+using (includes using namespace)
+namespace
+const
+this
+operator
+
+return
+if
+for
+else
+goto
+while
+do
+try
+catch
+case
+switch
+continue
+break
+
+typeid
+typename
+sizeof
+static_cast
+dynamic_cast
+reinterpret_cast
+const_cast
+
+signed
+unsigned
+void
+int
+float
+double
+long
+char
+bool
+true
+false
+short
+
+Here are the keywords I missed:
+friend
+default
+inline
+mutable
+register
+typedef
+union
+wchar_t
+
+You can tell which keywords I have used the least!

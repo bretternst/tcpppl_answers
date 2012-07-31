@@ -1,0 +1,3 @@
+If main() calls get_token in an error state, get_token can throw yet another
+exception when it tries to continue parsing input. The input is in an invalid
+state since its processing was abruptly stopped.

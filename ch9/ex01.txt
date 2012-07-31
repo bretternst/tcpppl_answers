@@ -1,0 +1,16 @@
+On Ubuntu server (Precise) include files are installed under /usr/include. C++
+standard include headers are under /usr/include/c++/4.6 (for GCC 4.6). Both
+paths are included in the header search list. Standard headers reside in the
+c++ folder, while C headers and non-standard headers reside anywhere under
+/usr/include.
+
+Example of standard headers:
+/usr/include/c++/4.6/cstdlib (C++ version)
+/usr/include/stdlib.h (C version)
+
+Platform specific headers are in a folder named after the "platform triple",
+e.g.:
+/usr/include/x86_64-linux-gnu/sys/time.h
+
+Non-standard example:
+/usr/include/libpng/png.h
