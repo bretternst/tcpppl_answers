@@ -17,7 +17,7 @@ namespace Exercises
 		T* array;
 		int size;
 
-		void Check() const;
+		void check() const;
 	public:
 		class InvalidPointerError{};
 
@@ -41,7 +41,7 @@ namespace Exercises
 	{
 	}
 
-	void Ptr_to_T::Check() const
+	void Ptr_to_T::check() const
 	{
 		if(p < array || p >= array + size)
 			throw InvalidPointerError();
@@ -82,13 +82,13 @@ namespace Exercises
 
 	T& Ptr_to_T::operator*() const
 	{
-		Check();
+		check();
 		return *p;
 	}
 
 	T* Ptr_to_T::operator->() const
 	{
-		Check();
+		check();
 		return p;
 	}
 }

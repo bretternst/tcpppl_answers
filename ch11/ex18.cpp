@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <cstdlib>
 
 namespace Exercises
 {
@@ -18,8 +19,8 @@ namespace Exercises
 		Vector(const Vector& other);
 		~Vector();
 
-		void Check(int idx) const;
-		void CheckSizeEquals(const Vector& other) const;
+		void check(int idx) const;
+		void check_size_equals(const Vector& other) const;
 		float& operator[](const int idx);
 		float operator[](const int idx) const;
 
@@ -32,7 +33,7 @@ namespace Exercises
 		Vector operator*(const Vector& x) const;
 		Vector operator/(const Vector& x) const;
 
-		Vector& Vector::operator=(const Vector& x);
+		Vector& operator=(const Vector& x);
 		Vector& operator+=(const float x);
 		Vector& operator-=(const float x);
 		Vector& operator*=(const float x);
@@ -73,13 +74,13 @@ namespace Exercises
 		delete[] items;
 	}
 
-	void Vector::Check(const int idx) const
+	void Vector::check(const int idx) const
 	{
 		if(idx < 0 || idx >= sz)
 			throw RangeError();
 	}
 
-	void Vector::CheckSizeEquals(const Vector& other) const
+	void Vector::check_size_equals(const Vector& other) const
 	{
 		if(sz != other.sz)
 			throw SizeError();
@@ -87,13 +88,13 @@ namespace Exercises
 
 	float& Vector::operator[](const int idx)
 	{
-		Check(idx);
+		check(idx);
 		return items[idx];
 	}
 
 	float Vector::operator[](const int idx) const
 	{
-		Check(idx);
+		check(idx);
 		return items[idx];
 	}
 
@@ -113,7 +114,7 @@ namespace Exercises
 
 	Vector& Vector::operator+=(const Vector& x)
 	{
-		CheckSizeEquals(x);
+		check_size_equals(x);
 		for(int i = 0; i < sz; i++)
 			items[i] += x.items[i];
 		return *this;
@@ -121,7 +122,7 @@ namespace Exercises
 
 	Vector& Vector::operator-=(const Vector& x)
 	{
-		CheckSizeEquals(x);
+		check_size_equals(x);
 		for(int i = 0; i < sz; i++)
 			items[i] -= x.items[i];
 		return *this;
@@ -129,7 +130,7 @@ namespace Exercises
 
 	Vector& Vector::operator*=(const Vector& x)
 	{
-		CheckSizeEquals(x);
+		check_size_equals(x);
 		for(int i = 0; i < sz; i++)
 			items[i] *= x.items[i];
 		return *this;
@@ -137,7 +138,7 @@ namespace Exercises
 
 	Vector& Vector::operator/=(const Vector& x)
 	{
-		CheckSizeEquals(x);
+		check_size_equals(x);
 		for(int i = 0; i < sz; i++)
 			items[i] /= x.items[i];
 		return *this;
@@ -279,8 +280,8 @@ namespace Exercises
 		Matrix(const Matrix& other);
 		~Matrix();
 
-		void Check(int idx) const;
-		void CheckSizeEquals(const Matrix& other) const;
+		void check(int idx) const;
+		void check_size_equals(const Matrix& other) const;
 		Vector& operator[](int idx);
 		const Vector& operator[](int idx) const;
 		Matrix& operator=(const Matrix& x);
@@ -294,7 +295,7 @@ namespace Exercises
 
 		friend std::ostream& operator<<(std::ostream& output, const Matrix& x);
 
-		void GaussianElimination(Vector& answers);
+		void gaussian_elimination(Vector& answers);
 	};
 
 	Matrix::Matrix(int rows, int columns) : rows(rows), columns(columns)
@@ -318,13 +319,13 @@ namespace Exercises
 		delete[] items;
 	}
 	
-	void Matrix::Check(int idx) const
+	void Matrix::check(int idx) const
 	{
 		if(idx < 0 || idx >= rows)
 			throw RangeError();
 	}
 
-	void Matrix::CheckSizeEquals(const Matrix& other) const
+	void Matrix::check_size_equals(const Matrix& other) const
 	{
 		if(rows != other.rows || columns != other.columns)
 			throw SizeError();
@@ -332,13 +333,13 @@ namespace Exercises
 
 	Vector& Matrix::operator[](int idx)
 	{
-		Check(idx);
+		check(idx);
 		return items[idx];
 	}
 
 	const Vector& Matrix::operator[](int idx) const
 	{
-		Check(idx);
+		check(idx);
 		return items[idx];
 	}
 
@@ -357,7 +358,7 @@ namespace Exercises
 
 	Matrix& Matrix::operator+=(const Matrix& x)
 	{
-		CheckSizeEquals(x);
+		check_size_equals(x);
 		for(int i = 0; i < rows; i++)
 			items[i] += x.items[i];
 		return *this;
@@ -435,7 +436,7 @@ namespace Exercises
 		return output;
 	}
 
-	void Matrix::GaussianElimination(Vector& answers)
+	void Matrix::gaussian_elimination(Vector& answers)
 	{
 		if(rows != columns)
 			throw SizeError();
@@ -537,7 +538,7 @@ int main()
 	cout << "m1 * 3:" << endl << m1 * 3;
 	cout << "m1 * m2:" << endl << m1 * m2;
 
-	m1.GaussianElimination(v3);
+	m1.gaussian_elimination(v3);
 	cout << "After Gaussian elimination:" << endl;
 	cout << m1;
 	cout << v3;
