@@ -1,7 +1,7 @@
-#include "Circle.h"
-#include "Surface.h"
+#include "circle.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	void FillRun(Surface& s, Color c, int y, int x1, int x2)
 	{

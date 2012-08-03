@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Window.h"
+#include "window.h"
 
 extern int NumberOfWindows;
 

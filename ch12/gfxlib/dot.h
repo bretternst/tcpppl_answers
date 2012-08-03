@@ -1,10 +1,10 @@
 #ifndef __DOT_H__
 #define __DOT_H__
 
-#include "Shape.h"
-#include "Surface.h"
+#include "shape.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	class Dot : public Shape
 	{

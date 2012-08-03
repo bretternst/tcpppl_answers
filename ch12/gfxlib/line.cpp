@@ -1,9 +1,9 @@
 #include <cmath>
 
-#include "Line.h"
-#include "Surface.h"
+#include "line.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	const double PI = 3.1415926;
 

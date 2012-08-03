@@ -3,11 +3,11 @@
 
 #include <string>
 
-#include "Shape.h"
-#include "Point.h"
-#include "Surface.h"
+#include "shape.h"
+#include "point.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	class Text : public Shape
 	{

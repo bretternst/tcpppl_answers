@@ -1,10 +1,10 @@
 #include <cmath>
 
-#include "Shape.h"
-#include "Surface.h"
-#include "Line.h"
+#include "shape.h"
+#include "surface.h"
+#include "line.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	bool Shape::Dash(int x) const
 	{

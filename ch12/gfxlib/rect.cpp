@@ -1,8 +1,8 @@
-#include "Rect.h"
-#include "Surface.h"
-#include "Line.h"
+#include "rect.h"
+#include "surface.h"
+#include "line.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	void Rect::Draw(Surface& s) const
 	{

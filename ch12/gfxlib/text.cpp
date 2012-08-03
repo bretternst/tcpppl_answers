@@ -1,7 +1,7 @@
-#include "Text.h"
-#include "Surface.h"
+#include "text.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	void Text::Draw(Surface& s) const
 	{

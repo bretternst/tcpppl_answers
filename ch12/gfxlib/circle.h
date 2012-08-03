@@ -1,10 +1,10 @@
 #ifndef __CIRCLE_H__
 #define __CIRCLE_H__
 
-#include "Shape.h"
-#include "Surface.h"
+#include "shape.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	class Circle : public Shape
 	{

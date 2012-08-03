@@ -1,11 +1,11 @@
 #ifndef __LINE_H__
 #define __LINE_H__
 
-#include "Shape.h"
-#include "Point.h"
-#include "Surface.h"
+#include "shape.h"
+#include "soint.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	class Line : public Shape
 	{

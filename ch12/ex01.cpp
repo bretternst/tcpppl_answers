@@ -24,7 +24,7 @@ namespace Exercises
 	};
 }
 
-void main()
+int main()
 {
 	using namespace std;
 	using namespace Exercises;

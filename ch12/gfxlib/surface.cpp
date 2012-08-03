@@ -2,10 +2,10 @@
 #include <windows.h>
 #include <gdiplus.h>
 
-#include "Surface.h"
-#include "Color.h"
+#include "surface.h"
+#include "color.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	using Gdiplus::REAL;
 	using Gdiplus::Graphics;

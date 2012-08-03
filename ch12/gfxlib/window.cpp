@@ -1,11 +1,11 @@
 #include <windows.h>
 #include <gdiplus.h>
 
-#include "Window.h"
-#include "Line.h"
-#include "Color.h"
+#include "window.h"
+#include "line.h"
+#include "color.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	using namespace Gdiplus;
 

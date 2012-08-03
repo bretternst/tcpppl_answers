@@ -6,11 +6,11 @@
 #include <vector>
 #include <map>
 
-#include "Point.h"
-#include "Shape.h"
-#include "Color.h"
+#include "point.h"
+#include "shape.h"
+#include "color.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	class Window
 	{

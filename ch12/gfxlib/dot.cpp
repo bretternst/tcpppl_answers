@@ -1,7 +1,7 @@
-#include "Dot.h"
-#include "Surface.h"
+#include "dot.h"
+#include "surface.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	void Dot::Draw(Surface& s) const
 	{

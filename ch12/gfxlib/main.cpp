@@ -1,8 +1,8 @@
 #include <windows.h>
 #include <gdiplus.h>
 
-#include "Tests.h"
-#include "Window.h"
+#include "tests.h"
+#include "window.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void OnPaint(HDC);
@@ -18,7 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd, 
 
 	wndClsEx.hInstance = hInstance;
 	wndClsEx.lpszClassName = "Canvas";
-	wndClsEx.lpfnWndProc = GraphicsLib::Window::WndProc;
+	wndClsEx.lpfnWndProc = gfxlib::Window::WndProc;
 	wndClsEx.style = 0;
 	wndClsEx.cbSize = sizeof(WNDCLASSEX);
 	wndClsEx.lpszMenuName = NULL;

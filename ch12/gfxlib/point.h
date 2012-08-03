@@ -1,7 +1,7 @@
 #ifndef __POINT_H__
 #define __POINT_H__
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	class Point
 	{

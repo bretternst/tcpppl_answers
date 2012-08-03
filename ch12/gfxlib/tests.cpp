@@ -1,14 +1,14 @@
-#include "Tests.h"
-#include "Window.h"
-#include "Dot.h"
-#include "Line.h"
-#include "Rect.h"
-#include "Circle.h"
-#include "Text.h"
+#include "tests.h"
+#include "window.h"
+#include "dot.h"
+#include "line.h"
+#include "rect.h"
+#include "circle.h"
+#include "text.h"
 
 int NumberOfWindows;
 
-using namespace GraphicsLib;
+using namespace gfxlib;
 
 void Exercise2();
 

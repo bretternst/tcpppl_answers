@@ -5,10 +5,10 @@
 #include <windows.h>
 #include <gdiplus.h>
 
-#include "Point.h"
-#include "Color.h"
+#include "point.h"
+#include "color.h"
 
-namespace GraphicsLib
+namespace gfxlib
 {
 	class Surface
 	{
