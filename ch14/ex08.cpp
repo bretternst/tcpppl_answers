@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-namespace Exercises
+namespace ch14
 {
     // This exception class is patterned after the .NET System.Exception class. In C#, every
     // exception must derive from this. It is missing some of the properties, such as the stack
@@ -70,13 +70,13 @@ namespace Exercises
 
 void f()
 {
-    throw Exercises::SpecificException("a specific error occurred");
+    throw ch14::SpecificException("a specific error occurred");
 }
 
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     try
     {

@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch16
 {
     // This exercise is really starting to lose me. I'm going to implement only "common" functionality
     // for "standard containers" which means mainly just a begin() and end() accessor for iterators.
@@ -107,7 +107,7 @@ namespace Exercises
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch16;
     using namespace std;
 
     Vector_16_2_1<int> v(3);

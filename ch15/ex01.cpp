@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch15
 {
     class A
     {
@@ -33,7 +33,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch15;
 
     A* a = new B;
     A1* c = new C;

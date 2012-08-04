@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch14
 {
     template<class Targ> class Callback
     {
@@ -49,7 +49,7 @@ void g(int x)
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     Callback<void> c(&f);
     c.Invoke();

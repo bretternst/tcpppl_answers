@@ -4,7 +4,7 @@
 
 // To run this example, provide two sets separated by a - argument. For example:
 // ./ex09 1 2 3 4 - 5 6 7 8
-namespace Exercises
+namespace ch10
 {
     using std::ostream;
 
@@ -125,7 +125,7 @@ namespace Exercises
 int main(int argc, char* argv[])
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch10;
 
     IntSet set1;
     int i;

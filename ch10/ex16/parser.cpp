@@ -8,7 +8,7 @@
 using std::map;
 using std::string;
 
-using namespace Exercises;
+using namespace ch10;
 
 Calculator::Calculator()
 {

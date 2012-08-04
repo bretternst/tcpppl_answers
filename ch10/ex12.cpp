@@ -4,7 +4,7 @@
 // comment out to use the linked list implementation
 #define USE_VECTOR
 
-namespace Exercises
+namespace ch10
 {
 #ifdef USE_VECTOR
     using std::vector;
@@ -85,7 +85,7 @@ namespace Exercises
 int main(int argc, char* argv[])
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch10;
 
     if(argc != 2)
     {

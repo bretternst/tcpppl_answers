@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace Exercises
+namespace ch13
 {
     using std::vector;
 
@@ -62,7 +62,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     vector<Record> list;
     list.push_back(Record(2, 4));

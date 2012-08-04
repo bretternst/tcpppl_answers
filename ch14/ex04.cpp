@@ -1,7 +1,7 @@
 #include <iostream>
 #include <limits>
 
-namespace Exercises
+namespace ch14
 {
     int IntMax = std::numeric_limits<int>::max();
     int IntMin = std::numeric_limits<int>::min();
@@ -124,7 +124,7 @@ namespace Exercises
 void main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     Int x = 2;
     Int y = 3;

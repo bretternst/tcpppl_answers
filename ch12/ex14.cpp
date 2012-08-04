@@ -1,4 +1,4 @@
-namespace Exercises
+namespace ch12
 {
     // Dummy classes defined simply so that this compiles.
     //
@@ -83,7 +83,7 @@ namespace Exercises
     };
 }
 
-using namespace Exercises;
+using namespace ch12;
 
 Ival_box* makeSlider()
 {

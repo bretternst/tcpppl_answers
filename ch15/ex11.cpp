@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch15
 {
     using std::type_info;
 
@@ -97,7 +97,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch15;
 
     C* c = new C();
 

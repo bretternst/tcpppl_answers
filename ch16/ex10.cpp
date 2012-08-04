@@ -15,7 +15,7 @@
 // of the extra level of indirection: storing pointers to Object instead of storing an Int
 // directly.
 
-namespace Exercises
+namespace ch16
 {
     template<class T> class Vector_16_2_1
     {
@@ -93,7 +93,7 @@ namespace Exercises
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch16;
     using namespace std;
 
     const int NumberOfElements = 10000;

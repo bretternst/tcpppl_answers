@@ -3,7 +3,7 @@
 // It's not clear to me exactly what the exercise was after.
 // This seems to be a reasonable implementation, as long as
 // an instance of C doesn't outlive the instances of S and T.
-namespace Exercises
+namespace ch11
 {
     struct S { int x, y; };
     struct T { const char* p; const char* q; };
@@ -23,7 +23,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch11;
 
     S s = { 1, 2 };
     T t = { "hello", "" };

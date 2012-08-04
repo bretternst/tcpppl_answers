@@ -1,7 +1,7 @@
 #include <iostream>
 #include <limits>
 
-namespace Exercises
+namespace ch14
 {
     template<class T> class Vector;
 

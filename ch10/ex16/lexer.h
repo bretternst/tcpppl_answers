@@ -5,7 +5,7 @@
 #include <iostream>
 #include <queue>
 
-namespace Exercises
+namespace ch10
 {
     using std::string;
     using std::istream;

@@ -1,6 +1,6 @@
 #include <string>
 
-namespace Exercises
+namespace ch13
 {
     template<class T> class DefaultAllocator
     {

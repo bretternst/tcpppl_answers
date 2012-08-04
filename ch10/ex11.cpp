@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 
-namespace Exercises
+namespace ch10
 {
     using std::istream;
     using std::ostream;
@@ -690,7 +690,7 @@ namespace Exercises
 int main(int argc, char* argv[])
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch10;
 
     if(argc != 2)
     {

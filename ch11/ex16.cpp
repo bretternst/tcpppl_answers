@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-namespace Exercises
+namespace ch11
 {
     class Vec4
     {
@@ -434,7 +434,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch11;
 
     Vec4 v1;
     v1[0] = 1.2f;

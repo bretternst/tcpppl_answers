@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 
-namespace Exercises
+namespace ch13
 {
     using std::cin;
     using std::cout;
@@ -54,7 +54,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     Item i;
     readline(i);

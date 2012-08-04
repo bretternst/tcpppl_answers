@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-namespace Exercises
+namespace ch11
 {
     // For this implementation, I use a wrapper class that responds to multiplication
     // by a double. The wrapper class is returned by the unary * operator on Index.
@@ -50,7 +50,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch11;
 
     Index I(8);
     cout << 2 ** I << endl; // expect: 256

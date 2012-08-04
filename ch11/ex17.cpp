@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch11
 {
     class Vector
     {
@@ -266,7 +266,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch11;
 
     Vector x(5);
     x[0] = 1.2f;

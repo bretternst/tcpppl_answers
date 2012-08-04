@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch14
 {
     // A very simple binary tree for use in this exercise; it relies on the strings
     // pointed to by the nodes to be unchanging.
@@ -67,7 +67,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     BinaryTree bt;
     bt.Add("abcd");

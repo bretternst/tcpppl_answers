@@ -38,7 +38,7 @@ template<class T> void PrintVec(T& vec)
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     vector<int> tmpl;
     tmpl.push_back(1);

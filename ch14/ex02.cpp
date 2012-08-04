@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch14
 {
     template<class T> class Ptr_to_T
     {
@@ -68,7 +68,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     // test null error
     Ptr_to_T<int> t1(0);

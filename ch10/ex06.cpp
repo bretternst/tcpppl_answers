@@ -6,7 +6,7 @@
 // To try out this solution, we re-use the histogram from the previous exercise.
 #include "ex05.h"
 
-namespace Exercises
+namespace ch10
 {
     const double PI = 3.14159265358979323846;
 
@@ -85,7 +85,7 @@ namespace Exercises
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch10;
     using namespace std;
 
     IntervalSet intervals;

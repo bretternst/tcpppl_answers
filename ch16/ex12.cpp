@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch16
 {   
     template<class T> class Vector_16_2_1
     {
@@ -73,7 +73,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch16;
 
     Vector_16_2_1<int> v;
     VectorWrapper<int> vw(v);

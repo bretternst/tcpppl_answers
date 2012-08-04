@@ -5,7 +5,7 @@
 #include "parser.h"
 
 using namespace std;
-using namespace Exercises;
+using namespace ch10;
 
 void interactive()
 {

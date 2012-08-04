@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch15
 {
     class Arena
     {
@@ -55,7 +55,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch15;
 
     CArena arena;
 

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-namespace Exercises
+namespace ch10
 {
     typedef std::set<int> IntervalSet;
     typedef std::map<int,int> ValueMap;

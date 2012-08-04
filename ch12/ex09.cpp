@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch12
 {
     class Char_vec {
         int sz;
@@ -30,7 +30,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch12;
 
     Char_vec* cv = Char_vec::new_char_vec(10);
     (*(cv))[9] = 'x';

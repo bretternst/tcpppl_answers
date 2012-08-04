@@ -8,7 +8,7 @@
 #include "error.h"
 #include "lexer.h"
 
-namespace Exercises
+namespace ch10
 {
     using std::string;
     using std::vector;

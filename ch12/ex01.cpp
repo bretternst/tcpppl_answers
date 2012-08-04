@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch12
 {
     using std::cout;
     using std::endl;
@@ -27,7 +27,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch12;
 
     Base b;
     Derived1 d1;

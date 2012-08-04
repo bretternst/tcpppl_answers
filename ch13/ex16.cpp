@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 
-namespace Exercises
+namespace ch13
 {
     // A quick and dirty check, see below for a better one.
     // This may or may not result in runtime overhead (a smart
@@ -50,7 +50,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     Comparer1<int> c1;
 

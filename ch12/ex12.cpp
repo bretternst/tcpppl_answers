@@ -1,4 +1,4 @@
-namespace Exercises
+namespace ch12
 {
     class Monster;
     class Object;

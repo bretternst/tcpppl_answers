@@ -10,7 +10,7 @@
 // list housekeeping. Those details should be part of the list itself and not
 // bleed out into the rest of the program. The user should only be concerned
 // about the actual element type that they want to use.
-namespace Exercises
+namespace ch13
 {
     using std::cout;
     using std::endl;
@@ -138,7 +138,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     cout << "using intrusive linked list:" << endl;
     int start = clock();

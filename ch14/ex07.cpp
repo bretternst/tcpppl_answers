@@ -13,7 +13,7 @@
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     Vector<int> v;
     v.push_back(1);

@@ -3,7 +3,7 @@
 
 #include "map.h"
 
-namespace Exercises
+namespace ch13
 {
     template<class T> struct Edge
     {
@@ -60,7 +60,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     std::vector<Edge<int> > edges;
     edges.push_back(Edge<int>(7,11));

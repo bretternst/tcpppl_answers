@@ -3,7 +3,7 @@
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch10;
     using namespace std;
 
     try

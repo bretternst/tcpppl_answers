@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cerrno>
 
-namespace Exercises
+namespace ch14
 {
     // The errno value is not included in the 
     class CLibraryError { public: int cerrno; CLibraryError() { cerrno = errno; } };
@@ -88,7 +88,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     try
     {

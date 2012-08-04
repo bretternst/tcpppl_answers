@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch14
 {
     template<class Tfunc, class Tset> class STC
     {
@@ -27,7 +27,7 @@ void f()
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     typedef std::new_handler (*SetNewHandler)(new_handler);
     STC<new_handler,SetNewHandler> stc(std::set_new_handler, f);

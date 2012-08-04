@@ -1,7 +1,7 @@
 #include <iostream>
 #include "windows.h"
 
-namespace Exercises
+namespace ch14
 {
     class Lock
     {
@@ -48,7 +48,7 @@ namespace Exercises
 
 DWORD __stdcall f(LPVOID p)
 {
-    using namespace Exercises;
+    using namespace ch14;
 
     Lock* l = static_cast<Lock*>(p);
     std::cout << "worker thread acquiring lock" << std::endl;
@@ -63,7 +63,7 @@ DWORD __stdcall f(LPVOID p)
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch14;
 
     HANDLE thread;
     DWORD threadId;

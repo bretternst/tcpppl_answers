@@ -2,7 +2,7 @@
 #include <vector>
 #include <time.h>
 
-namespace Exercises
+namespace ch16
 {
     class Object {};
 
@@ -70,7 +70,7 @@ namespace Exercises
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch16;
     using namespace std;
 
     IntHolder numbers[3];

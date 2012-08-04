@@ -4,7 +4,7 @@
 #include "math.h"
 #include "lexer.h"
 
-using namespace Exercises;
+using namespace ch10;
 
 Token Lexer::read_token()
 {

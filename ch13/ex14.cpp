@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace Exercises
+namespace ch13
 {
     //
     // Start Qsort algorithm, borrowed from exercise 6 (with modifications).
@@ -95,7 +95,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     vector<basic_string<char> > test;
     test.push_back("hello");

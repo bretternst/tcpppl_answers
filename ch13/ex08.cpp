@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstring>
 
-namespace Exercises
+namespace ch13
 {
     template<class T> class DefaultAllocator
     {
@@ -101,7 +101,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     Map<string, int> m;
     m["hello"] = 1;

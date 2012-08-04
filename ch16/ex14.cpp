@@ -7,7 +7,7 @@
 #undef NOMINMAX
 #undef _AFXDLL
 
-namespace Exercises
+namespace ch16
 {
     template<class T> class ReverseIterator
     {
@@ -224,7 +224,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch16;
 
     Vector<int> v;
     v.push_back(1);

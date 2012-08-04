@@ -1,7 +1,7 @@
 #include <iostream>
 #include <time.h>
 
-namespace Exercises
+namespace ch13
 {
     using std::cout;
     using std::endl;
@@ -132,7 +132,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     List_intrusive<LinkInt> l1;
     l1.add(LinkInt(1));

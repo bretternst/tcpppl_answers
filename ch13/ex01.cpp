@@ -3,7 +3,7 @@
 // The class generated for List<int> is functionally identical to
 // List_int. They are also invoked in an identical way when viewing
 // the disassembly in main().
-namespace Exercises
+namespace ch13
 {
     using std::cout;
     using std::endl;
@@ -49,7 +49,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     List<int> i1(5);
     i1.print_all();

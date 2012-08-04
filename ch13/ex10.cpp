@@ -10,7 +10,7 @@
 int main(int argc, char* argv[])
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     if(argc != 2)
     {

@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch11
 {
     class T
     {
@@ -95,7 +95,7 @@ namespace Exercises
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch11;
     using namespace std;
 
     T x(1);

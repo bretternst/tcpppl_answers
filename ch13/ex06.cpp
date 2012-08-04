@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace Exercises
+namespace ch13
 {
     template<class T> void qsort(std::vector<T>& list, int start, int end)
     {
@@ -40,7 +40,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     vector<int> list;
     list.push_back(4);

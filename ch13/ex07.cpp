@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 
-namespace Exercises
+namespace ch13
 {
     // The type T must have a default constructor that initializes it to zero.
     // T must also implement the += operator with another T.
@@ -37,7 +37,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     sum_inputs<string,int>();
 

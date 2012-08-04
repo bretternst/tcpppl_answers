@@ -8,7 +8,7 @@
 // on GCC. This is probably due to the fact that it uses a simple for loop
 // instead of iterators. However, the iterators are a close second, probably
 // helped by function inlining.
-namespace Exercises
+namespace ch13
 {
     using std::string;
 
@@ -56,7 +56,7 @@ namespace Exercises
 int main(int argc, char* argv[])
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch13;
 
     // Approach 1: using the associative array from section 11.8
     if(argc != 2)

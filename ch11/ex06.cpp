@@ -5,7 +5,7 @@
 
 using std::ostream;
 
-namespace Exercises
+namespace ch11
 {
     // Again, this is unlikely to be very efficient at all.
     class BIGINT
@@ -477,7 +477,7 @@ namespace Exercises
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch11;
     using namespace std;
 
     BIGINT bi(1000);

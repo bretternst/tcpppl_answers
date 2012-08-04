@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch16
 {
     class Object {};
 
@@ -74,7 +74,7 @@ namespace Exercises
 
 int main()
 {
-    using namespace Exercises;
+    using namespace ch16;
     using namespace std;
 
     Something o1(0);

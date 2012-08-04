@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch15
 {
     using std::cout;
     using std::endl;
@@ -58,7 +58,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch15;
 
     cout << "creating an object of type D1..." << endl;
     A* d1 = new D1;
