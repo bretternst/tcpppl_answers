@@ -3,8 +3,8 @@
 
 namespace gfxlib
 {
-	void Dot::draw(Window& s) const
-	{
-		s.draw_dot(pos, thickness(), stroke());
-	}
+    void Dot::draw(Window& s) const
+    {
+        s.draw_dot(pos, thickness(), stroke());
+    }
 }

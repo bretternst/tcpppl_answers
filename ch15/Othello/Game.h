@@ -6,22 +6,22 @@
 
 namespace Othello
 {
-	class Game
-	{
-		Board& b;
-		Player* p1;
-		Player* p2;
-		Player* currentPlayer;
+    class Game
+    {
+        Board& b;
+        Player* p1;
+        Player* p2;
+        Player* currentPlayer;
 
-		void ChangePlayer();
+        void ChangePlayer();
 
-	public:
-		class PlayerColorError {};
+    public:
+        class PlayerColorError {};
 
-		Game(Board& board, Player& player1, Player& player2);
+        Game(Board& board, Player& player1, Player& player2);
 
-		void Play();
-	};
+        void Play();
+    };
 }
 
 #endif

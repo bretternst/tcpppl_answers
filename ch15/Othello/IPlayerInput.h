@@ -7,12 +7,12 @@
 
 namespace Othello
 {
-	class IPlayerInput
-	{
-	public:
-		virtual Position GetMove() = 0;
-		virtual void Alert(std::string msg) = 0;
-	};
+    class IPlayerInput
+    {
+    public:
+        virtual Position GetMove() = 0;
+        virtual void Alert(std::string msg) = 0;
+    };
 }
 
 #endif

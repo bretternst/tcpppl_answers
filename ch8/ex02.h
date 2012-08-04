@@ -2,12 +2,12 @@
 
 namespace HelloWorld
 {
-	void SayHelloWorld();
+    void SayHelloWorld();
 }
 
 void HelloWorld::SayHelloWorld()
 {
-	std::cout << "Hello world" << std::endl;
+    std::cout << "Hello world" << std::endl;
 }
 
 // This line would be added to make ex02.h backward-compatible with a program

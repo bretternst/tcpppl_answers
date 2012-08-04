@@ -9,11 +9,11 @@ typedef int(&rifi) (int,int);
 
 int func01(int a, int b)
 {
-	return a + b;
+    return a + b;
 }
 
 int main(int argc, char* argv[])
 {
-	rifi r = func01;
-	cout << r(1,2) << endl;
+    rifi r = func01;
+    cout << r(1,2) << endl;
 }

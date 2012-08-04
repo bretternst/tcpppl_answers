@@ -8,34 +8,34 @@ using namespace std;
 
 int throwOrReturn(int x, bool throwIt)
 {
-	if(throwIt) throw x;
-	else return x;
+    if(throwIt) throw x;
+    else return x;
 }
 
 int main(int argc, char* argv[])
 {
-	int x = 1, y;
+    int x = 1, y;
 
-	int start = clock();
-	for(int i = 0; i < 1000000; i++)
-	{
-		y = throwOrReturn(x, false);
-	}
-	int end = clock();
-	cout << "direct return, elapsed clock ticks: " << end-start << endl;
+    int start = clock();
+    for(int i = 0; i < 1000000; i++)
+    {
+        y = throwOrReturn(x, false);
+    }
+    int end = clock();
+    cout << "direct return, elapsed clock ticks: " << end-start << endl;
 
-	start = clock();
-	for(int i = 0; i < 1000000; i++)
-	{
-		try
-		{
-			throwOrReturn(x, true);
-		}
-		catch(int err)
-		{
-			y = err;
-		}
-	}
-	end = clock();
-	cout << "exceptions, elapsed clock ticks: " << end-start << endl;
+    start = clock();
+    for(int i = 0; i < 1000000; i++)
+    {
+        try
+        {
+            throwOrReturn(x, true);
+        }
+        catch(int err)
+        {
+            y = err;
+        }
+    }
+    end = clock();
+    cout << "exceptions, elapsed clock ticks: " << end-start << endl;
 }

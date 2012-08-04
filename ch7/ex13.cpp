@@ -9,9 +9,9 @@ using namespace std;
 
 struct MixedCase
 {
-	int lowercase;
-	int pascalCase;
-	int multi_word;
+    int lowercase;
+    int pascalCase;
+    int multi_word;
 };
 
 const int ALL_CAPS_CONST = 5;
@@ -19,7 +19,7 @@ const int kMyConstant = 5;
 
 enum MyEnum
 {
-	ALL_CAPS_ENUM_VALUE
+    ALL_CAPS_ENUM_VALUE
 };
 
 void SomeFunction()
@@ -36,5 +36,5 @@ void someFunction()
 
 int main(int argc, char* argv[])
 {
-	char* szHungarianNotation;
+    char* szHungarianNotation;
 }

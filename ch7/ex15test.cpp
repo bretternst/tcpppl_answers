@@ -4,7 +4,7 @@
 
 int main()
 {
-	double d = PI;
-	int a = MAX(1,3);
-	int b = DBL(a);
+    double d = PI;
+    int a = MAX(1,3);
+    int b = DBL(a);
 }

@@ -5,7 +5,7 @@
 
 namespace DeskCalc
 {
-	int run(std::istream *input, std::ostream *output, std::ostream *error);
+    int run(std::istream *input, std::ostream *output, std::ostream *error);
 }
 
 #endif

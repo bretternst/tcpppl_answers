@@ -6,22 +6,22 @@
 
 namespace Error
 {
-	using std::string;
-	using std::istream;
+    using std::string;
+    using std::istream;
 
-	struct SyntaxError
-	{
-		string errMsg;
-		SyntaxError(string msg)
-		{
-			errMsg = msg;
-		}
-	};
+    struct SyntaxError
+    {
+        string errMsg;
+        SyntaxError(string msg)
+        {
+            errMsg = msg;
+        }
+    };
 
-	struct DivideByZeroError { };
-	struct OverflowError { };
+    struct DivideByZeroError { };
+    struct OverflowError { };
 
-	void skip(istream*);
+    void skip(istream*);
 }
 
 #endif

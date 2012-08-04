@@ -6,15 +6,15 @@
 
 namespace Othello
 {
-	class HumanPlayer : public Player
-	{
-		IPlayerInput& input;
-	public:
-		HumanPlayer(Board& board, Board::Color color, std::string name, IPlayerInput& input)
-			: Player(board, color, name), input(input) {}
+    class HumanPlayer : public Player
+    {
+        IPlayerInput& input;
+    public:
+        HumanPlayer(Board& board, Board::Color color, std::string name, IPlayerInput& input)
+            : Player(board, color, name), input(input) {}
 
-		void TakeTurn();
-	};
+        void TakeTurn();
+    };
 }
 
 #endif

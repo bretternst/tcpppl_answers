@@ -27,18 +27,18 @@ int strcmp_(const char *s1, const char *s2)
 
 int main()
 {
-	cout << strlen_("") << endl;
-	cout << strlen_("hello") << endl;
+    cout << strlen_("") << endl;
+    cout << strlen_("hello") << endl;
 
-	char dest[10];
-	strcpy_(dest, "");
-	cout << dest << endl;
+    char dest[10];
+    strcpy_(dest, "");
+    cout << dest << endl;
 
-	strcpy_(dest,"hello");
-	cout << dest << endl;
+    strcpy_(dest,"hello");
+    cout << dest << endl;
 
-	cout << strcmp_("", "hello") << endl;
-	cout << strcmp_("hello", "") << endl;
-	cout << strcmp_("abc", "abc") << endl;
-	cout << strcmp_("abc","abd") << endl;
+    cout << strcmp_("", "hello") << endl;
+    cout << strcmp_("hello", "") << endl;
+    cout << strcmp_("abc", "abc") << endl;
+    cout << strcmp_("abc","abd") << endl;
 }

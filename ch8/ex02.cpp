@@ -2,5 +2,5 @@
 
 int main()
 {
-	SayHelloWorld();
+    SayHelloWorld();
 }

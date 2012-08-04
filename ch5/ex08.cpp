@@ -5,9 +5,9 @@ using namespace std;
 
 int main()
 {
-	int arr[] = { 1, 2, 3, 4, 5 };
+    int arr[] = { 1, 2, 3, 4, 5 };
 
-	cout << arr[2] << endl;
+    cout << arr[2] << endl;
     /*
      * compiled with -O0
     movl    -24(%rbp), %eax
@@ -22,7 +22,7 @@ int main()
     call    _ZNSolsEi
     */
 
-	cout << *(arr+2) << endl;
+    cout << *(arr+2) << endl;
     /*
      * compiled with -O0
     movl    -24(%rbp), %eax

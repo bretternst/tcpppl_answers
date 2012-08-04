@@ -2,54 +2,54 @@
 
 namespace Exercises
 {
-	class A
-	{
-	public:
-		virtual ~A() {}
-	};
+    class A
+    {
+    public:
+        virtual ~A() {}
+    };
 
-	class B : public A
-	{
-	};
+    class B : public A
+    {
+    };
 
-	class A1
-	{
-	public:
-		virtual ~A1() {}
-	};
+    class A1
+    {
+    public:
+        virtual ~A1() {}
+    };
 
-	class C : public A1
-	{
-	};
+    class C : public A1
+    {
+    };
 
-	template<class T, class Tfrom> T ptr_cast(Tfrom p)
-	{
-		T r = dynamic_cast<T>(p);
-		if(!r) throw std::bad_cast();
-		return r;
-	}
+    template<class T, class Tfrom> T ptr_cast(Tfrom p)
+    {
+        T r = dynamic_cast<T>(p);
+        if(!r) throw std::bad_cast();
+        return r;
+    }
 }
 
 int main()
 {
-	using namespace std;
-	using namespace Exercises;
+    using namespace std;
+    using namespace Exercises;
 
-	A* a = new B;
-	A1* c = new C;
+    A* a = new B;
+    A1* c = new C;
 
-	B* b = ptr_cast<B*>(a);
-	try
-	{
-		b = ptr_cast<B*>(c);
-	}
-	catch(bad_cast)
-	{
-		cout << "caught bad_cast" << endl;
-	}
+    B* b = ptr_cast<B*>(a);
+    try
+    {
+        b = ptr_cast<B*>(c);
+    }
+    catch(bad_cast)
+    {
+        cout << "caught bad_cast" << endl;
+    }
 
-	delete a;
-	delete c;
+    delete a;
+    delete c;
 
-	return 0;
+    return 0;
 }

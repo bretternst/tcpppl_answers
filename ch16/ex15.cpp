@@ -28,16 +28,16 @@ using namespace std;
 
 void duplicate(vector<string>& v)
 {
-	for(vector<string>::iterator i = v.begin(); i != v.end(); i++)
-		v.insert(i, *i);
+    for(vector<string>::iterator i = v.begin(); i != v.end(); i++)
+        v.insert(i, *i);
 }
 
 int main()
 {
-	vector<string> v;
-	v.push_back("don't");
-	v.push_back("do");
-	v.push_back("this");
+    vector<string> v;
+    v.push_back("don't");
+    v.push_back("do");
+    v.push_back("this");
 
-	dup(v);
+    dup(v);
 }

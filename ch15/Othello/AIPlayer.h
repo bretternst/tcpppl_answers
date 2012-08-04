@@ -5,14 +5,14 @@
 
 namespace Othello
 {
-	class AIPlayer : public Player
-	{
-	public:
-		AIPlayer(Board& board, Board::Color color)
-			: Player(board, color, "the computer") {}
+    class AIPlayer : public Player
+    {
+    public:
+        AIPlayer(Board& board, Board::Color color)
+            : Player(board, color, "the computer") {}
 
-		void TakeTurn();
-	};
+        void TakeTurn();
+    };
 }
 
 #endif

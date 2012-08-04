@@ -6,12 +6,12 @@
 
 int main(void)
 {
-	void *p = malloc(13);
+    void *p = malloc(13);
 
     printf("%s\n", HELLO_WORLD);
     return 0;
 
-	free(p);
+    free(p);
 }
 */
 
@@ -24,9 +24,9 @@ const string HelloWorld("Hello, world!");
 
 int main(void)
 {
-	char *p = new char[13];
+    char *p = new char[13];
 
-	cout << HelloWorld << endl;
+    cout << HelloWorld << endl;
 
-	delete[] p;
+    delete[] p;
 }

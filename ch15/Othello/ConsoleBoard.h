@@ -6,14 +6,14 @@
 
 namespace Othello
 {
-	class ConsoleBoard : public Board
-	{
-		void DrawSpace(Color s);
-	public:
-		void Draw();
-		Position GetMove();
-		void Alert(std::string msg);
-	};
+    class ConsoleBoard : public Board
+    {
+        void DrawSpace(Color s);
+    public:
+        void Draw();
+        Position GetMove();
+        void Alert(std::string msg);
+    };
 }
 
 #endif

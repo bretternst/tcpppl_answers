@@ -12,25 +12,25 @@
 // process of stack unwinding is most likely less performant in most implementations.
 int main()
 {
-	using namespace std;
-	using namespace Exercises;
+    using namespace std;
+    using namespace Exercises;
 
-	Vector<int> v;
-	v.push_back(1);
-	v.push_back(2);
-	v.push_back(3);
+    Vector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
 
-	int i = 0;
-	try
-	{
-		for(;;)
-		{
-			cout << v.at(i++) << endl;
-		}
-	}
-	catch(Vector<int>::RangeError)
-	{
-	}
+    int i = 0;
+    try
+    {
+        for(;;)
+        {
+            cout << v.at(i++) << endl;
+        }
+    }
+    catch(Vector<int>::RangeError)
+    {
+    }
 
-	return 0;
+    return 0;
 }

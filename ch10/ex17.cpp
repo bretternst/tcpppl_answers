@@ -3,39 +3,39 @@
 struct MemberA
 {
 public:
-	int x;
-	MemberA();
+    int x;
+    MemberA();
 };
 
 struct MemberB
 {
-	int x;
+    int x;
 public:
-	MemberB();
+    MemberB();
 };
 
 class ClassA
 {
 public:
-	static MemberA x;
+    static MemberA x;
 };
 
 class ClassB
 {
 public:
-	static MemberB x;
+    static MemberB x;
 };
 
 MemberA::MemberA()
 {
-	x = ClassB::x.x; // <- not yet constructed!
-	std::cout << "MemberA constructor called!" << std::endl;
+    x = ClassB::x.x; // <- not yet constructed!
+    std::cout << "MemberA constructor called!" << std::endl;
 }
 
 MemberB::MemberB()
 {
-	x = ClassA::x.x;
-	std::cout << "MemberB constructor called!" << std::endl;
+    x = ClassA::x.x;
+    std::cout << "MemberB constructor called!" << std::endl;
 }
 
 MemberA ClassA::x;

@@ -3,18 +3,18 @@
 class AppInit
 {
 public:
-	AppInit();
-	~AppInit();
+    AppInit();
+    ~AppInit();
 } oAppInit;
 
 AppInit::AppInit()
 {
-	std::cout << "Initialize" << std::endl;
+    std::cout << "Initialize" << std::endl;
 }
 
 AppInit::~AppInit()
 {
-	std::cout << "Clean up" << std::endl;
+    std::cout << "Clean up" << std::endl;
 }
 
 int main()

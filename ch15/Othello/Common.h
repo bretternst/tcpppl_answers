@@ -3,13 +3,13 @@
 
 namespace Othello
 {
-	struct Position
-	{
-		int X;
-		int Y;
-		Position() : X(0), Y(0) {}
-		Position(int x, int y) : X(x), Y(y) {}
-	};
+    struct Position
+    {
+        int X;
+        int Y;
+        Position() : X(0), Y(0) {}
+        Position(int x, int y) : X(x), Y(y) {}
+    };
 }
 
 #endif
