@@ -1,25 +1,19 @@
 #include <algorithm>
-#include <windows.h>
+#include <iostream>
+#include <cstring>
 
 #include "task.h"
 #include "scheduler.h"
 
 namespace evtsim
 {
-    Task::Task(Scheduler *s, ucontext_t *context) : state(RUNNING), sched(s), context(context)
+    Task::Task(Scheduler *s) : state(RUNNING), sched(s)
     {
-        makecontext(
-        context = s->create_context();
-    }
-
-    Task::~Task()
-    {
-        DeleteFiber(fiber);
     }
 
     void Task::subscribe(std::string queueName)
     {
-        Queue* q = sched->GetQueue(queueName);
+        Queue* q = sched->get_queue(queueName);
         queues.push_back(q);
     }
 
@@ -32,19 +26,19 @@ namespace evtsim
     void Task::send_message(std::string queueName, const Message& m)
     {
         Queue* q = sched->get_queue(queueName);
-        q->Enqueue(m);
+        q->enqueue(m);
     }
 
     void Task::wait_message()
     {
         state = IDLE;
-        sched->yield_return();
+        sched->yield_return(this);
     }
 
     Message Task::get_message(std::string queueName)
     {
         Queue* q = sched->get_queue(queueName);
-        Message& m = q->dequeue();
+        Message m = q->dequeue();
         return m;
     }
 
@@ -66,17 +60,4 @@ namespace evtsim
         }
     }
 
-    void Task::run_fiber(Task* t)
-    {
-        try
-        {
-            t->run();
-            t->state = DONE;
-        }
-        catch(...)
-        {
-            t->state = ERR;
-        }
-        t->sched->yield_return();
-    }
 }

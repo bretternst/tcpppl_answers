@@ -16,17 +16,17 @@ namespace evtsim
     public:
         enum State { RUNNING, IDLE, DONE, ERR };
 
-        ucontext_t context;
-
-    private:
         State state;
         Scheduler* sched;
+        friend class Scheduler;
+
+    private:
+        ucontext_t context;
+        void *stack;
         QueueList queues;
 
-        static void run_fiber(Task* This);
     protected:
         Task(Scheduler* s);
-        ~Task();
         void set_state(State s) { state = s; }
         void subscribe(std::string queueName);
         void unsubscribe(std::string queueName);

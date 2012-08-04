@@ -5,16 +5,34 @@
 
 namespace evtsim
 {
+    extern "C" void run_fiber(Task *t)
+    {
+        try
+        {
+            t->run();
+            t->state = Task::DONE;
+        }
+        catch(...)
+        {
+            t->state = Task::ERR;
+        }
+        t->sched->yield_return(0);
+    }
+
+    const int StackSize = 16384;
+
     void Scheduler::add_task(Task *t) {
+        t->stack = malloc(StackSize);
+        getcontext(&t->context);
+        t->context.uc_stack.ss_sp = t->stack;
+        t->context.uc_stack.ss_size = StackSize;
+        t->context.uc_link = &context;
+        makecontext(&t->context, (void (*)())run_fiber, 1, t);
         tasks.push(t);
     }
-    void add_task(Task* t) { tasks.push(t); }
 
     void Scheduler::run()
     {
-        ucontext_t context;
-        getcontext(&context)
-
         while(tasks.size() > 0)
         {
             Task* t = tasks.front();
@@ -32,15 +50,21 @@ namespace evtsim
                     continue;
                 }
             case Task::RUNNING:
-                t->restore();
+                if (swapcontext(&this->context, &t->context)) {
+                    std::cerr << "swapcontext failed" << std::endl;
+                    return;
+                }
                 tasks.push(t);
                 break;
             }
         }
     }
 
-    void Scheduler::yield_return()
+    void Scheduler::yield_return(Task *t)
     {
-        s_sched_init.SwitchToPrimary();
+        if(t) {
+            if(swapcontext(&t->context, &this->context))
+                std::cerr << "swapcontext failed" << std::endl;
+        }
     }
 }

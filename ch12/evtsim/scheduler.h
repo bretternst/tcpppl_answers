@@ -22,11 +22,14 @@ namespace evtsim
     public:
         Scheduler() : vTime(0) {}
 
-        Queue* get_queue(std::string name) { return &queues[name]; }
+        // called by consumers
+        void add_task(Task *task);
         int elapsed() { return vTime; }
         void run();
 
-        void yield_return();
+        // called by tasks
+        Queue* get_queue(std::string name) { return &queues[name]; }
+        void yield_return(Task *t);
         void add_time(int t) { vTime += t; }
     };
 }
