@@ -99,15 +99,15 @@ void run_tests(gfxlib::Window *w)
 	l2.stroke(0xff00ff00);
 	w->draw(&l2);
 
-	// Test text
-	Text t1(Point(50,20),Point(350,35),L"Hello world!");
-	t1.stroke(0xffff0000);
-	w->draw(&t1);
-
 	// Test connect
 	l1 = l1.connect(&l2);
 	l1.thickness(1);
 	w->draw(&l1);
+
+	// Test text
+	Text t1(Point(50,10),Point(350,50),"Hello world!");
+	t1.stroke(0xffff0000);
+	w->draw(&t1);
 
     w->paint();
 }

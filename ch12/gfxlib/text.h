@@ -13,10 +13,10 @@ namespace gfxlib
 	private:
 		Point m_p1;
 		Point m_p2;
-		std::wstring m_str;
+		std::string m_str;
 
 	public:
-		Text(const Point& p1, const Point& p2, const std::wstring str) : m_p1(p1), m_p2(p2), m_str(str) {}
+		Text(const Point& p1, const Point& p2, const std::string str) : m_p1(p1), m_p2(p2), m_str(str) {}
 		virtual void draw(Window&) const;
 		virtual const Point n() const { return Point(c().x(),m_p1.y()<m_p2.y()?m_p1.y():m_p2.y()); }
 		virtual const Point s() const { return Point(c().x(),m_p1.y()>m_p2.y()?m_p1.y():m_p2.y()); }

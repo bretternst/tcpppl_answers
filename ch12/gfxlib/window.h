@@ -5,9 +5,11 @@
 #include <map>
 #include <string>
 #include <X11/Xlib.h>
+#include <vector>
 
 #include "point.h"
 #include "shape.h"
+#include "text.h"
 
 namespace gfxlib
 {
@@ -22,6 +24,7 @@ namespace gfxlib
         ::Window m_window;
         ::GC m_gc;
         ::XImage *m_img;
+        std::vector<Text> m_text;
 
     public:
         Window(Display *display, int w, int h, Color background);
@@ -31,11 +34,11 @@ namespace gfxlib
         void paint();
         const Point& current() const { return m_current; }
         void current(const Point& p) { m_current = p; }
-        void draw(Shape* s){s->draw(*this); m_current = s->se();}
+        void draw(Shape* s);
         Line connect(Shape* s1, Shape* s2);
         void set_pixel(Point p, Color c);
         void draw_dot(Point p, int thickness, Color c);
-        void draw_text(Point p1, Point p2, const std::wstring& str, Color c);
+        void draw_text(Point p1, Point p2, const std::string& str, Color c);
     };
 }
 #endif

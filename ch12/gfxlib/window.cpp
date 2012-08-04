@@ -3,6 +3,8 @@
 #include <X11/Xutil.h>
 #include "window.h"
 #include "line.h"
+#include "text.h"
+#include <iostream>
 
 namespace gfxlib
 {
@@ -30,10 +32,27 @@ namespace gfxlib
         XDestroyWindow(m_display, m_window);
     }
 
+    void Window::draw(Shape *shape) {
+        // since Xlib doesn't provide a way to draw text to an image, we have
+        // to hack around that and store copies of all text objects to draw
+        // whenever the window repaints.
+        Text *t = dynamic_cast<Text*>(shape);
+        if(t) {
+            m_text.push_back(Text(*t));
+        } else {
+            shape->draw(*this);
+        }
+        m_current = shape->se();
+    }
+
     void Window::paint() {
         GC gc = XCreateGC(m_display, m_window, 0, 0);
         XPutImage(m_display, m_window, gc, m_img, 0, 0, 0, 0, m_w, m_h);
         XFreeGC(m_display, gc);
+
+        for(std::vector<Text>::iterator i = m_text.begin(); i != m_text.end(); i++) {
+            i->draw(*this);
+        }
     }
 
     void Window::draw_dot(const Point p, int thickness, Color c)
@@ -56,7 +75,7 @@ namespace gfxlib
         XPutPixel(m_img, p.x(), p.y(), c);
     }
 
-    void Window::draw_text(Point p1, Point p2, const std::wstring& str, Color c)
+    void Window::draw_text(Point p1, Point p2, const std::string& str, Color c)
     {
         // Perform clipping, to maintain consistency with exercise 5
         int height = p2.y()-p1.y();
@@ -65,14 +84,20 @@ namespace gfxlib
         if(p2.x() > m_w) p2.x(m_w);
         if(p2.y() > m_h) p2.y(m_h);
 
-        /*
-        Graphics g(&bmp);
-        Font f(&FontFamily(L"Tahoma"), static_cast<REAL>(height), Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
-        RectF bounds(static_cast<REAL>(p1.X()),static_cast<REAL>(p1.Y()),
-            static_cast<REAL>(p2.X()-p1.X()),static_cast<REAL>(p2.Y()-p1.Y()));
+        XFontStruct *font;
+        font = XLoadQueryFont(m_display, "6x10");
+        XGCValues values;
+        values.font = font->fid;
+        values.foreground = BlackPixel(m_display,DefaultScreen(m_display));
+        values.background = WhitePixel(m_display,DefaultScreen(m_display));
 
-        g.DrawString(&str[0], str.size(), &f, bounds,
-                NULL,&SolidBrush(Gdiplus::Color(c)));
-                */
+        GC gc = XCreateGC(m_display, m_window, GCFont | GCForeground | GCBackground, &values);
+        XRectangle clip;
+        clip.x = p1.x();
+        clip.y = p1.y();
+        clip.width = p2.x() - p1.x();
+        clip.height = p2.y() - p1.y();
+        XSetClipRectangles(m_display, gc, 0, 0, &clip, 1, Unsorted);
+        XDrawString(m_display, m_window, gc, p1.x(), p2.y(), str.c_str(), str.size());
     }
 }
