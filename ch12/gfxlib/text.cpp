@@ -1,10 +1,10 @@
 #include "text.h"
-#include "surface.h"
+#include "window.h"
 
 namespace gfxlib
 {
-	void Text::Draw(Surface& s) const
+	void Text::draw(Window& s) const
 	{
-		s.DrawText(p1, p2, str, Stroke());
+		s.draw_text(m_p1, m_p2, m_str, stroke());
 	}
 }

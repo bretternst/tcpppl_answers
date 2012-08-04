@@ -2,11 +2,9 @@
 #define __TESTS_H__
 
 #include <vector>
-
+#include <X11/Xlib.h>
 #include "window.h"
 
-extern int NumberOfWindows;
-
-void RunTests();
+void run_tests(gfxlib::Window *w);
 
 #endif

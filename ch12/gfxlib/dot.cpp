@@ -1,10 +1,10 @@
 #include "dot.h"
-#include "surface.h"
+#include "window.h"
 
 namespace gfxlib
 {
-	void Dot::Draw(Surface& s) const
+	void Dot::draw(Window& s) const
 	{
-		s.DrawDot(pos, Thickness(), Stroke());
+		s.draw_dot(pos, thickness(), stroke());
 	}
 }

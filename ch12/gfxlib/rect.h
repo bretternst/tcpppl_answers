@@ -2,30 +2,30 @@
 #define __RECT_H__
 
 #include "shape.h"
-#include "surface.h"
+#include "window.h"
 
 namespace gfxlib
 {
-	class Rect : public Shape
-	{
-		Point sw;
-		Point ne;
+    class Rect : public Shape
+    {
+        Point m_sw;
+        Point m_ne;
 
-		void DrawSide(Surface&, Point, Point) const;
-		void DrawFill(Surface&) const;
-	public:
-		Rect(const Point& sw, const Point& ne) : sw(sw), ne(ne) {}
-		virtual void Draw(Surface&) const;
-		virtual const Point N() const { return Point(C().X(),ne.Y()); }
-		virtual const Point S() const { return Point(C().X(),sw.Y()); }
-		virtual const Point W() const { return Point(sw.X(),C().Y()); }
-		virtual const Point E() const { return Point(ne.X(),C().Y()); }
-		virtual const Point NW() const { return Point(sw.X(),ne.Y()); }
-		virtual const Point NE() const { return ne; }
-		virtual const Point SW() const { return sw; }
-		virtual const Point SE() const { return Point(ne.X(),sw.Y()); }
-		virtual const Point C() const { return Point((sw.X()+ne.X())/2,(sw.Y()+ne.Y())/2); }
-	};
+        void draw_side(Window&, Point, Point) const;
+        void draw_fill(Window&) const;
+    public:
+        Rect(const Point& sw, const Point& ne) : m_sw(sw), m_ne(ne) {}
+        virtual void draw(Window&) const;
+        virtual const Point n() const { return Point(c().x(),m_ne.y()); }
+        virtual const Point s() const { return Point(c().x(),m_sw.y()); }
+        virtual const Point w() const { return Point(m_sw.x(),c().y()); }
+        virtual const Point e() const { return Point(m_ne.x(),c().y()); }
+        virtual const Point nw() const { return Point(m_sw.x(),m_ne.y()); }
+        virtual const Point ne() const { return m_ne; }
+        virtual const Point sw() const { return m_sw; }
+        virtual const Point se() const { return Point(m_ne.x(),m_sw.y()); }
+        virtual const Point c() const { return Point((m_sw.x()+m_ne.x())/2,(m_sw.y()+m_ne.y())/2); }
+    };
 }
 
 #endif

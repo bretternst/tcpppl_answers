@@ -5,16 +5,16 @@ namespace gfxlib
 {
 	class Point
 	{
-		int x;
-		int y;
+		int m_x;
+		int m_y;
 
 	public:
-		int X() const { return x; }
-		void X(int xx) { x = xx; }
-		int Y() const { return y; }
-		void Y(int yy) { y = yy; }
-		Point() : x(0), y(0) {}
-		Point(int x, int y) : x(x), y(y) {}
+		int x() const { return m_x; }
+		void x(int x) { m_x = x; }
+		int y() const { return m_y; }
+		void y(int y) { m_y = y; }
+		Point() : m_x(0), m_y(0) {}
+		Point(int x, int y) : m_x(x), m_y(y) {}
 	};
 }
 #endif

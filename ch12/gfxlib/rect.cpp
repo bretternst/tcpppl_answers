@@ -1,39 +1,38 @@
 #include "rect.h"
-#include "surface.h"
 #include "line.h"
 
 namespace gfxlib
 {
-	void Rect::Draw(Surface& s) const
-	{
-		Color stroke = Stroke();
+    void Rect::draw(Window& s) const
+    {
+        Color stroke = this->stroke();
 
-		DrawSide(s,NW(),sw);
-		DrawSide(s,NW(),ne);
-		DrawSide(s,ne,SE());
-		DrawSide(s,sw,SE());
+        draw_side(s,nw(),m_sw);
+        draw_side(s,nw(),m_ne);
+        draw_side(s,m_ne,se());
+        draw_side(s,m_sw,se());
 
-		DrawFill(s);
-	}
+        draw_fill(s);
+    }
 
-	void Rect::DrawSide(Surface& s, Point p1, Point p2) const
-	{
-		Line side(p1,p2);
-		side.Thickness(Thickness());
-		side.Outline(Outline());
-		side.Stroke(Stroke());
-		side.Draw(s);
-	}
+    void Rect::draw_side(Window& s, Point p1, Point p2) const
+    {
+        Line side(p1,p2);
+        side.thickness(thickness());
+        side.outline(outline());
+        side.stroke(stroke());
+        side.draw(s);
+    }
 
-	void Rect::DrawFill(Surface& s) const
-	{
-		int fill = Fill();
-		for(int i = sw.X()+Thickness(); i < ne.X(); i++)
-		{
-			for(int j = ne.Y()+Thickness(); j < sw.Y(); j++)
-			{
-				s.SetPixel(Point(i,j),fill);
-			}
-		}
-	}
+    void Rect::draw_fill(Window& s) const
+    {
+        int fill = this->fill();
+        for(int i = m_sw.x()+thickness(); i < m_ne.x(); i++)
+        {
+            for(int j = m_ne.y()+thickness(); j < m_sw.y(); j++)
+            {
+                s.set_pixel(Point(i,j),fill);
+            }
+        }
+    }
 }

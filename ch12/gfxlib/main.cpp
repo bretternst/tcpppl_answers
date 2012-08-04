@@ -1,48 +1,37 @@
-#include <windows.h>
-#include <gdiplus.h>
-
-#include "tests.h"
+#include <iostream>
+#include <X11/Xlib.h>
 #include "window.h"
+#include "tests.h"
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void OnPaint(HDC);
+using namespace std;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd, int nCmd)
-{
-	WNDCLASSEX wndClsEx;
-	MSG messages;
-	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	ULONG_PTR gdiplusToken;
+int main() {
+    using gfxlib::Window;
 
-	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+    Display *display = XOpenDisplay(NULL);
+    if(!display) {
+        cerr << "Unable to open display.";
+        return 1;
+    }
 
-	wndClsEx.hInstance = hInstance;
-	wndClsEx.lpszClassName = "Canvas";
-	wndClsEx.lpfnWndProc = gfxlib::Window::WndProc;
-	wndClsEx.style = 0;
-	wndClsEx.cbSize = sizeof(WNDCLASSEX);
-	wndClsEx.lpszMenuName = NULL;
-	wndClsEx.cbClsExtra = 0;
-	wndClsEx.cbWndExtra = 0;
-	HBRUSH hBrush = CreateSolidBrush(RGB(255,255,255));
-	wndClsEx.hbrBackground = hBrush;
-    wndClsEx.hIcon = LoadIcon (NULL, IDI_APPLICATION);
-    wndClsEx.hIconSm = LoadIcon (NULL, IDI_APPLICATION);
-    wndClsEx.hCursor = LoadCursor (NULL, IDC_ARROW);
+    Window w(display, 640, 480, 0xfff0f0ff);
+    run_tests(&w);
 
-	if (!RegisterClassEx(&wndClsEx))
-		return -1;
+    XEvent event;
 
-	RunTests();
+    Atom wm_delete = XInternAtom(display, "WM_DELETE_WINDOW", false);
+    XSetWMProtocols(display, w.handle(), &wm_delete, 1);
+    XSelectInput(display, w.handle(), ExposureMask | KeyPressMask | ButtonPressMask);
 
-	while(GetMessage(&messages, NULL, 0, 0))
-	{
-		TranslateMessage(&messages);
-		DispatchMessage(&messages);
-	}
+    while(1) {
+        XNextEvent(display, &event);
+        if(event.type == KeyPress)
+            break;
+        else if (event.type == Expose)
+            w.paint();
+        else if (event.xclient.data.l[0] == wm_delete)
+            break;
+    }
 
-	DeleteObject(hBrush);
-	Gdiplus::GdiplusShutdown(gdiplusToken);
-
-	return 0;
+    XCloseDisplay(display);
 }

@@ -1,63 +1,63 @@
 #include "circle.h"
-#include "surface.h"
+#include "window.h"
 
 namespace gfxlib
 {
-	void FillRun(Surface& s, Color c, int y, int x1, int x2)
-	{
-		for(int i = x1; i <= x2; i++)
-			s.SetPixel(Point(i,y), c);
-	}
+    void fill_run(Window& s, Color c, int y, int x1, int x2)
+    {
+        for(int i = x1; i <= x2; i++)
+            s.set_pixel(Point(i,y), c);
+    }
 
-	void Circle::Draw(Surface& s) const
-	{
-		int f = 1 - r;
-		int ddfx = 1;
-		int ddfy = -2 * r;
-		int x = 0;
-		int y = r;
-		int thickness = Thickness();
-		LineStyle outline = Outline();
-		Color stroke = Stroke();
-		Color fill = Fill();
+    void Circle::draw(Window& s) const
+    {
+        int f = 1 - m_r;
+        int ddfx = 1;
+        int ddfy = -2 * m_r;
+        int x = 0;
+        int y = m_r;
+        int thickness = this->thickness();
+        LineStyle outline = this->outline();
+        Color stroke = this->stroke();
+        Color fill = this->fill();
 
-		s.DrawDot(Point(c.X(),c.Y()+r),thickness,stroke);
-		s.DrawDot(Point(c.X(),c.Y()-r),thickness,stroke);
-		s.DrawDot(Point(c.X()+r,c.Y()),thickness,stroke);
-		s.DrawDot(Point(c.X()-r,c.Y()),thickness,stroke);
-		FillRun(s, fill, c.Y(), c.X()-r+1, c.X()+r-1);
+        s.draw_dot(Point(m_c.x(),m_c.y()+m_r),thickness,stroke);
+        s.draw_dot(Point(m_c.x(),m_c.y()-m_r),thickness,stroke);
+        s.draw_dot(Point(m_c.x()+m_r,m_c.y()),thickness,stroke);
+        s.draw_dot(Point(m_c.x()-m_r,m_c.y()),thickness,stroke);
+        fill_run(s, fill, m_c.y(), m_c.x()-m_r+1, m_c.x()+m_r-1);
 
-		while(x < y)
-		{
-			if(f>=0)
-			{
-				y--;
-				ddfy += 2;
-				f += ddfy;
-			}
-			x++;
-			ddfx += 2;
-			f += ddfx;
-			
-			FillRun(s, fill, c.Y()+y, c.X()-x+1, c.X()+x-1);
-			FillRun(s, fill, c.Y()-y, c.X()-x+1, c.X()+x-1);
-			FillRun(s, fill, c.Y()+x, c.X()-y+1, c.X()+y-1);
-			FillRun(s, fill, c.Y()-x, c.X()-y+1, c.X()+y-1);
+        while(x < y)
+        {
+            if(f>=0)
+            {
+                y--;
+                ddfy += 2;
+                f += ddfy;
+            }
+            x++;
+            ddfx += 2;
+            f += ddfx;
+            
+            fill_run(s, fill, m_c.y()+y, m_c.x()-x+1, m_c.x()+x-1);
+            fill_run(s, fill, m_c.y()-y, m_c.x()-x+1, m_c.x()+x-1);
+            fill_run(s, fill, m_c.y()+x, m_c.x()-y+1, m_c.x()+y-1);
+            fill_run(s, fill, m_c.y()-x, m_c.x()-y+1, m_c.x()+y-1);
 
-			if(outline == LINE_SOLID || (outline == LINE_DASHED && Dash(x)) || (outline == LINE_DOTTED && Dot(x)))
-			{
-				s.DrawDot(Point(c.X()+x, c.Y()+y),thickness,stroke);
-				s.DrawDot(Point(c.X()-x, c.Y()+y),thickness,stroke);
+            if(outline == LINE_SOLID || (outline == LINE_DASHED && dash(x)) || (outline == LINE_DOTTED && dot(x)))
+            {
+                s.draw_dot(Point(m_c.x()+x, m_c.y()+y),thickness,stroke);
+                s.draw_dot(Point(m_c.x()-x, m_c.y()+y),thickness,stroke);
 
-				s.DrawDot(Point(c.X()+x, c.Y()-y),thickness,stroke);
-				s.DrawDot(Point(c.X()-x, c.Y()-y),thickness,stroke);
+                s.draw_dot(Point(m_c.x()+x, m_c.y()-y),thickness,stroke);
+                s.draw_dot(Point(m_c.x()-x, m_c.y()-y),thickness,stroke);
 
-				s.DrawDot(Point(c.X()+y, c.Y()+x),thickness,stroke);
-				s.DrawDot(Point(c.X()-y, c.Y()+x),thickness,stroke);
+                s.draw_dot(Point(m_c.x()+y, m_c.y()+x),thickness,stroke);
+                s.draw_dot(Point(m_c.x()-y, m_c.y()+x),thickness,stroke);
 
-				s.DrawDot(Point(c.X()+y, c.Y()-x),thickness,stroke);
-				s.DrawDot(Point(c.X()-y, c.Y()-x),thickness,stroke);
-			}
-		}
-	}
+                s.draw_dot(Point(m_c.x()+y, m_c.y()-x),thickness,stroke);
+                s.draw_dot(Point(m_c.x()-y, m_c.y()-x),thickness,stroke);
+            }
+        }
+    }
 }

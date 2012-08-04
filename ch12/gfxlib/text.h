@@ -5,29 +5,28 @@
 
 #include "shape.h"
 #include "point.h"
-#include "surface.h"
 
 namespace gfxlib
 {
 	class Text : public Shape
 	{
 	private:
-		Point p1;
-		Point p2;
-		std::wstring str;
+		Point m_p1;
+		Point m_p2;
+		std::wstring m_str;
 
 	public:
-		Text(const Point& p1, const Point& p2, const std::wstring str) : p1(p1), p2(p2), str(str) {}
-		virtual void Draw(Surface&) const;
-		virtual const Point N() const { return Point(C().X(),p1.Y()<p2.Y()?p1.Y():p2.Y()); }
-		virtual const Point S() const { return Point(C().X(),p1.Y()>p2.Y()?p1.Y():p2.Y()); }
-		virtual const Point W() const { return Point(p1.X()<p2.X()?p1.X():p2.X(),C().Y()); }
-		virtual const Point E() const { return Point(p1.X()>p2.X()?p1.X():p2.X(),C().Y()); }
-		virtual const Point NW() const { return Point(W().X(),N().Y()); }
-		virtual const Point NE() const { return Point(E().X(),N().Y()); }
-		virtual const Point SW() const { return Point(W().X(),S().Y()); }
-		virtual const Point SE() const { return Point(E().X(),S().Y()); }
-		virtual const Point C() const { return Point((p1.X()+p2.X())/2, (p1.Y()+p2.Y())/2); }
+		Text(const Point& p1, const Point& p2, const std::wstring str) : m_p1(p1), m_p2(p2), m_str(str) {}
+		virtual void draw(Window&) const;
+		virtual const Point n() const { return Point(c().x(),m_p1.y()<m_p2.y()?m_p1.y():m_p2.y()); }
+		virtual const Point s() const { return Point(c().x(),m_p1.y()>m_p2.y()?m_p1.y():m_p2.y()); }
+		virtual const Point w() const { return Point(m_p1.x()<m_p2.x()?m_p1.x():m_p2.x(),c().y()); }
+		virtual const Point e() const { return Point(m_p1.x()>m_p2.x()?m_p1.x():m_p2.x(),c().y()); }
+		virtual const Point nw() const { return Point(w().x(),n().y()); }
+		virtual const Point ne() const { return Point(e().x(),n().y()); }
+		virtual const Point sw() const { return Point(w().x(),s().y()); }
+		virtual const Point se() const { return Point(e().x(),s().y()); }
+		virtual const Point c() const { return Point((m_p1.x()+m_p2.x())/2, (m_p1.y()+m_p2.y())/2); }
 	};
 }
 

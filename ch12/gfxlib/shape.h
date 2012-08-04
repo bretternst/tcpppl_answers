@@ -1,12 +1,15 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 
+#include <stdint.h>
 #include "point.h"
-#include "surface.h"
 
 namespace gfxlib
 {
     class Line;
+    class Window;
+
+    typedef uint32_t Color;
 
     class Shape
     {
@@ -14,38 +17,38 @@ namespace gfxlib
         enum LineStyle { LINE_SOLID, LINE_DASHED, LINE_DOTTED };
 
     private:
-        int thickness;
-        LineStyle outline;
-        Color stroke;
-        Color fill;
+        int m_thickness;
+        LineStyle m_outline;
+        Color m_stroke;
+        Color m_fill;
 
     protected:
-        bool Dash(int y) const;
-        bool Dot(int y) const;
+        bool dash(int y) const;
+        bool dot(int y) const;
 
     public:
-        virtual void Draw(Surface&) const = 0;
-        virtual const Point N() const = 0;
-        virtual const Point S() const = 0;
-        virtual const Point W() const = 0;
-        virtual const Point E() const = 0;
-        virtual const Point NW() const = 0;
-        virtual const Point NE() const = 0;
-        virtual const Point SW() const = 0;
-        virtual const Point SE() const = 0;
-        virtual const Point C() const = 0;
+        virtual void draw(Window&) const = 0;
+        virtual const Point n() const = 0;
+        virtual const Point s() const = 0;
+        virtual const Point w() const = 0;
+        virtual const Point e() const = 0;
+        virtual const Point nw() const = 0;
+        virtual const Point ne() const = 0;
+        virtual const Point sw() const = 0;
+        virtual const Point se() const = 0;
+        virtual const Point c() const = 0;
 
-        Shape() : thickness(2), outline(LINE_SOLID), stroke(0xff000000), fill(0xffffffff) {}
-        int Thickness() const { return thickness; }
-        void Thickness(int t) { thickness = t; }
-        LineStyle Outline() const { return outline; }
-        void Outline(LineStyle style) { outline = style; }
-        int Stroke() const { return stroke; }
-        void Stroke(int s) { stroke = s; }
-        int Fill() const { return fill; }
-        void Fill(int f) { fill = f; }
+        Shape() : m_thickness(2), m_outline(LINE_SOLID), m_stroke(0xff000000), m_fill(0xffffffff) {}
+        int thickness() const { return m_thickness; }
+        void thickness(int t) { m_thickness = t; }
+        LineStyle outline() const { return m_outline; }
+        void outline(LineStyle style) { m_outline = style; }
+        int stroke() const { return m_stroke; }
+        void stroke(int s) { m_stroke = s; }
+        int fill() const { return m_fill; }
+        void fill(int f) { m_fill = f; }
 
-        Line Connect(Shape* s) const;
+        Line connect(Shape* s) const;
     };
 }
 

@@ -2,26 +2,26 @@
 #define __DOT_H__
 
 #include "shape.h"
-#include "surface.h"
+#include "window.h"
 
 namespace gfxlib
 {
-	class Dot : public Shape
-	{
-		Point pos;
-	public:
-		Dot(const Point& pos) : pos(pos) {}
-		virtual void Draw(Surface&) const;
-		virtual const Point N() const { return pos; }
-		virtual const Point S() const { return pos; }
-		virtual const Point W() const { return pos; }
-		virtual const Point E() const { return pos; }
-		virtual const Point NW() const { return pos; }
-		virtual const Point NE() const { return pos; }
-		virtual const Point SW() const { return pos; }
-		virtual const Point SE() const { return pos; }
-		virtual const Point C() const { return pos; }
-	};
+    class Dot : public Shape
+    {
+        Point pos;
+    public:
+        Dot(const Point& pos) : pos(pos) {}
+        virtual void draw(Window&) const;
+        virtual const Point n() const { return pos; }
+        virtual const Point s() const { return pos; }
+        virtual const Point w() const { return pos; }
+        virtual const Point e() const { return pos; }
+        virtual const Point nw() const { return pos; }
+        virtual const Point ne() const { return pos; }
+        virtual const Point sw() const { return pos; }
+        virtual const Point se() const { return pos; }
+        virtual const Point c() const { return pos; }
+    };
 }
 
 #endif
