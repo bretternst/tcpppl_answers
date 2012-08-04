@@ -37,7 +37,7 @@ namespace Exercises
         List_intrusive(const T& t) : head(new T(t)), tail(head) {}
         ~List_intrusive();
 
-        void Add(const T& t);
+        void add(const T& t);
         T& operator[](int idx);
     };
 
@@ -47,7 +47,7 @@ namespace Exercises
         while(p) { Link* n = p->next; delete p; p = n; }
     }
 
-    template<class T> void List_intrusive<T>::Add(const T& t)
+    template<class T> void List_intrusive<T>::add(const T& t)
     {
         if(!head)
         {
@@ -92,7 +92,7 @@ namespace Exercises
         List_nonintrusive(const T& t) : head(new Link(t)), tail(head) {}
         ~List_nonintrusive();
 
-        void Add(const T& t);
+        void add(const T& t);
         T& operator[](int idx);
     };
 
@@ -102,7 +102,7 @@ namespace Exercises
         while(p) { Link* n = p->next; delete p; p = n; }
     }
 
-    template<class T> void List_nonintrusive<T>::Add(const T& t)
+    template<class T> void List_nonintrusive<T>::add(const T& t)
     {
         if(!head)
         {
@@ -135,14 +135,14 @@ int main()
     using namespace Exercises;
 
     List_intrusive<LinkInt> l1;
-    l1.Add(LinkInt(1));
-    l1.Add(LinkInt(2));
-    l1.Add(LinkInt(3));
+    l1.add(LinkInt(1));
+    l1.add(LinkInt(2));
+    l1.add(LinkInt(3));
 
     List_nonintrusive<int> l2;
-    l2.Add(4);
-    l2.Add(5);
-    l2.Add(6);
+    l2.add(4);
+    l2.add(5);
+    l2.add(6);
 
     return 0;
 }

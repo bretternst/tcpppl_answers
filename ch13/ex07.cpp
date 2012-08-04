@@ -8,7 +8,7 @@ namespace Exercises
     // T must also implement the += operator with another T.
     // K must have a compare operator (<) and equality (==).
     // Both types must have stream input operators (>>).
-    template<class K,class T> void SumInputs()
+    template<class K,class T> void sum_inputs()
     {
         using namespace std;
 
@@ -27,7 +27,7 @@ namespace Exercises
         }
 
         cout << "Here are the sums:" << endl;
-        for(map<K,T>::const_iterator i = store.begin(); i != store.end(); i++)
+        for(typename map<K,T>::const_iterator i = store.begin(); i != store.end(); i++)
         {
             cout << i->first << ": " << i->second << endl;
         }
@@ -39,7 +39,7 @@ int main()
     using namespace std;
     using namespace Exercises;
 
-    SumInputs<string,int>();
+    sum_inputs<string,int>();
 
     return 0;
 }

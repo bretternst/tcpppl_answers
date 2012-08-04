@@ -14,6 +14,7 @@ namespace Exercises
 
     struct Price
     {
+        // just an example, never use double for currency :)
         double dollarsAndCents;
     };
 
@@ -24,29 +25,29 @@ namespace Exercises
         Price price;
     };
 
-    template<class T> void ReadLine(T& x)
+    template<class T> void readline(T& x)
     {
-        input >> x;
+        cin >> x;
     }
 
-    template<> void ReadLine<Count>(Count& x)
+    template<> void readline<Count>(Count& x)
     {
         cout << "Enter the count: ";
         cin >> x.qty;
     }
 
-    template<> void ReadLine<Price>(Price& x)
+    template<> void readline<Price>(Price& x)
     {
         cout << "Enter the price: ";
         cin >> x.dollarsAndCents;
     }
 
-    template<> void ReadLine<Item>(Item& x)
+    template<> void readline<Item>(Item& x)
     {
         cout << "Enter the item description: ";
         std::getline(cin,x.name);
-        ReadLine(x.count);
-        ReadLine(x.price);
+        readline(x.count);
+        readline(x.price);
     }
 }
 
@@ -56,7 +57,7 @@ int main()
     using namespace Exercises;
 
     Item i;
-    ReadLine(i);
+    readline(i);
 
     cout << "Name: " << i.name << endl;
     cout << "Qty: " << i.count.qty << endl;

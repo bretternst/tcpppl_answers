@@ -6,6 +6,9 @@ using std::ostream;
 // This is the string class as originally defined in chapter 11.
 // Exercise 4 converts this class into a template.
 
+template<class T> class String;
+template<class T> ostream& operator<<(ostream& o, const String<T>& x);
+
 template<class T> class String
 {
     template<class> friend class StringIterator;
@@ -16,7 +19,7 @@ template<class T> class String
     class Cref;
     class Sref;
 
-    bool IsMatch(const String<T>&, int, int);
+    bool is_match(const String<T>&, int, int);
 public:
     class RangeError {};
 
@@ -32,16 +35,16 @@ public:
     typename String<T>::Cref operator[](int i);
     T operator[](int i) const;
 
-    template<class T> friend ostream& operator<<(ostream&, const String<T>&);
+    friend ostream& operator<< <>(ostream&, const String<T>&);
     bool operator==(const T* s);
     bool operator==(const String<T>& y);
     bool operator!=(const T* s);
     bool operator!=(const String<T>& y);
 
-    int Size() const;
-    void Check(int i) const;
-    char Read(int i);
-    void Write(int i, char c);
+    int size() const;
+    void check(int i) const;
+    char read(int i);
+    void write(int i, char c);
 
     Sref operator()(int start, int count);
     String<T> operator()(int start, int count) const;
@@ -49,7 +52,7 @@ public:
     const T* c_str();
     T* operator*();
 
-    bool IsMatch(const String<T>&);
+    bool is_match(const String<T>&);
 };
 
 template<class T> struct String<T>::Srep
@@ -69,14 +72,14 @@ template<class T> struct String<T>::Srep
 
     ~Srep() { delete[] s; }
 
-    Srep* Copy()
+    Srep* copy()
     {
         if(n==1) return this;
         n--;
         return new Srep(sz, s);
     }
 
-    void Assign(int nsz, const T* p)
+    void assign(int nsz, const T* p)
     {
         if(sz != nsz) {
             delete[] s;
@@ -102,8 +105,8 @@ template<class T> class String<T>::Cref
     Cref(const Cref& r) : s(r.s), i(r.i) {}
     Cref();
 public:
-    operator T() const { s.Check(i); return s.Read(i); }
-    void operator=(T c) { s.Write(i, c); }
+    operator T() const { s.check(i); return s.read(i); }
+    void operator=(T c) { s.write(i, c); }
 };
 
 template<class T> class String<T>::Sref
@@ -115,11 +118,11 @@ template<class T> class String<T>::Sref
     Sref(const Sref& r) : s(r.s), start(r.start), count(r.count) {}
     Sref();
 public:
-    operator String<T>() { String<T> ret; ret.rep->Assign(count, &s.rep->s[start]); return ret; }
+    operator String<T>() { String<T> ret; ret.rep->assign(count, &s.rep->s[start]); return ret; }
     operator T*() { return s.rep->s; }
-    const Sref& operator=(T* x)
+    const Sref& operator=(const T* x)
     {
-        s.rep = s.rep->Copy();
+        s.rep = s.rep->copy();
         int xsz = 0;
         while(x[xsz++]);
         xsz--;
@@ -132,7 +135,7 @@ public:
         for(int j = 0; j < xsz; j++) tmp[i++] = x[j];
         for(int j = start+count; j < s.rep->sz; j++) tmp[i++] = s.rep->s[j];
 
-        s.rep->Assign(sz, tmp);
+        s.rep->assign(sz, tmp);
         delete[] tmp;
         return *this;
     }
@@ -168,12 +171,12 @@ template<class T> String<T>& String<T>::operator=(const T* x)
     xsz--;
 
     if(rep->n == 1) {
-        rep->Assign(xsz, s);
+        rep->assign(xsz, x);
     }
     else
     {
         rep->n--;
-        rep = new Srep(xsz, s);
+        rep = new Srep(xsz, x);
     }
     return *this;
 }
@@ -209,20 +212,20 @@ template<class T> String<T>& String<T>::operator+=(const T* x)
     for(int j = 0; j < rep->sz; j++) s[i++] = rep->s[j];
     for(int j = 0; j < xsz; j++) s[i++] = x[j];
     s[sz] = 0;
-    rep->Assign(sz, s);
+    rep->assign(sz, s);
     delete s;
     return *this;
 }
 
-template<class T> typename String<T>::Cref String<T>::operator[](int i) { Check(i); return Cref(*this, i); }
-template<class T> T String<T>::operator[](int i) const { Check(i); return rep->s[i]; }
+template<class T> typename String<T>::Cref String<T>::operator[](int i) { check(i); return Cref(*this, i); }
+template<class T> T String<T>::operator[](int i) const { check(i); return rep->s[i]; }
 
 template<class T> typename String<T>::Sref String<T>::operator()(int start, int count) { return Sref(*this, start, count); }
 
 template<class T> String<T> String<T>::operator()(int pos, int n) const
 {
-    Check(pos);
-    Check(pos+n-1);
+    check(pos);
+    check(pos+n-1);
     T* ss = new T[n+1];
     int i = 0;
     for(int j = pos; j < pos+n; j++) ss[i++] = rep->s[j];
@@ -262,10 +265,10 @@ template<class T> String<T> operator+(const String<T>& x, const char* y)
     return s;
 }
 
-template<class T> int String<T>::Size() const { return rep->sz; }
-template<class T> void String<T>::Check(int i) const { if(i<0 || i>=rep->sz) throw RangeError(); }
-template<class T> char String<T>::Read(int i) { return rep->s[i]; }
-template<class T> void String<T>::Write(int i, char c) { rep = rep->Copy(); rep->s[i] = c; }
+template<class T> int String<T>::size() const { return rep->sz; }
+template<class T> void String<T>::check(int i) const { if(i<0 || i>=rep->sz) throw RangeError(); }
+template<class T> char String<T>::read(int i) { return rep->s[i]; }
+template<class T> void String<T>::write(int i, char c) { rep = rep->copy(); rep->s[i] = c; }
 
 using namespace std;
 
@@ -274,10 +277,10 @@ template<class T> class StringIterator {
     String<T>& s;
 public:
     StringIterator(String<T>& s) : s(s), idx(0) {}
-    void Next() { idx++; }
-    void Move(int i) { idx = i; }
-    int Position() { return idx; }
-    bool IsPastEnd() { return idx >= s.Size(); }
+    void next() { idx++; }
+    void move(int i) { idx = i; }
+    int position() { return idx; }
+    bool is_past_end() { return idx >= s.size(); }
     typename String<T>::Cref operator*() { return s[idx]; }
 };
 
@@ -286,10 +289,10 @@ template<class T> class ConstStringIterator {
     const String<T>& s;
 public:
     ConstStringIterator(const String<T>& s) : s(s), idx(0) {}
-    void Next() { idx++; }
-    void Move(int i) { idx = i; }
-    int Position() { return idx; }
-    bool IsPastEnd() { return idx >= s.Size(); }
+    void next() { idx++; }
+    void move(int i) { idx = i; }
+    int position() { return idx; }
+    bool is_past_end() { return idx >= s.size(); }
     char operator*() { return s[idx]; }
 };
 
@@ -307,27 +310,27 @@ template<class T> T* String<T>::operator*()
     return tmp;
 }
 
-template<class T> bool String<T>::IsMatch(const String<T>& pattern, int pPos, int sPos)
+template<class T> bool String<T>::is_match(const String<T>& pattern, int pPos, int sPos)
 {
-    if(pattern.Size() < pPos+1 ||
-        (pattern.Size() == pPos+1 && pattern[pPos] == '*')) return true;
+    if(pattern.size() < pPos+1 ||
+        (pattern.size() == pPos+1 && pattern[pPos] == '*')) return true;
     if(pattern[pPos] == '*')
     {
         ConstStringIterator<T> p(pattern);
         ConstStringIterator<T> i(*this);
-        for(int idx = 0; idx < Size()-sPos; idx++)
+        for(int idx = 0; idx < size()-sPos; idx++)
         {
-            p.Move(pPos+1);
-            i.Move(sPos+idx);
+            p.move(pPos+1);
+            i.move(sPos+idx);
             bool match = true;
-            while(!i.IsPastEnd() && !p.IsPastEnd())
+            while(!i.is_past_end() && !p.is_past_end())
             {
-                if(*p == '*') return IsMatch(pattern, p.Position(), i.Position());
+                if(*p == '*') return is_match(pattern, p.position(), i.position());
                 if(*i != *p) {match = false; break;}
-                i.Next(); p.Next();
+                i.next(); p.next();
             }
             if(match)
-                return i.IsPastEnd() && (p.IsPastEnd() || (p.Position()==pattern.Size()-1 && *p=='*'));
+                return i.is_past_end() && (p.is_past_end() || (p.position()==pattern.size()-1 && *p=='*'));
         }
         return false;
     }
@@ -335,19 +338,19 @@ template<class T> bool String<T>::IsMatch(const String<T>& pattern, int pPos, in
     {
         ConstStringIterator<T> p(pattern);
         ConstStringIterator<T> i(*this);
-        while(!i.IsPastEnd() && !p.IsPastEnd())
+        while(!i.is_past_end() && !p.is_past_end())
         {
-            if(*p == '*') return IsMatch(pattern, p.Position(), i.Position());
+            if(*p == '*') return is_match(pattern, p.position(), i.position());
             if(*i != *p) return false;
-            i.Next(); p.Next();
+            i.next(); p.next();
         }
-        return i.IsPastEnd() && (p.IsPastEnd() || (p.Position()==pattern.Size()-1 && *p=='*'));
+        return i.is_past_end() && (p.is_past_end() || (p.position()==pattern.size()-1 && *p=='*'));
     }
 }
 
-template<class T> bool String<T>::IsMatch(const String<T>& pattern)
+template<class T> bool String<T>::is_match(const String<T>& pattern)
 {
-    return IsMatch(pattern, 0, 0);
+    return is_match(pattern, 0, 0);
 }
 
 template<class T> String<T> f(String<T> a, String<T> b)
@@ -373,10 +376,10 @@ int main()
     cout << endl << "Exercise 7:" << endl;
     String<char> s("hello world");
     StringIterator<char> i(s);
-    while(!i.IsPastEnd())
+    while(!i.is_past_end())
     {
         cout << *i;
-        i.Next();
+        i.next();
     }
     cout << endl;
 
@@ -406,21 +409,21 @@ int main()
 
     cout << endl << "Exercise 11:" << endl;
     String<char> ex11("Hello world!");
-    cout << "Should be true: " << ex11.IsMatch("*") << endl;
-    cout << "Should be true: " << ex11.IsMatch("Hello*") << endl;
-    cout << "Should be true: " << ex11.IsMatch("Hello world!") << endl;
-    cout << "Should be true: " << ex11.IsMatch("*lo world!") << endl;
-    cout << "Should be true: " << ex11.IsMatch("Hel*orld!") << endl;
-    cout << "Should be true: " << ex11.IsMatch("Hel*o*d!") << endl;
-    cout << "Should be true: " << ex11.IsMatch("*ello worl*") << endl;
-    cout << "Should be true: " << ex11.IsMatch("*Hello world!") << endl;
-    cout << "Should be true: " << ex11.IsMatch("Hello world!*") << endl;
-    cout << "Should be true: " << ex11.IsMatch("*") << endl;
+    cout << "Should be true: " << ex11.is_match("*") << endl;
+    cout << "Should be true: " << ex11.is_match("Hello*") << endl;
+    cout << "Should be true: " << ex11.is_match("Hello world!") << endl;
+    cout << "Should be true: " << ex11.is_match("*lo world!") << endl;
+    cout << "Should be true: " << ex11.is_match("Hel*orld!") << endl;
+    cout << "Should be true: " << ex11.is_match("Hel*o*d!") << endl;
+    cout << "Should be true: " << ex11.is_match("*ello worl*") << endl;
+    cout << "Should be true: " << ex11.is_match("*Hello world!") << endl;
+    cout << "Should be true: " << ex11.is_match("Hello world!*") << endl;
+    cout << "Should be true: " << ex11.is_match("*") << endl;
 
-    cout << "Should be false: " << ex11.IsMatch("Hello world") << endl;
-    cout << "Should be false: " << ex11.IsMatch("*Hello world") << endl;
-    cout << "Should be false: " << ex11.IsMatch("Hello* world") << endl;
-    cout << "Should be false: " << ex11.IsMatch("x*") << endl;
-    cout << "Should be false: " << ex11.IsMatch("*x") << endl;
-    cout << "Should be false: " << ex11.IsMatch("Hel*x*orld!") << endl;
+    cout << "Should be false: " << ex11.is_match("Hello world") << endl;
+    cout << "Should be false: " << ex11.is_match("*Hello world") << endl;
+    cout << "Should be false: " << ex11.is_match("Hello* world") << endl;
+    cout << "Should be false: " << ex11.is_match("x*") << endl;
+    cout << "Should be false: " << ex11.is_match("*x") << endl;
+    cout << "Should be false: " << ex11.is_match("Hel*x*orld!") << endl;
 }

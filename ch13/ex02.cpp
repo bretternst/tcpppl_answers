@@ -1,15 +1,15 @@
 #include <iostream>
 #include <time.h>
 
-// In terms of performance, the intrusive and non-intrusive linked
-// lists come out pretty much dead even. However, I think the
-// non-intrusive one is the clear winner from the perspective of
-// ease of use and clarity. The consumer of the list shouldn't have
-// to worry about deriving the element type from a certain class
-// that contains linked list housekeeping. Those details should be
-// part of the list itself and not bleed out into the rest of the
-// program. The user should only be concerned about the actual
-// element type that they want to use.
+// In terms of performance, the non-intrusive list takes (over many iterations)
+// about 75%-90% of the time that an intrusive list takes (under GCC).
+//
+// I think the non-intrusive one is the clear winner from the perspective of
+// ease of use and clarity. The consumer of the list shouldn't have to worry
+// about deriving the element type from a certain class that contains linked
+// list housekeeping. Those details should be part of the list itself and not
+// bleed out into the rest of the program. The user should only be concerned
+// about the actual element type that they want to use.
 namespace Exercises
 {
     using std::cout;
@@ -45,7 +45,7 @@ namespace Exercises
         List_intrusive(const T& t) : head(new T(t)), tail(head) {}
         ~List_intrusive();
 
-        void Add(const T& t);
+        void add(const T& t);
         T& operator[](int idx);
     };
 
@@ -55,7 +55,7 @@ namespace Exercises
         while(p) { Link* n = p->next; delete p; p = n; }
     }
 
-    template<class T> void List_intrusive<T>::Add(const T& t)
+    template<class T> void List_intrusive<T>::add(const T& t)
     {
         if(!head)
         {
@@ -72,10 +72,11 @@ namespace Exercises
     {
         int i = 0;
         Link* p = head;
+        if(!p) throw RangeError();
         while(i++ < idx)
         {
-            if(!p) throw RangeError();
             p = p->next;
+            if(!p) throw RangeError();
         }
         return *(static_cast<T*>(p));
     }
@@ -98,7 +99,7 @@ namespace Exercises
         List_nonintrusive(const T& t) : head(new Link(t)), tail(head) {}
         ~List_nonintrusive();
 
-        void Add(const T& t);
+        void add(const T& t);
         T& operator[](int idx);
     };
 
@@ -108,7 +109,7 @@ namespace Exercises
         while(p) { Link* n = p->next; delete p; p = n; }
     }
 
-    template<class T> void List_nonintrusive<T>::Add(const T& t)
+    template<class T> void List_nonintrusive<T>::add(const T& t)
     {
         if(!head)
         {
@@ -143,14 +144,14 @@ int main()
     int start = clock();
     List_intrusive<LinkInt> l1;
     for(int i = 0; i < 10000000; i++)
-        l1.Add(LinkInt(i));
+        l1.add(LinkInt(i));
     cout << "elapsed time: " << clock()-start << endl;
 
     cout << "using non-intrusive linked list:" << endl;
     start = clock();
     List_nonintrusive<int> l2;
     for(int i = 0; i < 10000000; i++)
-        l2.Add(i);
+        l2.add(i);
     cout << "elapsed time: " << clock()-start << endl;
     return 0;
 }

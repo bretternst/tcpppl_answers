@@ -2,19 +2,21 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cstring>
 
 namespace Exercises
 {
     template<class T> class DefaultAllocator
     {
     public:
-        static T Allocate() { return T(); }
+        static T allocate() { return T(); }
     };
 
     template<class Tkey,class Tval,class Talloc = DefaultAllocator<Tval> > class Map
     {
+    public:
         struct Pair;
-
+    private:
         // prevent copying
         Map(const Map&) {}
         void operator=(const Map&) {}
@@ -50,11 +52,11 @@ namespace Exercises
 
     template<class Tkey,class Tval,class Talloc> Tval& Map<Tkey,Tval,Talloc>::operator[](const Tkey& key)
     {
-        for(ItemList::iterator i = items.begin(); i != items.end(); i++)
+        for(typename ItemList::iterator i = items.begin(); i != items.end(); i++)
         {
             if(i->key == key) return i->val;
         }
-        Tval v = Talloc::Allocate();
+        Tval v = Talloc::allocate();
         Pair p(key, v);
         items.push_back(p);
         return items.back().val;
@@ -62,7 +64,7 @@ namespace Exercises
 
     template<class Tkey,class Tval,class Talloc> const Tval& Map<Tkey,Tval,Talloc>::operator[](const Tkey& key) const
     {
-        for(ItemList::const_iterator i = items.begin(); i != items.end(); i++)
+        for(typename ItemList::const_iterator i = items.begin(); i != items.end(); i++)
         {
             if(i->key == key) return i->val;
         }
@@ -92,7 +94,7 @@ namespace Exercises
     class NoDefaultCtorAllocator
     {
     public:
-        static NoDefaultCtor Allocate() { return NoDefaultCtor(0); }
+        static NoDefaultCtor allocate() { return NoDefaultCtor(0); }
     };
 }
 

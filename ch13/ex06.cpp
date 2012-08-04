@@ -4,7 +4,7 @@
 
 namespace Exercises
 {
-    template<class T> void QSort(std::vector<T>& list, int start, int end)
+    template<class T> void qsort(std::vector<T>& list, int start, int end)
     {
         using std::swap;
 
@@ -26,14 +26,14 @@ namespace Exercises
         }
         swap(list[s], list[end]);
 
-        QSort(list, start, s-1);
-        QSort(list, s+1, end);
+        qsort(list, start, s-1);
+        qsort(list, s+1, end);
     }
 
     // Implements qsort for a vector of items of type T.
-    template<class T> void QSort(std::vector<T>& list)
+    template<class T> void qsort(std::vector<T>& list)
     {
-        QSort(list, 0, list.size()-1);
+        qsort(list, 0, list.size()-1);
     }
 }
 
@@ -52,7 +52,7 @@ int main()
     for(vector<int>::const_iterator i = list.begin(); i != list.end(); i++)
         cout << *i << endl;
 
-    QSort(list);
+    qsort(list);
     cout << "After sort: " << endl;
     for(vector<int>::const_iterator i = list.begin(); i != list.end(); i++)
         cout << *i << endl;

@@ -4,12 +4,12 @@
 
 namespace Exercises
 {
-    // A solution that I came up with:
+    // A quick and dirty check, see below for a better one.
     // This may or may not result in runtime overhead (a smart
     // compiler will optimize out the if (false) {...} but this
     // is not guaranteed, especially if optimization is off.
     // If there are other constructors, the logic would need to
-    // be copied of moved into another method.
+    // be copied or moved into another method.
     template<class T>
     class Comparer1
     {

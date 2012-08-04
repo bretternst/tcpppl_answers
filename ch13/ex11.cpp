@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Map.h"
+#include "map.h"
 
 namespace Exercises
 {
@@ -13,7 +13,7 @@ namespace Exercises
         Edge(const T& n1, const T& n2) : n1(n1),n2(n2) {}
     };
 
-    template<class T> void TopologicalSort(std::vector<Edge<T> >& edges, std::vector<T>& list)
+    template<class T> void topological_sort(std::vector<Edge<T> >& edges, std::vector<T>& list)
     {
         typedef std::vector<Edge<T> > EdgeList;
         typedef std::vector<T> NodeList;
@@ -22,7 +22,7 @@ namespace Exercises
         NodeMap forward;
         Map<T,int> backward;
 
-        for(EdgeList::const_iterator i = edges.begin(); i != edges.end(); i++)
+        for(typename EdgeList::const_iterator i = edges.begin(); i != edges.end(); i++)
         {
             forward[i->n1].push_back(i->n2);
             backward[i->n1];
@@ -35,14 +35,14 @@ namespace Exercises
         do
         {
             done = true;
-            for(Map<T,int>::Iterator i = backward.Begin(); i != backward.End(); i++)
+            for(typename Map<T,int>::Iterator i = backward.begin(); i != backward.end(); i++)
             {
                 if(i->val < 0) continue;
                 if(i->val == 0)
                 {
                     list.push_back(i->key);
                     NodeList& targets = forward[i->key];
-                    for(NodeList::iterator j = targets.begin(); j != targets.end(); j++)
+                    for(typename NodeList::iterator j = targets.begin(); j != targets.end(); j++)
                     {
                         backward[*j]--;
                     }
@@ -74,7 +74,7 @@ int main()
     edges.push_back(Edge<int>(11,10));
 
     std::vector<int> results;
-    TopologicalSort(edges, results);
+    topological_sort(edges, results);
 
     for(std::vector<int>::const_iterator i = results.begin(); i != results.end(); i++)
     {

@@ -5,13 +5,15 @@ namespace Exercises
     template<class T> class DefaultAllocator
     {
     public:
-        static T Allocate() { return T(); }
+        static T allocate() { return T(); }
     };
 
     template<class Tkey,class Tval,class Talloc = DefaultAllocator<Tval> > class Map
     {
+    public:
         struct Pair;
-
+        
+    private:
         struct Node
         {
             Node* parent;
@@ -24,29 +26,29 @@ namespace Exercises
             Node(Node* parent, Pair& pair) : parent(parent),pair(pair),left(0),right(0),red(0) {}
             ~Node() { if(left) delete left; if(right) delete right; }
 
-            Node* Grandparent()
+            Node* grandparent()
             {
                 return parent ? parent->parent : 0;
             }
 
-            Node* Uncle()
+            Node* uncle()
             {
-                Node* g = Grandparent();
+                Node* g = grandparent();
                 if (!g) return 0;
                 return parent == g->left ? g->right : g->left;
             }
 
-            void Fix();
-            void Case2();
-            void Case3();
-            void Case4();
-            void Case5();
+            void fix();
+            void case2();
+            void case3();
+            void case4();
+            void case5();
 
-            void RotateLeft();
-            void RotateRight();
+            void rotate_left();
+            void rotate_right();
 
-            int Count() const;
-            int Depth() const;
+            int count() const;
+            int depth() const;
         };
 
         Node* root;
@@ -55,8 +57,8 @@ namespace Exercises
         Map(const Map&) : root(0) {}
         void operator=(const Map&) {}
 
-        Node* Find(Tkey& key, Node* n) const;
-        Node* FindOrInsert(const Tkey& key, Node* n);
+        Node* find(Tkey& key, Node* n) const;
+        Node* find_or_insert(const Tkey& key, Node* n);
 
     public:
         struct Pair
@@ -69,8 +71,8 @@ namespace Exercises
         Map() : root(0) {}
         ~Map() { if(root) delete root; }
 
-        int Count() const;
-        int Depth() const;
+        int count() const;
+        int depth() const;
 
         Tval& operator[](const Tkey& key);
 
@@ -90,12 +92,12 @@ namespace Exercises
             bool operator!=(const Iterator& y);
         };
 
-        Iterator Begin();
-        Iterator End();
+        Iterator begin();
+        Iterator end();
     };
 
     template<class Tkey, class Tval, class Talloc>
-    typename Map<Tkey,Tval,Talloc>::Iterator Map<Tkey,Tval,Talloc>::Begin()
+    typename Map<Tkey,Tval,Talloc>::Iterator Map<Tkey,Tval,Talloc>::begin()
     {
         Node* n = root;
         while(n->left) n = n->left;
@@ -103,7 +105,7 @@ namespace Exercises
     }
 
     template<class Tkey, class Tval, class Talloc>
-    typename Map<Tkey,Tval,Talloc>::Iterator Map<Tkey,Tval,Talloc>::End()
+    typename Map<Tkey,Tval,Talloc>::Iterator Map<Tkey,Tval,Talloc>::end()
     {
         return Iterator(*this, 0);
     }
@@ -186,76 +188,76 @@ namespace Exercises
     }
 
     template<class Tkey, class Tval, class Talloc>
-    void Map<Tkey,Tval,Talloc>::Node::Fix()
+    void Map<Tkey,Tval,Talloc>::Node::fix()
     {
         if(!parent)
             red = false;
         else
-            Case2();
+            case2();
     }
 
     template<class Tkey, class Tval, class Talloc>
-    void Map<Tkey,Tval,Talloc>::Node::Case2()
+    void Map<Tkey,Tval,Talloc>::Node::case2()
     {
         if (!parent->red)
             return;
         else
-            Case3();
+            case3();
     }
 
     template<class Tkey, class Tval, class Talloc>
-    void Map<Tkey,Tval,Talloc>::Node::Case3()
+    void Map<Tkey,Tval,Talloc>::Node::case3()
     {
-        Node* u = Uncle();
+        Node* u = uncle();
 
         if(u && u->red)
         {
             parent->red = false;
             u->red = false;
-            Node* g = Grandparent();
+            Node* g = grandparent();
             g->red = true;
-            g->Fix();
+            g->fix();
         }
         else
         {
-            Case4();
+            case4();
         }
     }
 
     template<class Tkey, class Tval, class Talloc>
-    void Map<Tkey,Tval,Talloc>::Node::Case4()
+    void Map<Tkey,Tval,Talloc>::Node::case4()
     {
-        Node* g = Grandparent();
+        Node* g = grandparent();
 
         if(this == parent->right && parent == g->left)
         {
-            parent->RotateLeft();
-            left->Case5();
+            parent->rotate_left();
+            left->case5();
             return;
         }
         else if (this == parent->left && parent == g->right)
         {
-            parent->RotateRight();
-            right->Case5();
+            parent->rotate_right();
+            right->case5();
             return;
         }
-        Case5();
+        case5();
     }
 
     template<class Tkey, class Tval, class Talloc>
-    void Map<Tkey,Tval,Talloc>::Node::Case5()
+    void Map<Tkey,Tval,Talloc>::Node::case5()
     {
-        Node* g = Grandparent();
+        Node* g = grandparent();
         parent->red = false;
         g->red = true;
         if(this == parent->left && parent == g->left)
-            g->RotateRight();
+            g->rotate_right();
         else
-            g->RotateLeft();
+            g->rotate_left();
     }
 
     template<class Tkey, class Tval, class Talloc>
-    void Map<Tkey,Tval,Talloc>::Node::RotateLeft()
+    void Map<Tkey,Tval,Talloc>::Node::rotate_left()
     {
         Node* n = right;
         if(parent)
@@ -271,7 +273,7 @@ namespace Exercises
     }
 
     template<class Tkey, class Tval, class Talloc>
-    void Map<Tkey,Tval,Talloc>::Node::RotateRight()
+    void Map<Tkey,Tval,Talloc>::Node::rotate_right()
     {
 
         Node* n = left;
@@ -288,49 +290,50 @@ namespace Exercises
     }
 
     template<class Tkey, class Tval, class Talloc>
-    int Map<Tkey,Tval,Talloc>::Node::Count() const
+    int Map<Tkey,Tval,Talloc>::Node::count() const
     {
-        return 1 + (left ? left->Count() : 0) + (right ? right->Count() : 0);
+        return 1 + (left ? left->count() : 0) + (right ? right->count() : 0);
     }
 
     template<class Tkey, class Tval, class Talloc>
-    int Map<Tkey,Tval,Talloc>::Count() const
+    int Map<Tkey,Tval,Talloc>::count() const
     {
-        return root ? root->Count() : 0;
+        return root ? root->count() : 0;
     }
 
     template<class Tkey, class Tval, class Talloc>
-    int Map<Tkey,Tval,Talloc>::Node::Depth() const
+    int Map<Tkey,Tval,Talloc>::Node::depth() const
     {
-        int l = left ? left->Depth() : 0;
-        int r = right ? right->Depth() : 0;
+        int l = left ? left->depth() : 0;
+        int r = right ? right->depth() : 0;
         return 1 + (l > r ? l : r);
     }
 
     template<class Tkey, class Tval, class Talloc>
-    int Map<Tkey,Tval,Talloc>::Depth() const
+    int Map<Tkey,Tval,Talloc>::depth() const
     {
-        return root ? root->Depth() : 0;
+        return root ? root->depth() : 0;
     }
 
     template<class Tkey, class Tval, class Talloc>
-    typename Map<Tkey,Tval,Talloc>::Node* Map<Tkey,Tval,Talloc>::Find(Tkey& key, Node* n) const
+    typename Map<Tkey,Tval,Talloc>::Node* Map<Tkey,Tval,Talloc>::find(Tkey& key, Node* n) const
     {
         if (!n) return 0;
         else if (n->pair.key == key) return n;
-        else if (key < n->pair.key) return Find(key, n->left);
-        return Find(key, n->right);
+        else if (key < n->pair.key) return find(key, n->left);
+        return find(key, n->right);
     }
 
     template<class Tkey, class Tval, class Talloc>
-    typename Map<Tkey,Tval,Talloc>::Node* Map<Tkey,Tval,Talloc>::FindOrInsert(const Tkey& key, Node* n)
+    typename Map<Tkey,Tval,Talloc>::Node* Map<Tkey,Tval,Talloc>::find_or_insert(const Tkey& key, Node* n)
     {
         Node* newNode;
 
         if(n == root && !n)
         {
             // Tree is empty
-            return root = new Node(0, Pair(key,Talloc::Allocate()));
+            Pair p(key,Talloc::allocate());
+            return root = new Node(0, p);
         }
         else if (key == n->pair.key)
         {
@@ -339,17 +342,19 @@ namespace Exercises
         }
         else if (key < n->pair.key)
         {
-            if(n->left) return FindOrInsert(key, n->left);
-            newNode = n->left = new Node(n, Pair(key,Talloc::Allocate()));
+            if(n->left) return find_or_insert(key, n->left);
+            Pair p(key,Talloc::allocate());
+            newNode = n->left = new Node(n, p);
         }
         else
         {
-            if(n->right) return FindOrInsert(key, n->right);
-            newNode = n->right = new Node(n, Pair(key,Talloc::Allocate()));
+            if(n->right) return find_or_insert(key, n->right);
+            Pair p(key,Talloc::allocate());
+            newNode = n->right = new Node(n, p);
         }
 
         newNode->red = true;
-        newNode->Fix();
+        newNode->fix();
 
         while(root->parent)
         {
@@ -362,7 +367,7 @@ namespace Exercises
     template<class Tkey,class Tval,class Talloc>
     Tval& Map<Tkey,Tval,Talloc>::operator[](const Tkey& key)
     {
-        Node* n = FindOrInsert(key, root);
+        Node* n = find_or_insert(key, root);
         return n->pair.val;
     }
 

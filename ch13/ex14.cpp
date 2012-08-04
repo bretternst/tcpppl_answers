@@ -9,7 +9,7 @@ namespace Exercises
     // Start Qsort algorithm, borrowed from exercise 6 (with modifications).
     //
     template<class T,class Tcomparer>
-    void QSort(std::vector<T>& list, int start, int end)
+    void qsort(std::vector<T>& list, int start, int end)
     {
         using std::swap;
 
@@ -23,7 +23,7 @@ namespace Exercises
         int s = start;
         for(int i = start; i < end; i++)
         {
-            if(Tcomparer::Compare(list[i],pivot) < 0)
+            if(Tcomparer::compare(list[i],pivot) < 0)
             {
                 swap(list[i], list[s]);
                 s++;
@@ -31,31 +31,31 @@ namespace Exercises
         }
         swap(list[s], list[end]);
 
-        QSort<T,Tcomparer>(list, start, s-1);
-        QSort<T,Tcomparer>(list, s+1, end);
+        qsort<T,Tcomparer>(list, start, s-1);
+        qsort<T,Tcomparer>(list, s+1, end);
     }
 
     // Implements qsort for a vector of items of type T.
     template<class T,class Tcomparer>
-    void QSort(std::vector<T>& list)
+    void qsort(std::vector<T>& list)
     {
-        QSort<T,Tcomparer>(list, 0, list.size()-1);
+        qsort<T,Tcomparer>(list, 0, list.size()-1);
     }
 
     //
-    // Comparers strings in reverse-lexicographic order.
+    // comparers strings in reverse-lexicographic order.
     //
     template<class T, class Tcomparer>
-    class ReverseLexStringComparer
+    class ReverseLexStringcomparer
     {
     public:
-        static int Compare(const std::basic_string<T>& s1, const std::basic_string<T>& s2)
+        static int compare(const std::basic_string<T>& s1, const std::basic_string<T>& s2)
         {
             int l1 = s1.length();
             int l2 = s2.length();
             for(int i = 0; i <= std::min(l1,l2); i++)
             {
-                int dif = Tcomparer::Compare(s1[l1-i],s2[l2-i]);
+                int dif = Tcomparer::compare(s1[l1-i],s2[l2-i]);
                 if(dif) return dif > 0 ? 1 : -1;
             }
             return l1 - l2;
@@ -65,7 +65,7 @@ namespace Exercises
     //
     // Standard char comparer 
     //
-    class CharComparer
+    class Charcomparer
     {
     public:
         // Always implicitly cast to unsigned char to handle implementations with
@@ -73,7 +73,7 @@ namespace Exercises
         // never be sorted less than "positive" chars.
         //
         // It is unclear whether this was the intention of the exercise.
-        static int Compare(unsigned char c1, unsigned char c2)
+        static int compare(unsigned char c1, unsigned char c2)
         {
             return c1 - c2;
         }
@@ -82,10 +82,10 @@ namespace Exercises
     //
     // Case-insensitive char comparer
     //
-    class CaseInsensitiveCharComparer
+    class CaseInsensitiveCharcomparer
     {
     public:
-        static int Compare(unsigned char c1, unsigned char c2)
+        static int compare(unsigned char c1, unsigned char c2)
         {
             return toupper(c1) - toupper(c2);
         }
@@ -109,14 +109,14 @@ int main()
     test.push_back("abcdd");
 
     cout << "Standard sort, case sensitive:" << endl;
-    QSort<basic_string<char>,ReverseLexStringComparer<char, CharComparer> >(test);
+    qsort<basic_string<char>,ReverseLexStringcomparer<char, Charcomparer> >(test);
     for(vector<basic_string<char> >::const_iterator i = test.begin(); i != test.end(); i++)
     {
         cout << *i << endl;
     }
 
     cout << "Standard sort, case insensitive:" << endl;
-    QSort<basic_string<char>,ReverseLexStringComparer<char, CaseInsensitiveCharComparer> >(test);
+    qsort<basic_string<char>,ReverseLexStringcomparer<char, CaseInsensitiveCharcomparer> >(test);
     for(vector<basic_string<char> >::const_iterator i = test.begin(); i != test.end(); i++)
     {
         cout << *i << endl;

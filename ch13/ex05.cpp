@@ -21,19 +21,19 @@ namespace Exercises
         return output;
     }
 
-    class CountComparer
+    class Countcomparer
     {
     public:
-        static int Compare(Record a, Record b)
+        static int compare(Record a, Record b)
         {
             return a.count - b.count;
         }
     };
 
-    class PriceComparer
+    class Pricecomparer
     {
     public:
-        static int Compare(Record a, Record b)
+        static int compare(Record a, Record b)
         {
             return a.price - b.price;
         }
@@ -49,7 +49,7 @@ namespace Exercises
             done = true;
             for(unsigned int i = 0; i < list.size()-1; i++)
             {
-                if(TCriteria::Compare(list[i],list[i+1]) > 0)
+                if(TCriteria::compare(list[i],list[i+1]) > 0)
                 {
                     std::swap(list[i],list[i+1]);
                     done = false;
@@ -74,12 +74,12 @@ int main()
     for(vector<Record>::const_iterator i = list.begin(); i != list.end(); i++)
         cout << *i << endl;
 
-    Sort<CountComparer>(list);
+    Sort<Countcomparer>(list);
     cout << endl << "After sort by count: " << endl;
     for(vector<Record>::const_iterator i = list.begin(); i != list.end(); i++)
         cout << *i << endl;
 
-    Sort<PriceComparer>(list);
+    Sort<Pricecomparer>(list);
     cout << endl << "After sort by price: " << endl;
     for(vector<Record>::const_iterator i = list.begin(); i != list.end(); i++)
         cout << *i << endl;
