@@ -1,24 +1,28 @@
 #include <iostream>
 #include <string>
+#include <exception>
+#include <cstdlib>
 
-int main()
+void handle_error() {
+    abort();
+}
+
+using namespace std;
+
+int main() try
 {
-    using namespace std;
+    set_unexpected(handle_error);
 
-    try
-    {
-        // do stuff here
-    }
-    catch(exception& ex)
-    {
-        cout << "exception: " << ex.what() << endl;
-        abort();
-    }
-    catch(...)
-    {
-        cout << "unknown exception" << endl;
-        abort();
-    }
-
+    // do stuff here
     return 0;
+}
+catch(exception& ex)
+{
+    cout << "exception: " << ex.what() << endl;
+    abort();
+}
+catch(...)
+{
+    cout << "unknown exception" << endl;
+    abort();
 }

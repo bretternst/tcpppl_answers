@@ -1,15 +1,12 @@
 #include <iostream>
 
-#include "Vector.h"
+#include "vector.h"
 
-// This is an abuse of exceptions. Exceptions are meant for exceptional circumstances,
-// and reaching the end of a vector is most definitely not exceptional (every vector has
-// an end). This is actually a logic error in the calling code.
-//
-// It is also unclear to other developers what is going on.
-//
-// Finally, it adds overhead. A new exception object must be created and copied, and the
-// process of stack unwinding is most likely less performant in most implementations.
+// Exceptions should be used to report circumstances where some library function (or
+// other code) can't do what it is meant to do. In this case, reading past the end
+// of a vector can't be done, so an exception is rightly thrown. However, the calling
+// code can easily avoid asking the library to do something it can't. It is both
+// clearer and faster to avoid a completely avoidable exception.
 int main()
 {
     using namespace std;

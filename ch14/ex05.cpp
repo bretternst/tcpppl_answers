@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cerrno>
+#include <cstdio>
 
 namespace ch14
 {
-    // The errno value is not included in the 
     class CLibraryError { public: int cerrno; CLibraryError() { cerrno = errno; } };
     class IOError : public CLibraryError {};
     class ResourceBusyError : public CLibraryError {};

@@ -2,7 +2,8 @@
 
 namespace ch14
 {
-    template<class Targ> class Callback
+    template<class Targ>
+    class Callback
     {
     public:
         typedef void (CallbackFunc)(Targ);
@@ -14,21 +15,38 @@ namespace ch14
         class FunctionNullError {};
 
         Callback() : func(0) {}
-        Callback(CallbackFunc* funcPtr) : func(funcPtr) {}
+        explicit Callback(CallbackFunc* funcPtr) : func(funcPtr) {}
 
-        void Invoke(Targ) const;
+        void invoke(Targ) const;
+    };
+
+    template<>
+    class Callback<void>
+    {
+    public:
+        typedef void (CallbackFunc)();
+
+    private:
+        CallbackFunc* func;
+
+    public:
+        class FunctionNullError {};
+
+        Callback() : func(0) {}
+        explicit Callback(CallbackFunc* funcPtr) : func(funcPtr) {}
+
+        void invoke() const;
     };
 
     template<class Targ>
-    void Callback<Targ>::Invoke(Targ arg) const
+    void Callback<Targ>::invoke(Targ arg) const
     {
         if(!func) throw FunctionNullError();
         // Let the invoked function throw any exception; don't trap it
         func(arg);
     }
 
-    template<>
-    void Callback<void>::Invoke(void) const
+    void Callback<void>::invoke() const
     {
         if(!func) throw FunctionNullError();
         // Let the invoked function throw any exception; don't trap it
@@ -52,10 +70,10 @@ int main()
     using namespace ch14;
 
     Callback<void> c(&f);
-    c.Invoke();
+    c.invoke();
 
     Callback<int> c2(&g);
-    c2.Invoke(1);
+    c2.invoke(1);
 
     return 0;
 }

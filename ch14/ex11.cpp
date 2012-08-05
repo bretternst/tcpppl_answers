@@ -1,62 +1,68 @@
 #include <iostream>
-#include "windows.h"
+#include <pthread.h>
+#include <unistd.h>
 
+// build with g++ -lpthread -o ex11 ex11.cpp
 namespace ch14
 {
     class Lock
     {
     private:
-        HANDLE lockHandle;
-        CRITICAL_SECTION lockSection;
-
+        pthread_mutex_t mutex;
         // Prevent copying
         Lock(const Lock& x);
         Lock& operator=(const Lock& x);
 
     public:
+        class LockError2 {};
+        class LockError : public std::exception {};
         Lock();
         ~Lock();
-        void OpenLock();
-        void CloseLock();
+        void open();
+        void close();
     };
 
     Lock::Lock()
     {
-        lockHandle = CreateEvent(NULL, TRUE, TRUE, NULL);
-        InitializeCriticalSection(&lockSection);
+        if(pthread_mutex_init(&mutex, 0))
+            throw LockError();
     }
 
     Lock::~Lock()
     {
-        DeleteCriticalSection(&lockSection);
-        CloseHandle(lockHandle);
+        if(pthread_mutex_destroy(&mutex))
+            throw LockError();
     }
 
-    void Lock::OpenLock()
+    void Lock::open()
     {
-        EnterCriticalSection(&lockSection);
-        WaitForSingleObject(lockHandle, INFINITE);
-        ResetEvent(lockHandle);
-        LeaveCriticalSection(&lockSection);
+        if(pthread_mutex_lock(&mutex))
+            throw LockError();
     }
 
-    void Lock::CloseLock()
+    void Lock::close()
     {
-        SetEvent(lockHandle);
+        if(pthread_mutex_unlock(&mutex))
+            throw LockError();
     }
+
+    class AutoLock {
+    private:
+        Lock* lock;
+    public:
+        AutoLock(Lock* lock) : lock(lock) { lock->open(); }
+        ~AutoLock() { lock->close(); }
+    };
 }
 
-DWORD __stdcall f(LPVOID p)
+extern "C" void* worker(void *p)
 {
     using namespace ch14;
+    AutoLock l(static_cast<Lock*>(p));
 
-    Lock* l = static_cast<Lock*>(p);
-    std::cout << "worker thread acquiring lock" << std::endl;
-    l->OpenLock();
     std::cout << "worker thread acquired lock" << std::endl;
-    Sleep(5000);
+    sleep(5);
     std::cout << "worker thread releasing lock" << std::endl;
-    l->CloseLock();
     return 0;
 }
 
@@ -65,23 +71,20 @@ int main()
     using namespace std;
     using namespace ch14;
 
-    HANDLE thread;
-    DWORD threadId;
-    Lock* l = new Lock();
-
-    thread = CreateThread(0, 0, &f, l, 0, &threadId);
-    Sleep(1000);
+    Lock l;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    pthread_t thread;
+    pthread_create(&thread, &attr, worker, (void*)&l);
+    pthread_attr_destroy(&attr);
+    sleep(1);
 
     cout << "main thread acquiring lock" << endl;
-    l->OpenLock();
+    l.open();
     cout << "main thread acquired lock" << endl;
     // Do some locked stuff here
     std::cout << "main thread releasing lock" << endl;
-    l->CloseLock();
-
-    WaitForSingleObject(thread, INFINITE);
-
-    delete l;
-
-    return 0;
+    l.close();
+    pthread_join(thread, 0);
 }

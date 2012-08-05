@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 namespace ch14
 {
@@ -9,50 +10,50 @@ namespace ch14
     public:
         struct Node
         {
-            char* text;
+            const char* text;
             Node* left;
             Node* right;
 
-            Node(char* s) : text(s), left(0), right(0) {}
+            Node(const char* s) : text(s), left(0), right(0) {}
             ~Node() { delete left; delete right; }
         };
 
     private:
-        Node* root;
+        Node* m_root;
 
-        void Add(Node* n, char* s)
+        void add(Node* n, const char* s)
         {
             int cmp = strcmp(s, n->text);
             if(cmp < 0)
             {
-                if(n->left) Add(n->left, s);
+                if(n->left) add(n->left, s);
                 else n->left = new Node(s);
             }
             else if (cmp > 0)
             {
-                if(n->right) Add(n->right, s);
+                if(n->right) add(n->right, s);
                 else n->right = new Node(s);
             }
         }
 
     public:
-        BinaryTree() : root(0) {}
-        ~BinaryTree() { delete root; }
+        BinaryTree() : m_root(0) {}
+        ~BinaryTree() { delete m_root; }
 
-        Node* Root() const { return root; }
+        Node* root() const { return m_root; }
 
-        void Add(char* s)
+        void add(const char* s)
         {
-            if(!root) root = new Node(s);
-            else Add(root, s);
+            if(!m_root) m_root = new Node(s);
+            else add(m_root, s);
         }
     };
 
     class NodeNotFoundError {};
 
-    BinaryTree::Node* Find(const BinaryTree& bt, char* s)
+    BinaryTree::Node* find(const BinaryTree& bt, const char* s)
     {
-        BinaryTree::Node* n = bt.Root();
+        BinaryTree::Node* n = bt.root();
         while(n)
         {
             int cmp = strcmp(s,n->text);
@@ -70,19 +71,19 @@ int main()
     using namespace ch14;
 
     BinaryTree bt;
-    bt.Add("abcd");
-    bt.Add("abcx");
-    bt.Add("hello");
-    bt.Add("xxxx");
-    bt.Add("habc");
-    bt.Add("abcq");
+    bt.add("abcd");
+    bt.add("abcx");
+    bt.add("hello");
+    bt.add("xxxx");
+    bt.add("habc");
+    bt.add("abcq");
 
-    BinaryTree::Node* n = Find(bt, "hello");
+    BinaryTree::Node* n = find(bt, "hello");
     cout << n->text << endl; // should print hello
 
     try
     {
-        n = Find(bt, "world");
+        n = find(bt, "world");
     }
     catch(NodeNotFoundError)
     {

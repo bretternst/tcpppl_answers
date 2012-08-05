@@ -121,7 +121,7 @@ namespace ch14
     }
 }
 
-void main()
+int main()
 {
     using namespace std;
     using namespace ch14;

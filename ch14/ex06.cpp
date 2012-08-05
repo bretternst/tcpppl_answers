@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 
-#include "Vector.h"
+#include "vector.h"
 
-template<class T1, class T2> void CompareVec(T1& v1, T2& v2)
+template<class T1, class T2> void compare_vec(T1& v1, T2& v2)
 {
     using namespace std;
     static int count = 0;
@@ -49,14 +49,14 @@ int main()
 
     Vector<int> V1(tmpl.begin(), tmpl.end());
     vector<int> v1(tmpl.begin(), tmpl.end());
-    CompareVec(V1,v1);
+    compare_vec(V1,v1);
 
     Vector<int> V2(V1.begin(), V1.end());
-    CompareVec(V2,v1);
+    compare_vec(V2,v1);
 
     Vector<int> V3(V1.rbegin(), V1.rend());
     vector<int> v3(v1.rbegin(), v1.rend());
-    CompareVec(V3,v3);
+    compare_vec(V3,v3);
 
     try
     {
@@ -79,11 +79,11 @@ int main()
 
     V1.erase(V1.begin()+2);
     v1.erase(v1.begin()+2);
-    CompareVec(V1,v1);
+    compare_vec(V1,v1);
 
     V1.erase(V1.begin()+1,V1.end());
     v1.erase(v1.begin()+1,v1.end());
-    CompareVec(V1,v1);
+    compare_vec(V1,v1);
 
     V1 = Vector<int>(tmpl.begin(),tmpl.end());
     V2 = Vector<int>(tmpl.begin(),tmpl.end());
@@ -92,11 +92,11 @@ int main()
 
     V1.insert(V1.begin()+2,3,2);
     v1.insert(v1.begin()+2,3,2);
-    CompareVec(V1,v1);
+    compare_vec(V1,v1);
 
     V1.insert(V1.begin()+3,V2.begin(),V2.end());
     v1.insert(v1.begin()+3,v2.begin(),v2.end());
-    CompareVec(V1,v1);
+    compare_vec(V1,v1);
 
     int q = 5;
     int r = 7;
@@ -119,7 +119,7 @@ int main()
     Vp.insert(Vp.begin()+2,&r);
     vp.insert(vp.begin()+2,&r);
 
-    CompareVec(Vp,vp);
+    compare_vec(Vp,vp);
 
     return 0;
 }

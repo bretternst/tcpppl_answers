@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 
 namespace ch14
 {
@@ -21,7 +22,7 @@ namespace ch14
 void f()
 {
     std::cout << "I got called!" << std::endl;
-    exit(-1);
+    abort();
 }
 
 int main()

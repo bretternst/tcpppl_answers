@@ -104,8 +104,8 @@ namespace ch14
         void reserve(int n);
         T& operator[](int i) { return p[i]; }
         const T& operator[](int i) const { return p[i]; }
-        T& at(int i) { if(i>=sz) throw RangeError(); return p[i]; }
-        const T& at(int i) const { if(i>=sz) throw RangeError(); return p[i]; }
+        T& at(int i) { if(i>=sz || i < 0) throw RangeError(); return p[i]; }
+        const T& at(int i) const { if(i>=sz || i < 0) throw RangeError(); return p[i]; }
         T& front() { if(sz<1) throw SizeError(); return p[0]; }
         const T& front() const { if(sz<1) throw SizeError(); return p[0]; }
         T& back() { if(sz<1) throw SizeError(); return p[sz-1]; }
@@ -123,7 +123,7 @@ namespace ch14
     };
 
     template<class T>
-    Vector<T>::Vector(int size, const T& value = T()) : sz(size), p(new T[size]), cp(size)
+    Vector<T>::Vector(int size, const T& value) : sz(size), p(new T[size]), cp(size)
     {
         for(int i = 0; i < sz; i++) p[i] = value;
     }
@@ -158,7 +158,7 @@ namespace ch14
     }
 
     template<class T>
-    void Vector<T>::resize(int size, T c = T())
+    void Vector<T>::resize(int size, T c)
     {
         if(size > sz)
         {
@@ -198,7 +198,7 @@ namespace ch14
     {
         if(n > cp)
         {
-            cp = n
+            cp = n;
             delete[] p;
             p = new T[cp];
         }
