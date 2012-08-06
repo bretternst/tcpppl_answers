@@ -1,10 +1,10 @@
-#include "AIPlayer.h"
+#include "aiplayer.h"
 
-namespace Othello
+namespace othello
 {
-    void AIPlayer::TakeTurn()
+    void AIPlayer::take_turn()
     {
-        Board& b = GetBoard();
+        Board& b = get_board();
 
         Position p;
         int score = 0;
@@ -15,7 +15,7 @@ namespace Othello
             for(int x = 0; x < Board::NumberOfColumns; x++)
             {
                 Position candidate(x,y);
-                int potentialScore = GetBoard().SimulatePlay(Color(), candidate);
+                int potentialScore = get_board().simulate_play(color(), candidate);
                 if(potentialScore > score)
                 {
                     score = potentialScore;
@@ -24,6 +24,6 @@ namespace Othello
             }
         }
 
-        AddPoints(b.Play(Color(), p) + 1);
+        add_points(b.play(color(), p) + 1);
     }
 }

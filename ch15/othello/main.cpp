@@ -1,13 +1,13 @@
 #include <iostream>
-#include <windows.h>
+#include <cstring>
 
-#include "Game.h"
-#include "ConsoleBoard.h"
-#include "GuiBoard.h"
-#include "HumanPlayer.h"
-#include "AIPlayer.h"
+#include "game.h"
+#include "cboard.h"
+#include "gboard.h"
+#include "humanplayer.h"
+#include "aiplayer.h"
 
-using namespace Othello;
+using namespace othello;
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
         p2 = new HumanPlayer(*b, Board::White, p2name, *b);
 
     Game* g = new Game(*b, *p1, *p2);
-    g->Play();
+    g->play();
 
     delete g;
     delete b;

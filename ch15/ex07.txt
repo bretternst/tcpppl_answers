@@ -1,5 +1,6 @@
-These are the C++ keywords I was able to think of without using a reference. I consider
-only standard C++ keywords (no extensions) and I do not include preprocessor directives.
+These are the C++ keywords I was able to think of without using a reference. I
+consider only standard C++ keywords (no extensions) and I do not include
+preprocessor directives.
 
 new (includes new[])
 delete (includes delete[])
@@ -67,5 +68,3 @@ register
 typedef
 union
 wchar_t
-
-You can tell which keywords I have used the least!

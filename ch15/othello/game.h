@@ -1,10 +1,10 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 
-#include "Board.h"
-#include "Player.h"
+#include "board.h"
+#include "player.h"
 
-namespace Othello
+namespace othello
 {
     class Game
     {
@@ -13,14 +13,14 @@ namespace Othello
         Player* p2;
         Player* currentPlayer;
 
-        void ChangePlayer();
+        void change_player();
 
     public:
         class PlayerColorError {};
 
         Game(Board& board, Player& player1, Player& player2);
 
-        void Play();
+        void play();
     };
 }
 

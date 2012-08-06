@@ -5,9 +5,10 @@ class A
 {
 };
 
-template inline const unsigned long volatile int operator +(A a, int y);
+extern const unsigned long volatile int operator +(A a, int y);
 
-// But I couldn't get to 10 keywords. Here's an actual solution stolen from the web:
+// But I couldn't get to 10 keywords. Here's an actual solution stolen from the
+// web:
 
 // Copied from http://www.vandevoorde.com/C++Solutions/challenge.shtml
 int f()

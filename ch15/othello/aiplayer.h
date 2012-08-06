@@ -1,17 +1,17 @@
 #ifndef __AIPLAYER_H__
 #define __AIPLAYER_H__
 
-#include "Player.h"
+#include "player.h"
 
-namespace Othello
+namespace othello
 {
     class AIPlayer : public Player
     {
     public:
         AIPlayer(Board& board, Board::Color color)
-            : Player(board, color, "the computer") {}
+            : Player(board, color, "computer") {}
 
-        void TakeTurn();
+        void take_turn();
     };
 }
 

@@ -1,10 +1,10 @@
 #ifndef __HUMANPLAYER_H__
 #define __HUMANPLAYER_H__
 
-#include "Player.h"
-#include "IPlayerInput.h"
+#include "player.h"
+#include "iplayerinput.h"
 
-namespace Othello
+namespace othello
 {
     class HumanPlayer : public Player
     {
@@ -13,7 +13,7 @@ namespace Othello
         HumanPlayer(Board& board, Board::Color color, std::string name, IPlayerInput& input)
             : Player(board, color, name), input(input) {}
 
-        void TakeTurn();
+        void take_turn();
     };
 }
 

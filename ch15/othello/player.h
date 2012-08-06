@@ -1,9 +1,9 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include "Board.h"
+#include "board.h"
 
-namespace Othello
+namespace othello
 {
     class Player
     {
@@ -13,16 +13,16 @@ namespace Othello
         int points;
 
     protected:
-        Board& GetBoard() { return b; }
+        Board& get_board() { return b; }
 
     public:
         Player(Board& board, Board::Color color, std::string name) : b(board), c(color), n(name), points(0) {}
 
-        Board::Color Color() const { return c; }
-        const std::string& Name() const { return n; }
-        virtual void TakeTurn() = 0;
-        void AddPoints(int n) { points += n; }
-        int Points() { return points; }
+        Board::Color color() const { return c; }
+        const std::string& name() const { return n; }
+        virtual void take_turn() = 0;
+        void add_points(int n) { points += n; }
+        int score() { return points; }
     };
 }
 

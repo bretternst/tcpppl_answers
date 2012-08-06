@@ -1,4 +1,5 @@
 #include <iostream>
+#include <typeinfo>
 
 namespace ch15
 {

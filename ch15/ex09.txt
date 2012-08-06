@@ -5,19 +5,19 @@ with a hidden "this" parameter). Specific versions of the functions
 get stored in the vtable depending on the inheritance hierarchy.
 
 Radio's layout looks like this:
-	Pointer to vtable part 1 (Transmitter::Storable)
-	Pointer to vtable part 2 (Receiver::Storable)
+    Pointer to vtable part 1 (Transmitter::Storable)
+    Pointer to vtable part 2 (Receiver::Storable)
 
 Radio's vtable would look like this:
-	vtable part 1: (Transmitter::Storable)
-		Ptr to Radio::get_file()
-		Ptr to Radio::read()
-		Ptr to Radio::write()
-	vtable part 2: (Receiver::Storable)
-		Ptr to Radio::get_file()
-		Ptr to Radio::read()
-		Ptr to Radio::write()
-	
+    vtable part 1: (Transmitter::Storable)
+        Ptr to Radio::get_file()
+        Ptr to Radio::read()
+        Ptr to Radio::write()
+    vtable part 2: (Receiver::Storable)
+        Ptr to Radio::get_file()
+        Ptr to Radio::read()
+        Ptr to Radio::write()
+    
 Radio overrides all three functions supplied by Storable, so
 all three functions in the vtable point to Radio's version.
 It is not possible to store a Storable* pointer to a Radio object

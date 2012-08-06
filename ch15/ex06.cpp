@@ -1,54 +1,55 @@
 #include <iostream>
+#include <cstdlib>
 
 namespace ch15
 {
     class Arena
     {
     public:
-        virtual void* Alloc(size_t sz) = 0;
-        virtual void Free(void*) = 0;
+        virtual void* alloc(size_t sz) = 0;
+        virtual void free(void*) = 0;
 
-        template<class T> void Destroy(T* o)
+        template<class T> void destroy(T* o)
         {
             o->~T();
-            Free(o);
+            free(o);
         }
     };
 
-    // a very simplistic arena that just wraps the C malloc and free functions, meant
-    // simply to illustrate custom allocation.
+    // a very simplistic arena that just wraps the C malloc and free functions,
+    // meant simply to illustrate custom allocation.
     class CArena : public Arena
     {
     public:
-        void* Alloc(size_t sz)
+        void* alloc(size_t sz)
         {
             return malloc(sz);
         }
 
-        void Free(void* p)
+        void free(void* p)
         {
-            free(p);
+            ::free(p);
         }
     };
 
     class A
     {
-        int x;
+        int m_x;
     public:
-        A() : x(0) {}
-        A(int x) : x(x) {}
+        A() : m_x(0) {}
+        A(int x) : m_x(x) {}
 
-        A* Clone(Arena* a)
+        A* clone(Arena* a)
         {
             return new(a) A(*this);
         }
 
         void* operator new(size_t, Arena* a)
         {
-            return a->Alloc(sizeof(A));
+            return a->alloc(sizeof(A));
         }
 
-        int X() { return x; }
+        int x() { return m_x; }
     };
 }
 
@@ -60,9 +61,9 @@ int main()
     CArena arena;
 
     A a(5);
-    A* a1 = a.Clone(&arena);
-    cout << a1->X() << endl; // should print 5
-    arena.Destroy(a1);
+    A* a1 = a.clone(&arena);
+    cout << a1->x() << endl; // should print 5
+    arena.destroy(a1);
 
     return 0;
 }

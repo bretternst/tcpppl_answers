@@ -3,15 +3,15 @@ However, since virtual inheritance is used, there is still only one base
 class. Therefore, there is only one vtable:
 
 Radio's layout looks like this:
-	Pointer to vtable (Transmitter::Storable)
-	Pointer to vtable (Receiver::Storable)
-	const char* store
+    Pointer to vtable (Transmitter::Storable)
+    Pointer to vtable (Receiver::Storable)
+    const char* store
 
 Radio's vtable would look like this:
-	vtable: (Storable)
-		Ptr to Radio::get_file()
-		Ptr to Radio::read()
-		Ptr to Radio::write()
+    vtable: (Storable)
+        Ptr to Radio::get_file()
+        Ptr to Radio::read()
+        Ptr to Radio::write()
 
 The method of invoking the virtual function is much simpler.
 

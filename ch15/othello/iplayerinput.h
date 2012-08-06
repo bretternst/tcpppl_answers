@@ -3,15 +3,15 @@
 
 #include <string>
 
-#include "Common.h"
+#include "common.h"
 
-namespace Othello
+namespace othello
 {
     class IPlayerInput
     {
     public:
-        virtual Position GetMove() = 0;
-        virtual void Alert(std::string msg) = 0;
+        virtual Position get_move() = 0;
+        virtual void alert(std::string msg) = 0;
     };
 }
 
