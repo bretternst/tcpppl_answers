@@ -18,7 +18,7 @@ int main()
     typedef vector<string> StringVec;
 
     string fruit;
-    StringVec fruits;
+    vector<string> fruits;
 
     cout << "enter some types of fruit, blank line to end:" << endl;
     getline(cin,fruit);

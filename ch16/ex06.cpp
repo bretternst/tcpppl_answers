@@ -6,11 +6,11 @@
 using std::vector;
 using std::string;
 
-class contains
+class ContainsFilter
 {
     vector<string>& names;
 public:
-    contains(vector<string>& names) : names(names) {}
+    ContainsFilter(vector<string>& names) : names(names) {}
 
     bool operator()(std::string s)
     {
@@ -22,11 +22,9 @@ int main()
 {
     using namespace std;
 
-    typedef vector<string> StringVec;
-
     string fruit;
+    vector<string> fruitsYouDontLike;
 
-    StringVec fruitsYouDontLike;
     cout << "enter the names of some fruits you don't like, blank line to end:" << endl;
     getline(cin,fruit);
     while(fruit.size() > 0)
@@ -35,7 +33,7 @@ int main()
         getline(cin,fruit);
     }
 
-    StringVec fruits;
+    vector<string> fruits;
     cout << "enter some types of fruit, blank line to end:" << endl;
     getline(cin,fruit);
     while(fruit.size() > 0)
@@ -47,9 +45,9 @@ int main()
     // the sort is just carried over from the last few exercises
     sort(fruits.begin(),fruits.end());
 
-    fruits.erase(remove_if(fruits.begin(),fruits.end(),contains(fruitsYouDontLike)),fruits.end());
+    fruits.erase(remove_if(fruits.begin(),fruits.end(),ContainsFilter(fruitsYouDontLike)),fruits.end());
 
-    for(StringVec::const_iterator i = fruits.begin(); i != fruits.end(); i++)
+    for(vector<string>::const_iterator i = fruits.begin(); i != fruits.end(); i++)
     {
         cout << *i << endl;
     }

@@ -5,7 +5,7 @@ int main()
 {
     using namespace std;
 
-    char* letters = "abcdefghijklmnopqrstuvwxyz";
+    const char* letters = "abcdefghijklmnopqrstuvwxyz";
 
     typedef vector<char> CharVec;
 

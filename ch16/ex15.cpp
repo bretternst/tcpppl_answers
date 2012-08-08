@@ -28,8 +28,13 @@ using namespace std;
 
 void duplicate(vector<string>& v)
 {
-    for(vector<string>::iterator i = v.begin(); i != v.end(); i++)
+    for(vector<string>::iterator i = v.begin(); i != v.end(); i++) {
         v.insert(i, *i);
+        for(vector<string>::const_iterator j = v.begin(); j != v.end(); j++) {
+            std::cout << *j << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 int main()
@@ -39,5 +44,9 @@ int main()
     v.push_back("do");
     v.push_back("this");
 
-    dup(v);
+    // on my system, this seg faults after 2 iterations:
+    // don't don't do this
+    // don't don't dont do this
+    // Segmentation fault
+    duplicate(v);
 }

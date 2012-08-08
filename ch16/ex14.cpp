@@ -1,14 +1,30 @@
 #include <iostream>
 #include <limits>
-
-#define _AFXDLL
-#define NOMINMAX
-#include <afxtempl.h>
-#undef NOMINMAX
-#undef _AFXDLL
+#include <QtCore/QVector>
 
 namespace ch16
 {
+    // Compile with:
+    // g++ -I/usr/include/qt4 -o ex14 ex14.cpp -lQtCore
+    //
+    // This answer uses the Qt4 library. Adjust the include path as necessary for your
+    // distro. The QVector class is very much like the std vector class, but to keep
+    // with the spirit of this exercise, I use a very minimal set of functions from it.
+    // I essentially just use it as a backing store, pretending that it only has a very
+    // basic interface.
+    //
+    // The backing QVector may not match the size of the vector itself, which is why I
+    // store the size separately. I could have used the full functionality of the class,
+    // making this a wrapper that does almost nothing, but I think the purpose of this
+    // exercise was to adapt a different kind of container to work like the STL one.
+    //
+    // The last part of the question asks how I would deal with functionality available
+    // from the non-standard vector that doesn't exist in the standard vector. Two
+    // approaches to this: 1) Don't - if the user expects to use this class like the
+    // standard vector, then the additional functionality is not needed, or 2) Provide
+    // those extra functions as part of this class and call through to QVector. It
+    // would no longer be standard, but would have non-standard extensions instead.
+    // That way, it could be used by users with both sets of expectations.
     template<class T> class ReverseIterator
     {
         T* i;
@@ -34,13 +50,13 @@ namespace ch16
         bool operator>=(const ReverseIterator<T>& x) const { return i >= x.i; }
         bool operator==(const ReverseIterator<T>& x) const { return i == x.i; }
         bool operator!=(const ReverseIterator<T>& x) const { return i != x.i; }
-        T& operator[](int idx) { return *(i-idx) }
+        T& operator[](int idx) { return *(i-idx); }
         const T& operator[](int idx) const { return *(i-idx); }
     };
 
     template<class T> class Vector
     {
-        CArray<T> arr;
+        QVector<T> arr;
         int sz; // store actual size, not capacity
 
     public:
@@ -70,7 +86,7 @@ namespace ch16
         int size() const { return sz; }
         int max_size() const { return std::numeric_limits<int>::max(); }
         void resize(int sz, T c = T());
-        int capacity() const { return arr.GetSize(); }
+        int capacity() const { return arr.size(); }
         bool empty() const { return sz == 0; }
         void reserve(int n);
         T& operator[](int i) { return arr[i]; }
@@ -94,41 +110,38 @@ namespace ch16
     };
 
     template<class T>
-    Vector<T>::Vector(int size, const T& value = T()) : sz(size)
+    Vector<T>::Vector(int size, const T& value) : sz(size), arr(size)
     {
-        arr.SetSize(size, size);
         for(int i = 0; i < sz; i++) arr[i] = value;
     }
 
     template<class T>
-    Vector<T>::Vector(const Vector<T>& x) : sz(x.size())
+    Vector<T>::Vector(const Vector<T>& x) : sz(x.size()), arr(size)
     {
-        arr.SetSize(x.size());
         for(int i = 0; i < x.size(); i++) arr[i]=x[i];  
     }
 
     template<class T>
     template<class InputIterator>
-    Vector<T>::Vector(InputIterator first, InputIterator last)
+    Vector<T>::Vector(InputIterator first, InputIterator last) : sz(last-first)
     {
-        arr.SetSize(sz = last-first);
-        while(first != last) arr.Add(*first++);
+        while(first != last) arr.push_back(*first++);
     }
 
     template<class T>
     Vector<T>& Vector<T>::operator=(const Vector<T>& x)
     {
-        if(arr.GetSize() != x.size())
-            arr.SetSize(sz = x.size());
+        if(arr.size() != x.size())
+            arr.resize(sz = x.size());
         for(int i = 0; i < x.size(); i++) arr[i] = x[i];
         return *this;
     }
 
     template<class T>
-    void Vector<T>::resize(int size, T c = T())
+    void Vector<T>::resize(int size, T c)
     {
-        int osz = arr.GetSize();
-        arr.SetSize(sz = size);
+        int osz = arr.size();
+        arr.resize(sz = size);
         for(int i = osz; i < size; i++)
         {
             arr[i] = c;
@@ -138,34 +151,37 @@ namespace ch16
     template<class T>
     void Vector<T>::reserve(int n)
     {
-        arr.SetSize(n);
+        arr.resize(n);
     }
 
     template<class T>
     void Vector<T>::assign(int n, const T& u)
     {
-        if(n > arr.GetSize())
-            arr.SetSize(sz = n);
+        if(n > arr.size())
+            arr.resize(sz = n);
         for(int i = 0; i < n; i++) arr[i] = u;
     }
 
     template<class T>
     void Vector<T>::push_back(const T& u)
     {
-        arr.Add(u);
+        if(sz == arr.size())
+            arr.push_back(u);
+        else
+            arr[sz] = u;
         sz++;
     }
 
     template<class T>
     void Vector<T>::pop_back()
     {
-        arr.RemoveAt(--sz);
+        --sz;
     }
 
     template<class T>
     typename Vector<T>::iterator Vector<T>::insert(iterator pos, const T& x)
     {
-        arr.InsertAt(pos - &arr[0], x);
+        arr.insert(arr.begin()+(pos - &arr[0]), x);
         sz++;
     }
 
@@ -174,7 +190,7 @@ namespace ch16
     {
         while(n-- > 0)
         {
-            arr.InsertAt(pos++ - &arr[0], x);
+            arr.insert(arr.begin()+(pos++ - &arr[0]), x);
             sz++;
         }
     }
@@ -185,7 +201,7 @@ namespace ch16
     {
         while(first != last)
         {
-            arr.InsertAt(pos++ - &arr[0], *(first++));
+            arr.insert(arr.begin()+(pos++ - &arr[0]), *(first++));
             sz++;
         }
     }
@@ -193,7 +209,7 @@ namespace ch16
     template<class T>
     typename Vector<T>::iterator Vector<T>::erase(iterator pos)
     {
-        arr.RemoveAt(pos - &arr[0]);
+        arr.remove(pos - &arr[0]);
         sz--;
         return pos;
     }
@@ -201,7 +217,7 @@ namespace ch16
     template<class T>
     typename Vector<T>::iterator Vector<T>::erase(iterator first, iterator last)
     {
-        arr.RemoveAt(first - &arr[0], last-first);
+        arr.remove(first - &arr[0], last-first);
         sz -= last-first;
         return first;
     }
@@ -216,7 +232,7 @@ namespace ch16
     template<class T>
     void Vector<T>::clear()
     {
-        arr.RemoveAll();
+        arr.clear();
         sz = 0;
     }
 }

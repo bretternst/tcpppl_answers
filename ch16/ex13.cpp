@@ -127,7 +127,8 @@ int main()
     v2.put(new Vector_16_2_2_wrapper<int>::Holder(3));
     Vector_16_2_2_wrapper<int> vw2(v2);
 
-    for(Vector_16_2_2_wrapper<int>::iterator i = vw2.begin(); i != vw2.end(); i++)
+    Vector_16_2_2_wrapper<int>::iterator end = vw2.end();
+    for(Vector_16_2_2_wrapper<int>::iterator i = vw2.begin(); i != end; i++)
     {
         cout << *i << endl;
     }

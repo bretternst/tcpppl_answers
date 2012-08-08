@@ -15,10 +15,8 @@ int main()
 {
     using namespace std;
 
-    typedef vector<string> StringVec;
-
     string fruit;
-    StringVec fruits;
+    vector<string> fruits;
 
     cout << "enter some types of fruit, blank line to end:" << endl;
     getline(cin,fruit);
@@ -30,7 +28,7 @@ int main()
 
     sort(fruits.begin(),fruits.end());
     initial pred('a');
-    StringVec::const_iterator i = find_if(fruits.begin(),fruits.end(),pred);
+    vector<string>::const_iterator i = find_if(fruits.begin(),fruits.end(),pred);
     while(i != fruits.end() && pred(*i))
     {
         cout << *i << endl;
