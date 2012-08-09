@@ -4,9 +4,13 @@
 #include <utility>
 #include <ctime>
 #include <map>
+#include <cstdlib>
 
-namespace Exercises
+namespace ch17
 {
+    using std::allocator;
+    using std::pair;
+
     template<class T>
     class Hash
     {
@@ -113,7 +117,7 @@ namespace Exercises
         size_type no_of_erased;
 
     public:
-        template<class Iter, class T>
+        template<class Iter, class U>
         class hash_iterator
         {
             Iter i;
@@ -121,8 +125,8 @@ namespace Exercises
         public:
             hash_iterator() {}
             hash_iterator(Iter ii, Iter ee) : i(ii), end(ee) {}
-            T& operator*() const { return i->p; }
-            T* operator->() const { return &(i->p); }
+            U& operator*() const { return i->p; }
+            U* operator->() const { return &(i->p); }
             hash_iterator& operator++() { ++i; while(i != end && i->erased) ++i; return *this; }
             hash_iterator operator++(int) { hash_iterator i = *this; ++*this; return i; }
             hash_iterator& operator--() { --i; while(i->erased) --i; return *this; }
@@ -135,7 +139,7 @@ namespace Exercises
         typedef hash_iterator<typename std::vector<Entry>::iterator, value_type> iterator;
         typedef hash_iterator<typename std::vector<Entry>::reverse_iterator, value_type> reverse_iterator;
 
-        template<class Iter, class T>
+        template<class Iter, class U>
         class const_hash_iterator
         {
             Iter i;
@@ -144,12 +148,12 @@ namespace Exercises
             const_hash_iterator() {}
             const_hash_iterator(Iter ii, Iter ee) : i(ii), end(ee) {}
             const_hash_iterator(const iterator& ii) : i(ii.i), end(ii.end) {}
-            const T& operator*() const { return i->p; }
-            const T* const operator->() const { return &(i->p); }
+            const U& operator*() const { return i->p; }
+            const U* const operator->() const { return &(i->p); }
             const_hash_iterator& operator++() { ++i; while(i != end && i->erased) ++i; return *this; }
-            const_hash_iterator operator++(int) { hash_iterator i = *this; ++*this; return i; }
+            const_hash_iterator operator++(int) { hash_iterator<Iter,U> i = *this; ++*this; return i; }
             const_hash_iterator& operator--() { --i; while(i->erased) --i; return *this; }
-            const_hash_iterator operator--(int) { hash_iterator i = *this; --*this; return i; }
+            const_hash_iterator operator--(int) { hash_iterator<Iter,U> i = *this; --*this; return i; }
             bool operator==(const const_hash_iterator& x) { return x.i==i; }
             bool operator!=(const const_hash_iterator& x) { return !(*this==x); }
             Entry& entry() { return *i; }
@@ -175,12 +179,12 @@ namespace Exercises
             const T& dv = T(), size_type n = 101, const H& hf = H(), const EQ& eq = EQ());
         ~hash_map() {}
 
-        iterator begin() { std::vector<Entry>::iterator i = v.begin(); while(i!=v.end() && i->erased) ++i; return iterator(i,v.end()); }
-        const_iterator begin() const { std::vector<Entry>::const_iterator i = v.begin(); while(i!=vne.d() && i->erased) ++i; return const_iterator(i,v.end()); }
+        iterator begin() { typename std::vector<Entry>::iterator i = v.begin(); while(i!=v.end() && i->erased) ++i; return iterator(i,v.end()); }
+        const_iterator begin() const { typename std::vector<Entry>::const_iterator i = v.begin(); while(i!=v.end() && i->erased) ++i; return const_iterator(i,v.end()); }
         iterator end() { return iterator(v.end(),v.end()); }
         const_iterator end() const { return const_iterator(v.end(),v.end()); }
-        reverse_iterator rbegin() { std::vector<Entry>::reverse_iterator i = v.rbegin(); while(i!=v.rend() && i->erased) ++i; return reverse_iterator(i,v.rend()); };
-        const_reverse_iterator rbegin() const { std::vector<Entry>::reverse_iterator i = v.rbegin(); while(i!=v.rend() && i->erased) ++i; return reverse_iterator(i,v.rend()); };
+        reverse_iterator rbegin() { typename std::vector<Entry>::reverse_iterator i = v.rbegin(); while(i!=v.rend() && i->erased) ++i; return reverse_iterator(i,v.rend()); };
+        const_reverse_iterator rbegin() const { typename std::vector<Entry>::reverse_iterator i = v.rbegin(); while(i!=v.rend() && i->erased) ++i; return reverse_iterator(i,v.rend()); };
         reverse_iterator rend() { return reverse_iterator(v.rend(),v.rend()); };
         const_reverse_iterator rend() const { return const_reverse_iterator(v.rend(),v.rend()); };
 
@@ -325,7 +329,7 @@ struct BadHashType
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch17;
 
     typedef hash_map<int,int> IntInt;
     IntInt h;

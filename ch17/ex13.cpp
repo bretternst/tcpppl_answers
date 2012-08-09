@@ -1,6 +1,6 @@
 #include <iostream>
 
-namespace Exercises
+namespace ch17
 {
     template<class T>
     class List
@@ -44,7 +44,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch17;
 
     // destruct sequence should read: 4 3 5 1 2
     List<ListItem> l;

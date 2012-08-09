@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stack>
 
-namespace Exercises
+namespace ch17
 {
     template<class T>
     class Queue
@@ -13,13 +13,13 @@ namespace Exercises
         class UnderflowError {};
 
         Queue() {}
-        void PushBack(T x) { s1.push(x); }
-        T PopFront();
-        bool Empty() const { return s1.empty() && s2.empty(); }
+        void push_back(T x) { s1.push(x); }
+        T pop_front();
+        bool empty() const { return s1.empty() && s2.empty(); }
     };
 
     template<class T>
-    T Queue<T>::PopFront()
+    T Queue<T>::pop_front()
     {
         if(s2.empty())
         {
@@ -40,20 +40,20 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch17;
 
     Queue<int> q;
-    q.PushBack(1);
-    q.PushBack(2);
-    q.PushBack(3);
+    q.push_back(1);
+    q.push_back(2);
+    q.push_back(3);
 
-    cout << q.PopFront() << endl;
-    q.PushBack(4);
-    q.PushBack(5);
+    cout << q.pop_front() << endl;
+    q.push_back(4);
+    q.push_back(5);
 
-    while(!q.Empty())
+    while(!q.empty())
     {
-        cout << q.PopFront() << endl;
+        cout << q.pop_front() << endl;
     }
 
     return 0;

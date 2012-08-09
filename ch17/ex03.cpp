@@ -4,6 +4,10 @@
 #include <set>
 #include <algorithm>
 
+char tolower_func(char ch) {
+    return tolower(ch);
+}
+
 int main(int argc, char* argv[])
 {
     using namespace std;
@@ -43,7 +47,7 @@ int main(int argc, char* argv[])
 //      f >> word;
 
         // transform all words to lowercase
-        transform(word.begin(), word.end(), word.begin(), tolower);
+        transform(word.begin(), word.end(), word.begin(), tolower_func);
 
         words.insert(word);
     }

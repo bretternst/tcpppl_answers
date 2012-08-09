@@ -10,7 +10,7 @@
 // have direct access to the previous node to "patch up" the link. as a result, i have removed
 // most operations except for those which can be implemented efficiently. this class basically
 // acts as a stack implemented using a linked list. iteration is forward-only.
-namespace Exercises
+namespace ch17
 {
     class integral_type {};
     class not_integral_type {};
@@ -231,7 +231,7 @@ namespace Exercises
             return false;
         }
 
-        for(list<T,A>::const_iterator ix = x.begin(), iy = y.begin(); ix != x.end(); ++ix,++iy) {
+        for(typename list<T,A>::const_iterator ix = x.begin(), iy = y.begin(); ix != x.end(); ++ix,++iy) {
             if(*ix != *iy) return false;
         }
         return true;
@@ -247,7 +247,7 @@ namespace Exercises
 // begin test cases
 
 template<class L1, class L2>
-void compare_result(char* name, const L1& l1, const L2& l2) {
+void compare_result(const char* name, const L1& l1, const L2& l2) {
     std::cout << name << ": ";
     if(l1.size() != l2.size()) std::cout << "FAIL - size differs" << std::endl;
 
@@ -271,7 +271,7 @@ void test_fill1(L& l) {
 }
 
 int main() {
-    Exercises::list<int> l1;
+    ch17::list<int> l1;
     std::list<int> l2;
 
     test_fill1(l1);

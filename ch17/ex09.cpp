@@ -3,12 +3,13 @@
 #include <string>
 #include <map>
 #include <algorithm>
+#include <cstring>
 
-namespace Exercises
+namespace ch17
 {
     class DateComparer
     {
-        int getMonth(std::string s)
+        int get_month(std::string s)
         {
             for(int i = 0; i < 3; i++) s[i] = tolower(s[i]);
             const char* mth = s.c_str();
@@ -27,7 +28,7 @@ namespace Exercises
             else throw FormatError();
         }
 
-        int getYear(const std::string& s)
+        int get_year(const std::string& s)
         {
             if(!isdigit(s[3]) || !isdigit(s[4])) throw FormatError();
             return atoi(std::string(s.begin()+3,s.end()).c_str());
@@ -40,10 +41,10 @@ namespace Exercises
         {
             int y1,y2,m1,m2;
 
-            m1 = getMonth(d1);
-            m2 = getMonth(d2);
-            y1 = getYear(d1);
-            y2 = getYear(d2);
+            m1 = get_month(d1);
+            m2 = get_month(d2);
+            y1 = get_year(d1);
+            y2 = get_year(d2);
 
             return y1 < y2 || (y1 == y2 && m1 < m2);
         }
@@ -53,10 +54,9 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch17;
 
     cout << "enter some dates (empty line to finish):" << endl;
-
 
     vector<string> dates;
     string s;
@@ -66,7 +66,7 @@ int main()
     }
 
     sort(dates.begin(),dates.end(),DateComparer());
-    for(vector<string>::const_iterator i = dates.begin(); i != dates.end(); i++)
+    for(vector<string>::const_reverse_iterator i = dates.rbegin(); i != dates.rend(); i++)
     {
         cout << *i << endl;
     }

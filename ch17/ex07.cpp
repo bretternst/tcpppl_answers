@@ -3,13 +3,13 @@
 #include <deque>
 #include <vector>
 
-namespace Exercises
+namespace ch17
 {
-    template<class T, class C = deque<T> >
+    template<class T, class C = std::deque<T> >
     class Stack
     {
     protected:
-        bool needsFree;
+        bool m_needs_free;
         C& c;
     public:
         typedef typename C::value_type value_type;
@@ -18,9 +18,9 @@ namespace Exercises
         typedef typename C::const_iterator const_iterator;
         typedef C container_type;
 
-        Stack() : needsFree(true), c(*(new C())) {}
-        explicit Stack(C& a) : needsFree(false), c(a) {}
-        ~Stack() { if(needsFree) delete &c; }
+        Stack() : m_needs_free(true), c(*(new C())) {}
+        explicit Stack(C& a) : m_needs_free(false), c(a) {}
+        ~Stack() { if(m_needs_free) delete &c; }
 
         bool empty() const { return c.empty(); }
         size_type size() const { return c.size(); }
@@ -41,7 +41,7 @@ namespace Exercises
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch17;
 
     Stack<int> s;
     s.push(1);
@@ -63,15 +63,16 @@ int main()
     Stack<int,vector<int> > s2(v);
     s2.push(4);
     s2.push(5);
+    v.push_back(6);
 
-    // should print 12345
+    // should print 123456
     for(Stack<int,vector<int> >::const_iterator i = s2.begin(); i != s2.end(); i++)
     {
         cout << *i;
     }
     cout << endl;
 
-    // should print 12345
+    // should print 123456
     for(vector<int>::const_iterator i = v.begin(); i != v.end(); i++)
     {
         cout << *i;

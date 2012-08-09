@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <stdexcept>
+#include <typeinfo>
 
 // included only for comparison testing
 #include <list>
@@ -12,7 +14,7 @@
 // the collection, the worse it gets. a vector can subscript in o(1) time because the
 // location of any given element can be computed without any iteration. i THIKN this is
 // the point that Bjarne is trying to get across in this exercise.....?
-namespace Exercises
+namespace ch17
 {
     class integral_type {};
     class not_integral_type {};
@@ -314,7 +316,7 @@ namespace Exercises
 
         template<class In>
         void insert(const_iterator pos, In first, In last) {
-            do_insert(pos, first, last, is_integral<In>::type());
+            do_insert(pos, first, last, typename is_integral<In>::type());
         }
 
         iterator erase(const_iterator pos);
@@ -419,7 +421,7 @@ namespace Exercises
     };
 
     template<class T, class A>
-    void list<T,A>::resize(size_type n, T val = T()) {
+    void list<T,A>::resize(size_type n, T val) {
         if(n<sz) {
             iterator i = begin();
             while(n--) ++i;
@@ -533,7 +535,7 @@ namespace Exercises
             return false;
         }
 
-        for(list<T,A>::const_iterator ix = x.begin(), iy = y.begin(); ix != x.end(); ++ix,++iy) {
+        for(typename list<T,A>::const_iterator ix = x.begin(), iy = y.begin(); ix != x.end(); ++ix,++iy) {
             if(*ix != *iy) return false;
         }
         return true;
@@ -558,7 +560,7 @@ bool operator!=(const int_holder& x, const int_holder& y) { return x.i!=y.i; }
 bool operator<(const int_holder& x, const int_holder& y) { return x.i<y.i; }
 
 template<class L1, class L2>
-void compare_result(char* name, const L1& l1, const L2& l2) {
+void compare_result(const char* name, const L1& l1, const L2& l2) {
     std::cout << name << ": ";
     if(l1.size() != l2.size()) std::cout << "FAIL - size differs" << std::endl;
 
@@ -648,7 +650,7 @@ template<class L>
 void test_insert(L& l) {
     l.clear();
     test_fill1(l);
-    L::iterator i = l.insert(l.begin(),1000);
+    typename L::iterator i = l.insert(l.begin(),1000);
     l.insert(i, 1001);
     i = l.insert(l.end(),1002);
     l.insert(i, 1003);
@@ -672,10 +674,10 @@ void test_erase(L& l) {
     test_fill1(l);
     l.erase(l.begin());
     l.erase(--l.end());
-    L::iterator i = l.begin();
+    typename L::iterator i = l.begin();
     ++i; ++i;
     i = l.erase(i);
-    L::iterator i2 = i;
+    typename L::iterator i2 = i;
     ++i2; ++i2;
     i = l.erase(i,i2);
     l.erase(i);
@@ -793,7 +795,7 @@ void test_reverse(L& l) {
 }
 
 bool test_equality() {
-    Exercises::list<int> l1, l2;
+    ch17::list<int> l1, l2;
     test_fill1(l1);
     test_fill1(l2);
     if(!(l1==l2)) return false;
@@ -815,7 +817,7 @@ template<class T>
 void run_tests() {
     std::cout << "test pass T=" << typeid(T).name() << std::endl;
 
-    Exercises::list<T> l1;
+    ch17::list<T> l1;
     std::list<T> l2;
 
     test_fill1(l1);
@@ -886,18 +888,18 @@ void run_tests() {
 
     std::cout << "equality: " << (test_equality() ? "PASS" : "FAIL") << std::endl;
 
-    const Exercises::list<T> l3(l1);
+    const ch17::list<T> l3(l1);
     compare_result("const_iterator",l1,l3);
 
     std::list<T> stdlctor1(10, 10);
-    Exercises::list<T> exlctor1(10, 10);
+    ch17::list<T> exlctor1(10, 10);
     compare_result("ctor1",stdlctor1,exlctor1);
 
     std::list<T> stdlctor2(l1.begin(),l1.end());
-    Exercises::list<T> exlctor2(l1.begin(),l1.end());
+    ch17::list<T> exlctor2(l1.begin(),l1.end());
     compare_result("ctor2",stdlctor2,exlctor2);
 
-    Exercises::list<T> exlctor3(l1);
+    ch17::list<T> exlctor3(l1);
     compare_result("ctor3",exlctor3,l1);
 };
 
@@ -905,7 +907,7 @@ int main() {
     run_tests<int>();
     run_tests<int_holder>();
 
-    Exercises::list<int> l1;
+    ch17::list<int> l1;
     test_fill1(l1);
     std::cout << "element at position 2 = " << l1[2] << std::endl;
     try {

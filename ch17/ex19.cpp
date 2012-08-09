@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
 
-namespace Exercises {
+namespace ch17 {
     template<class Coll1, class Coll2>
     void merge(Coll1& c1, Coll2& c2) {
-        Coll1::iterator ipos = c1.begin();
-        Coll2::iterator first = c2.begin();
-        Coll2::iterator last = c2.begin();
+        typename Coll1::iterator ipos = c1.begin();
+        typename Coll2::iterator first = c2.begin();
+        typename Coll2::iterator last = c2.begin();
 
         while(first != c2.end())
         {
@@ -15,7 +15,6 @@ namespace Exercises {
             }
             do {
                 ipos = c1.insert(ipos, *first++);
-//              first = c2.erase(first);
             } while (first != c2.end() && *first < *ipos);
         }
         c2.clear();
@@ -24,7 +23,7 @@ namespace Exercises {
 
 int main() {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch17;
 
     vector<int> c1;
     c1.push_back(1);

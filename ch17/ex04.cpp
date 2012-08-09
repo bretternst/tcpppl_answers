@@ -1,11 +1,93 @@
 #include <iostream>
 #include <ctime>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 
-#include "ex04.h"
-
-namespace Solitaire
+namespace solitaire
 {
+    class Card
+    {
+    public:
+        enum SuitType { Spades, Clubs, Diamonds, Hearts };
+
+    private:
+        SuitType s;
+        unsigned char n;
+
+    public:
+        Card(SuitType suit, unsigned char number) : s(suit), n(number) {}
+        SuitType suit() const { return s; }
+        char symbol() const
+        {
+            switch(n) {
+                case 10: return 'T'; case 11: return 'J'; case 12: return 'Q'; case 13: return 'K'; 
+                default: return n+'0';
+            }
+        }
+        unsigned char number() { return n; }
+        bool is_black() { return s == Spades || s == Clubs; }
+        bool is_red() { return s == Diamonds || s == Hearts; }
+        std::string to_string() const
+        {
+            std::string ret;
+            ret.push_back(symbol());
+            switch(s) {
+                case Spades: ret.push_back('S'); break;
+                case Clubs: ret.push_back('C'); break;
+                case Diamonds: ret.push_back('D'); break;
+                case Hearts: ret.push_back('H'); break;
+            }
+            return ret;
+        }
+    };
+
+    std::ostream& operator<<(std::ostream& output, const Card& x)
+    {
+        output << x.to_string();
+        return output;
+    }
+
+    class Deck : public std::vector<Card>
+    {
+    public:
+        Deck();
+        void shuffle() { std::random_shuffle(this->begin(), this->end()); }
+    };
+
+    class Stack : public std::vector<Card*>
+    {
+    public:
+        Stack(Deck& deck)
+        {
+            for(Deck::iterator i = deck.begin(); i != deck.end(); i++)
+                this->push_back(&(*i));
+        }
+
+        template<class Tcoll> Stack(const Tcoll& cards)
+        {
+            for(typename Tcoll::const_iterator i = cards.begin(); i != cards.end(); i++)
+                this->push_back(*i);
+        }
+
+        Stack() {}
+
+        virtual Card* draw() { Card* c = this->back(); this->pop_back(); return c; }
+    };
+
+    class Tableau : public Stack
+    {
+        unsigned int m_shown;
+    public:
+        Tableau() : m_shown(0) {}
+        void add_hidden(Card* c) { this->push_back(c); }
+        void add_shown(int n) { m_shown += n; }
+        void add_shown(Card* c) { this->push_back(c); m_shown++; }
+        void remove_shown(int n) { m_shown -= n; }
+        unsigned int shown() const { return m_shown; }
+        Card* draw() { m_shown--; return Stack::draw(); }
+    };
+    
     Deck::Deck()
     {
         // fill the deck
@@ -19,7 +101,7 @@ namespace Solitaire
         }
     }
 
-    bool getCol(std::istream& input, int& col)
+    bool get_col(std::istream& input, int& col)
     {
         col = 0;
         input >> col;
@@ -27,7 +109,7 @@ namespace Solitaire
         return col >= 0 && col <= 6;
     }
     
-    bool getFoundation(std::istream& input, int& f)
+    bool get_foundation(std::istream& input, int& f)
     {
         f = 0;
         input >> f;
@@ -35,17 +117,17 @@ namespace Solitaire
         return f >= 0 && f <= 3;
     }
 
-    bool getNumberOfCards(std::istream& input, const Tableau& t, unsigned int& n)
+    bool get_num_of_cards(std::istream& input, const Tableau& t, unsigned int& n)
     {
         n = 0;
         input >> n;
         if(n < 1) n = 1;
-        return n <= t.Shown();
+        return n <= t.shown();
     }
 
-    bool isValidUnder(Card* c1, Card* c2)
+    bool is_valid_under(Card* c1, Card* c2)
     {
-        return ((c1->IsBlack() && c2->IsRed()) || (c1->IsRed() && c2->IsBlack())) && c2->Number() == c1->Number() - 1;
+        return ((c1->is_black() && c2->is_red()) || (c1->is_red() && c2->is_black())) && c2->number() == c1->number() - 1;
     }
 }
 
@@ -53,7 +135,7 @@ namespace Solitaire
 int main()
 {
     using namespace std;
-    using namespace Solitaire;
+    using namespace solitaire;
 
     // seed rand() once per execution
     srand(static_cast<unsigned int>(time(0)));
@@ -66,15 +148,15 @@ int main()
     Tableau tableau[7];
 
     // deal cards
-    deck.Shuffle();
+    deck.shuffle();
     for(int i = 0; i < 7; i++)
     {
         for(int j = 0; j < i; j++)
-            tableau[i].AddHidden(stock.Draw());
-        tableau[i].AddShown(stock.Draw());
+            tableau[i].add_hidden(stock.draw());
+        tableau[i].add_shown(stock.draw());
     }
     for(int i = 0; i < 3; i++)
-        waste.push_back(stock.Draw());
+        waste.push_back(stock.draw());
 
     bool gameover = false;
     while(!gameover)
@@ -117,7 +199,7 @@ int main()
             {
                 if(tableau[j].size() >= i)
                 {
-                    if(i <= tableau[j].size()-tableau[j].Shown())
+                    if(i <= tableau[j].size()-tableau[j].shown())
                         cout << "** ";
                     else
                         cout << *tableau[j][i-1] << ' ';
@@ -149,16 +231,16 @@ int main()
                         waste.clear();
                     }
 
-                    int n = min(stock.size(),static_cast<unsigned int>(3));
+                    int n = min((int)stock.size(),3);
                     for(int i = 0; i < n; i++)
-                        waste.push_back(stock.Draw());
+                        waste.push_back(stock.draw());
                     break;
                 }
             case 't':
                 {
                     // top card to column
                     int col;
-                    if(!getCol(cmd, col))
+                    if(!get_col(cmd, col))
                     {
                         cout << "invalid column" << endl;
                         break;
@@ -168,14 +250,14 @@ int main()
                         cout << "no card to move" << endl;
                         break;
                     }
-                    if(!(tableau[col].size() == 0 && waste.back()->Number() == 13) &&
-                        !isValidUnder(tableau[col].back(), waste.back()))
+                    if(!(tableau[col].size() == 0 && waste.back()->number() == 13) &&
+                        !is_valid_under(tableau[col].back(), waste.back()))
                     {
                         cout << "move is not valid" << endl;
                     }
                     else
                     {
-                        tableau[col].AddShown(waste.Draw());
+                        tableau[col].add_shown(waste.draw());
                     }
                     break;
                 }
@@ -184,13 +266,13 @@ int main()
                     int col1;
                     int col2;
                     unsigned int n;
-                    if(!getCol(cmd, col1) ||
-                        !getCol(cmd, col2))
+                    if(!get_col(cmd, col1) ||
+                        !get_col(cmd, col2))
                     {
                         cout << "invalid column" << endl;
                         break;
                     }
-                    if(!getNumberOfCards(cmd, tableau[col1], n))
+                    if(!get_num_of_cards(cmd, tableau[col1], n))
                     {
                         cout << "invalid number of cards" << endl;
                         break;
@@ -199,13 +281,13 @@ int main()
 
                     // if target is empty and top card is a king, permit the move
                     // otherwise, if the card is of an alternating color and one number lower, permit the move
-                    if((tableau[col2].empty() && (*i)->Number() == 13) ||
-                        (isValidUnder(tableau[col2].back(),*i)))
+                    if((tableau[col2].empty() && (*i)->number() == 13) ||
+                        (is_valid_under(tableau[col2].back(),*i)))
                     {
                         tableau[col2].insert(tableau[col2].end(), i, tableau[col1].end());
-                        tableau[col2].AddShown(n);
+                        tableau[col2].add_shown(n);
                         tableau[col1].erase(i, tableau[col1].end());
-                        tableau[col1].RemoveShown(n);
+                        tableau[col1].remove_shown(n);
                     }
                     else
                     {
@@ -218,20 +300,20 @@ int main()
                     // move card from tableau to foundation
                     int col;
                     int f;
-                    if(!getFoundation(cmd, f))
+                    if(!get_foundation(cmd, f))
                     {
                         cout << "invalid foundation" << endl;
                         break;
                     }
 
                     // move from top to foundation
-                    if(!getCol(cmd, col))
+                    if(!get_col(cmd, col))
                     {
                         Card* c = waste.back();
-                        if((foundation[f].empty() && c->Number()==1) ||
-                            (foundation[f].back()->Suit() == c->Suit() && foundation[f].back()->Number() == c->Number()-1))
+                        if((foundation[f].empty() && c->number()==1) ||
+                            (foundation[f].back()->suit() == c->suit() && foundation[f].back()->number() == c->number()-1))
                         {
-                            foundation[f].push_back(waste.Draw());
+                            foundation[f].push_back(waste.draw());
                         }
                         else
                         {
@@ -241,7 +323,7 @@ int main()
                     }
                     else
                     {
-                        if(tableau[col].empty() || tableau[col].Shown() < 1)
+                        if(tableau[col].empty() || tableau[col].shown() < 1)
                         {
                             cout << "invalid column" << endl;
                             break;
@@ -250,10 +332,10 @@ int main()
 
                         // ace can move into an empty foundation stack
                         // otherwise, card must be the same suit and n+1
-                        if((foundation[f].empty() && c->Number()==1) ||
-                            (foundation[f].back()->Suit() == c->Suit() && foundation[f].back()->Number() == c->Number()-1))
+                        if((foundation[f].empty() && c->number()==1) ||
+                            (foundation[f].back()->suit() == c->suit() && foundation[f].back()->number() == c->number()-1))
                         {
-                            foundation[f].push_back(tableau[col].Draw());
+                            foundation[f].push_back(tableau[col].draw());
                         }
                         else
                         {
@@ -265,7 +347,7 @@ int main()
                     // check for endgame condition
                     gameover = true;
                     for(int i = 0; i < 4; i++)
-                        if(foundation[i].empty() || foundation[i].back()->Number() != 13) gameover = false;
+                        if(foundation[i].empty() || foundation[i].back()->number() != 13) gameover = false;
 
                     break;
                 }
@@ -273,14 +355,14 @@ int main()
                 {
                     // flip bottom card in column
                     int col;
-                    if(!getCol(cmd, col) ||
+                    if(!get_col(cmd, col) ||
                         tableau[col].empty() ||
-                        tableau[col].Shown() != 0)
+                        tableau[col].shown() != 0)
                     {
                         cout << "invalid column" << endl;
                         break;
                     }
-                    tableau[col].AddShown(1);
+                    tableau[col].add_shown(1);
                     break;
                 }
             }

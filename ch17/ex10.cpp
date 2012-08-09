@@ -3,8 +3,9 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <cstdio> // for EOF
 
-namespace Exercises
+namespace ch17
 {
     class Date
     {
@@ -12,30 +13,30 @@ namespace Exercises
         unsigned int m;
         unsigned int d;
 
-        void ReadFullYear(std::istream& input) { if(!(input >> y)) throw FormatError(); }
-        void ReadThreeLetterMonth(std::istream&);
-        void ReadMonthNumber(std::istream& input) { if(!(input >> m)) throw FormatError(); }
-        void ReadDay(std::istream& input) { if(!(input >> d)) throw FormatError(); }
-        bool IsLeapYear() { return ((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0); };
-        bool IsDateValid();
+        void read_full_year(std::istream& input) { if(!(input >> y)) throw FormatError(); }
+        void read_three_letter_month(std::istream&);
+        void read_month_number(std::istream& input) { if(!(input >> m)) throw FormatError(); }
+        void read_day(std::istream& input) { if(!(input >> d)) throw FormatError(); }
+        bool is_leap_year() { return ((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0); };
+        bool is_date_valid();
 
-        void ReadMmmYYYY(std::istream& input);
-        void ReadMMDDYYYY(std::istream& input);
-        void ReadMmmDDYYYY(std::istream& input);
+        void read_mmmyyyy(std::istream& input);
+        void read_mmddyyyy(std::istream& input);
+        void read_mmmddyyyy(std::istream& input);
     public:
         class FormatError {};
         class InvalidDateError {};
 
         Date() : y(1900), m(1), d(1) {}
         explicit Date(const std::string& s);
-        unsigned int Year() const { return y; }
-        unsigned int Month() const { return m; }
-        unsigned int Day() const { return d; }
+        unsigned int year() const { return y; }
+        unsigned int month() const { return m; }
+        unsigned int day() const { return d; }
 
-        bool operator<(const Date&);
+        bool operator<(const Date&) const;
     };
 
-    void Date::ReadThreeLetterMonth(std::istream& input)
+    void Date::read_three_letter_month(std::istream& input)
     {
         std::string s;
         for(int i = 0; i < 3 && input; i++) s.push_back(tolower(input.get()));
@@ -47,39 +48,39 @@ namespace Exercises
         else throw InvalidDateError();
     }
 
-    bool Date::IsDateValid()
+    bool Date::is_date_valid()
     {
         if(y < 1 || y > 9999) return false;
         if(m < 1 || m > 12) return false;
 
         static unsigned int monthLengths[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-        if(m == 2 && IsLeapYear()) return d <= 29;
+        if(m == 2 && is_leap_year()) return d <= 29;
         return d <= monthLengths[m-1];
     }
     
-    void Date::ReadMmmYYYY(std::istream& input)
+    void Date::read_mmmyyyy(std::istream& input)
     {
         d = 1;
-        ReadThreeLetterMonth(input);
-        ReadFullYear(input);
+        read_three_letter_month(input);
+        read_full_year(input);
     }
 
-    void Date::ReadMMDDYYYY(std::istream& input)
+    void Date::read_mmddyyyy(std::istream& input)
     {
-        ReadMonthNumber(input);
+        read_month_number(input);
         if(input.get() != '/') throw FormatError();
-        ReadDay(input);
+        read_day(input);
         if(input.get() != '/') throw FormatError();
-        ReadFullYear(input);
+        read_full_year(input);
     }
 
-    void Date::ReadMmmDDYYYY(std::istream& input)
+    void Date::read_mmmddyyyy(std::istream& input)
     {
         if(input.get() != '(') throw FormatError();
-        ReadThreeLetterMonth(input);
-        ReadDay(input);
+        read_three_letter_month(input);
+        read_day(input);
         if(input.get() != ',') throw FormatError();
-        ReadFullYear(input);
+        read_full_year(input);
         if(input.get() != ')') throw FormatError();
     }
 
@@ -89,21 +90,21 @@ namespace Exercises
 
         // date format 1: Jan2008
         if(isalpha(input.peek()))
-            ReadMmmYYYY(input);
+            read_mmmyyyy(input);
         // date format 2: 1/1/2008
         else if(isdigit(input.peek()))
-            ReadMMDDYYYY(input);
+            read_mmddyyyy(input);
         // date format 3: (Mmm DD, YYYY)
         else if(input.peek()=='(')
-            ReadMmmDDYYYY(input);
+            read_mmmddyyyy(input);
         else
             throw FormatError();
 
         if(input.peek() != EOF) throw FormatError();
-        if(!IsDateValid()) throw InvalidDateError();
+        if(!is_date_valid()) throw InvalidDateError();
     }
 
-    bool Date::operator<(const Date& x)
+    bool Date::operator<(const Date& x) const
     {
         return (y < x.y) ||
             (y == x.y && m < x.m) ||
@@ -112,14 +113,14 @@ namespace Exercises
 
     std::ostream& operator<<(std::ostream& output, const Date& d)
     {
-        return output << d.Month() << '/' << d.Day() << '/' << d.Year();
+        return output << d.month() << '/' << d.day() << '/' << d.year();
     }
 }
 
 int main()
 {
     using namespace std;
-    using namespace Exercises;
+    using namespace ch17;
 
     cout << "enter some dates (empty line to finish):" << endl;
 
