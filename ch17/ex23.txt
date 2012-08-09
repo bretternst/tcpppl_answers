@@ -1,0 +1,35 @@
+Wikipedia has an excellent article on hash tables and implmenetation
+strategies:
+http://en.wikipedia.org/wiki/Hash_table
+
+A chaining hash table's performance degrades gracefully when the load becomes
+heavy. If lookup and insertion performance are paramount, this is probably an
+optimal strategy. The hash table can still be ineffective if the hash
+algorithm is poor; for example, if most of the elements get inserted into a
+small number of chains, the search time can approach O(N).
+
+The space overhead with this approach is associated with the additional
+storage required for the linked list for each chain. To improve lookup time
+further when multiple elements live in a chain, the hash table size can be
+further increased, assuming the hash algorithm was chosen well enough to keep
+spreading things out.
+
+To even further improve performance at the cost of space, some implementations
+store more than one element in a chain node. This allows them to be better
+cached, but increases space overhead when those slots are not filled.
+
+An alternative strategy does away with the linked list and stores all elements
+in the hash table itself. This requires less space, but can increase lookup
+times because the hash table must locate an element by jumping around the hash
+table in a deterministic pattern looking for the element (or an unused space).
+This can get especially bad when the table is heavily loaded because
+collisions become more frequent (the lookup process may have to evaluate and
+skip entries that do not even belong to the given key.)
+
+According to wikipedia, the performance is severely degraded when the load
+factor grows beyond 0.7 or so. Even a "perfect" hash algorithm will begin to
+break down in this way. A more aggressive resize algorithm is required, which
+may further slow down lookups because of more frequent resizing.
+
+There are many more algorithms, some which combine the two approaches to get
+the benefit of both.

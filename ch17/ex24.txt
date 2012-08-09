@@ -1,0 +1,18 @@
+To make equal_range trivial to implement, it seems to me that the easiest
+approach is a chained one, where all key/value pairs with the same key are
+stored in a single linked list. This makes it very easy to get the first and
+last elements because they are all in the same place. In fact, the list need
+not be traversed since equal_range's second result is one beyond the final
+value for the given key.
+
+So, equal_range's first result for key K would be the first node in the list
+for K. Then, equal_range's second result would simply be the first node of the
+following list in the hash table (or end() if there are no further entries).
+
+The main problem with this approach is that the hash table entries may have to
+be traversed to find the next used entry, and this could be a O(n) search in
+the hash table in the worst case, where n is the number of hash table entries
+(not the number of key/value pairs). The exercise didn't say anything about
+efficiency, so I'm not going to worry too much about that. Hash maps are
+designed for fast lookup, insert, etc. - not necessarily the fastest
+iteration.
