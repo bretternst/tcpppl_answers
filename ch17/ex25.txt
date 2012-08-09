@@ -1,0 +1,17 @@
+Space overhead for hash_map is composed of the following (on an x64 system): 
+- Constant 16 bytes (to store max_load, grow, and no_of_erased). 
+- 48 bytes for the two vectors (the entry vector and the buckets)
+- 8 * size of bucket table (one pointer per entry)
+- 17 bytes for each actual entry (for the Entry struct) + the size of the
+  key and value itself.
+
+So an empty hash_map with 101 buckets would take 872 bytes + 17 bytes per each
+added item.
+
+My implmenetation's map class is hard to decipher, but it appears to use a
+red-black tree where each node has 28 bytes overhead (plus the key and value).
+Obviously the map will have much less memory overhead because it doesn't need
+to maintain all that empty space in the hash table. A hash table will almost
+always have empty entries because of the load factor vs. performance
+trade-off. If space is at a premium, one would probably want to use map;
+however, if lookup time is paramount, then hash_map may be the better choice.

@@ -27,7 +27,7 @@ collisions become more frequent (the lookup process may have to evaluate and
 skip entries that do not even belong to the given key.)
 
 According to wikipedia, the performance is severely degraded when the load
-factor grows beyond 0.7 or so. Even a "perfect" hash algorithm will begin to
+factor grows beyond 0.7 or so. Even an excellent hash algorithm will begin to
 break down in this way. A more aggressive resize algorithm is required, which
 may further slow down lookups because of more frequent resizing.
 
