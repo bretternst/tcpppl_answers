@@ -1,0 +1,19 @@
+I don't really get this question, but I'll give it a shot. 
+
+1. Rebuild the table, ignoring erased elements (the original implementation
+does this already).
+2. Use a loop on each vector bucket to deallocate erased nodes and link the
+previous node to the next node (it's just a linked list).
+3. If the buckets are implemented using a data structure for which standard
+iterators are available, the remove_if function could be used with a predicate
+to remove all erased nodes to the end and then erase them from there. This
+would avoid a loop.
+4. Erased nodes could be removed immediately when they are erased. This avoids
+a loop later. This again depends on the data structure used for the buckets.
+With the simple linked list, it's just a matter of linking the previous node
+to the next node and deallocating the erased node (or changing the root node
+in the hash table if it's the first one).
+
+It would not be advisable to use an iterator over the whole hash_map container
+and some algorithm function to remove erased nodes because a changing
+container may cause active iterators to blow up.

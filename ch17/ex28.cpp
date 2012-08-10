@@ -245,5 +245,5 @@ int main() {
     hm[1] = 2;
     hm[2] = 3;
     hm[1] = 5;
-    cout << hm[0] << " " << hm[1] << " " << hm[2] << endl;
+    cout << hm[2] << " " << hm[0] << " " << hm[1] << endl;
 }
