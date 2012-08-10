@@ -33,11 +33,10 @@
 template<class T>
 void f(T& container) {
     srand(time(0));
-
     // profile inserts and lookups
     for(int i = 0; i < 10000000; i++) {
         container[rand() % 1000] = rand();
-    }   
+    }
 }
 
 int main() {
