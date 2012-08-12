@@ -1,0 +1,30 @@
+The implementation given in 17.6.2.3 won't cover all of the representation of
+an object when the object contains pointers to other objects. These pointers
+may refer to an integral part of the object (for example, a string may contain
+a pointer to an array of characters). This is a problem because it reduces the
+usefulness of the hash and may also result in logically incorrect hashing (two
+identical strings could have different pointers). Specialization would be
+required in those cases.
+
+In order to write a hash function that considers all the representation of a
+key, one would have to know something about the structure of the object and
+the meaning of its various parts. One way to handle this, which is what some
+environments do (e.g. .NET) is delegate the hashing to the object itself via a
+GetHashCode method. This could be accomplished using either polymorphism or on
+any object implementing the function using a templated hash function.
+
+I'm not aware of, nor have I been able to find a generic hash function that
+works in all situations, so I'm not sure how to answer that part of the
+question.
+
+It might be wise to ignore part of a key when you may have uninitialized
+fields, when the fields are not relevant to the value of an object (i.e. they
+do not factor into an operator== result) or when the field is dependent upon
+another field. For example, a string may contain a character array and a
+separate size field. The size field could be used when computing the hash
+using the char array, but using the size field directly in the hash (such as
+xoring the result by the size) doesn't add anything. Additionally, fields
+which are dependent on the context in which the object is used should not be
+considered when hashing; for example, the node of a linked list may have a
+"next" field pointer which can change without changing the logical value of
+the node.
