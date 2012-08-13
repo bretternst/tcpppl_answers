@@ -4,32 +4,25 @@
 #include <string>
 #include <cstdlib>
 
-namespace ch17
-{
+namespace ch17 {
     using std::allocator;
     using std::pair;
 
     template<class T>
-    class Hash
-    {
+    class Hash {
     public:
-        size_t operator()(const T& key) const;
+        size_t operator()(const T& key) const {
+            size_t res = 0;
+            size_t len = sizeof(T);
+            const char* p = reinterpret_cast<const char*>(&key);
+            while(len--) res = (res<<1) ^ *p++;
+            return res;
+        }
     };
-
-    template<class T>
-    size_t Hash<T>::operator()(const T& key) const
-    {
-        size_t res = 0;
-        size_t len = sizeof(T);
-        const char* p = reinterpret_cast<const char*>(&key);
-        while(len--) res = (res<<1) ^ *p++;
-        return res;
-    }
 
     // integer hash algorithm taken from http://burtleburtle.net/bob/hash/integer.html
     template<>
-    size_t Hash<int>::operator()(const int& key) const
-    {
+    size_t Hash<int>::operator()(const int& key) const {
         int a = key;
         a = (a ^ 61) ^ (a >> 16);
         a = a + (a << 3);
@@ -41,8 +34,7 @@ namespace ch17
 
     typedef char* Pchar;
     template<>
-    size_t Hash<char*>::operator()(const Pchar& key) const
-    {
+    size_t Hash<char*>::operator()(const Pchar& key) const {
         size_t res = 0;
         Pchar p = key;
         while(*p) res = (res<<1)^*p++;
@@ -50,8 +42,7 @@ namespace ch17
     }
 
     template<>
-    size_t Hash<std::string>::operator()(const std::string& key) const
-    {
+    size_t Hash<std::string>::operator()(const std::string& key) const {
         size_t res = 0;
         typedef std::string::const_iterator CI;
         CI p = key.begin();
@@ -71,23 +62,12 @@ namespace ch17
         typedef A allocator_type;
         typedef typename A::reference reference;
         typedef typename A::const_reference const_reference;
-
         typedef typename A::size_type size_type;
         typedef typename A::difference_type difference_type;
-
-        typedef H Hasher;
+        typedef typename A::pointer pointer;
+        typedef typename A::const_pointer const_pointer;
         typedef EQ key_equal;
-
-        class value_equal : public std::binary_function<value_type,value_type,bool>
-        {
-            friend class hash_map;
-        protected:
-            EQ eq;
-            value_equal(EQ e) : eq(e) {}
-        public:
-            bool operator()(const value_type& x, const value_type& y) const
-                { return eq(x.first,y.first); }
-        };
+        typedef H key_hash;
 
     private:
         // representation
@@ -108,23 +88,31 @@ namespace ch17
         std::vector<Entry*,typename A::template rebind<Entry*>::other> b;
 
         const T default_value;
-        Hasher hash;
+        key_hash hash;
         key_equal eq;
         float max_load;
         float grow;
         size_type no_of_erased;
 
+        typedef typename std::vector<Entry>::iterator v_iterator;
+        typedef typename std::vector<Entry>::const_iterator v_const_iterator;
+
     public:
-        template<class Iter, class U>
         class hash_iterator
         {
-            Iter i;
-            Iter end;
+            v_iterator i;
+            v_iterator end;
         public:
+            typedef hash_map::value_type value_type;
+            typedef hash_map::difference_type difference_type;
+            typedef hash_map::pointer pointer;
+            typedef hash_map::reference reference;
+            typedef std::bidirectional_iterator_tag iterator_category;
+
             hash_iterator() {}
-            hash_iterator(Iter ii, Iter ee) : i(ii), end(ee) {}
-            U& operator*() const { return i->p; }
-            U* operator->() const { return &(i->p); }
+            hash_iterator(v_iterator i, v_iterator e) : i(i), end(e) {}
+            reference operator*() const { return i->p; }
+            pointer operator->() const { return &(i->p); }
             hash_iterator& operator++() { ++i; while(i != end && i->erased) ++i; return *this; }
             hash_iterator operator++(int) { hash_iterator i = *this; ++*this; return i; }
             hash_iterator& operator--() { --i; while(i->erased) --i; return *this; }
@@ -134,37 +122,42 @@ namespace ch17
             Entry& entry() { return *i; }
         };
 
-        typedef hash_iterator<typename std::vector<Entry>::iterator, value_type> iterator;
-        typedef hash_iterator<typename std::vector<Entry>::reverse_iterator, value_type> reverse_iterator;
+        typedef hash_iterator iterator;
+        typedef std::reverse_iterator<hash_iterator> reverse_iterator;
 
-        template<class Iter, class U>
         class const_hash_iterator
         {
-            Iter i;
-            Iter end;
+            v_const_iterator i;
+            v_const_iterator end;
         public:
+            typedef hash_map::value_type value_type;
+            typedef hash_map::difference_type difference_type;
+            typedef hash_map::pointer pointer;
+            typedef hash_map::reference reference;
+            typedef std::bidirectional_iterator_tag iterator_category;
+
             const_hash_iterator() {}
-            const_hash_iterator(Iter ii, Iter ee) : i(ii), end(ee) {}
-            const_hash_iterator(const iterator& ii) : i(ii.i), end(ii.end) {}
-            const U& operator*() const { return i->p; }
-            const U* const operator->() const { return &(i->p); }
+            const_hash_iterator(v_const_iterator i, v_const_iterator e) : i(i), end(e) {}
+            const_hash_iterator(const iterator& i) : i(i.i), end(i.end) {}
+            const_reference operator*() const { return i->p; }
+            const_pointer const operator->() const { return &(i->p); }
             const_hash_iterator& operator++() { ++i; while(i != end && i->erased) ++i; return *this; }
-            const_hash_iterator operator++(int) { hash_iterator<Iter,U> i = *this; ++*this; return i; }
+            const_hash_iterator operator++(int) { const_hash_iterator i = *this; ++*this; return i; }
             const_hash_iterator& operator--() { --i; while(i->erased) --i; return *this; }
-            const_hash_iterator operator--(int) { hash_iterator<Iter,U> i = *this; --*this; return i; }
+            const_hash_iterator operator--(int) { const_hash_iterator i = *this; --*this; return i; }
             bool operator==(const const_hash_iterator& x) { return x.i==i; }
             bool operator!=(const const_hash_iterator& x) { return !(*this==x); }
             Entry& entry() { return *i; }
         };
 
-        typedef const_hash_iterator<typename std::vector<Entry>::const_iterator, value_type> const_iterator;
-        typedef const_hash_iterator<typename std::vector<Entry>::const_reverse_iterator, value_type> const_reverse_iterator;
+        typedef const_hash_iterator const_iterator;
+        typedef std::reverse_iterator<const_hash_iterator> const_reverse_iterator;
 
         hash_map(const T& dv = T(), size_type n = 101, const H& h = H(), const EQ& e = EQ()) :
           default_value(dv), b(n), no_of_erased(0), hash(h), eq(e)
         {
             set_load();
-            v.reserve(static_cast<unsigned int>(max_load*b.size()));
+            v.reserve(n);
         }
 
         void set_load(float m = 0.7, float g = 1.6)
@@ -177,14 +170,41 @@ namespace ch17
             const T& dv = T(), size_type n = 101, const H& hf = H(), const EQ& eq = EQ());
         ~hash_map() {}
 
-        iterator begin() { typename std::vector<Entry>::iterator i = v.begin(); while(i!=v.end() && i->erased) ++i; return iterator(i,v.end()); }
-        const_iterator begin() const { typename std::vector<Entry>::const_iterator i = v.begin(); while(i!=v.end() && i->erased) ++i; return const_iterator(i,v.end()); }
-        iterator end() { return iterator(v.end(),v.end()); }
-        const_iterator end() const { return const_iterator(v.end(),v.end()); }
-        reverse_iterator rbegin() { typename std::vector<Entry>::reverse_iterator i = v.rbegin(); while(i!=v.rend() && i->erased) ++i; return reverse_iterator(i,v.rend()); };
-        const_reverse_iterator rbegin() const { typename std::vector<Entry>::reverse_iterator i = v.rbegin(); while(i!=v.rend() && i->erased) ++i; return reverse_iterator(i,v.rend()); };
-        reverse_iterator rend() { return reverse_iterator(v.rend(),v.rend()); };
-        const_reverse_iterator rend() const { return const_reverse_iterator(v.rend(),v.rend()); };
+        iterator begin() {
+            v_iterator i = v.begin();
+            while(i!=v.end() && i->erased) ++i;
+            return iterator(i,v.end());
+        }
+
+        const_iterator begin() const {
+            v_const_iterator i = v.begin();
+            while(i!=v.end() && i->erased) ++i;
+            return const_iterator(i,v.end());
+        }
+
+        iterator end() {
+            return iterator(v.end(),v.end());
+        }
+
+        const_iterator end() const {
+            return const_iterator(v.end(),v.end());
+        }
+
+        reverse_iterator rbegin() {
+            return reverse_iterator(end());
+        };
+
+        const_reverse_iterator rbegin() const {
+            return const_reverse_iterator(end());
+        };
+
+        reverse_iterator rend() {
+            return reverse_iterator(begin());
+        }
+
+        const_reverse_iterator rend() const {
+            return const_reverse_iterator(begin());
+        }
 
         // map functions
         iterator find(const key_type& k);
@@ -212,7 +232,7 @@ namespace ch17
         size_type max_size() const { v.max_size(); };
         size_type bucket_count() const { return b.size(); }
         void resize(size_type n);
-        Hasher hash_fun() const { return hash; }
+        key_hash hash_fun() const { return hash; }
         key_equal key_eq() const { return eq; }
         bool empty() const { return size()==0; }
         void swap(hash_map& x) { b.swap(x.b); v.swap(x.v); std::swap(no_of_erased,x.no_of_erased); }
@@ -281,27 +301,40 @@ namespace ch17
     hash_map<Key,T,H,EQ,A>::operator[](const key_type& k)
     {
         size_type i = hash(k)%b.size();
-        for(Entry* p = b[i]; p; p = p->next)
-        {
-            if(eq(k,p->p.first))
+        if(b[i]) {
+            Entry* q;
+            for(Entry* p = b[i]; p; p = p->next)
             {
-                if(p->erased)
+                q = p;
+                if(eq(k,p->p.first))
                 {
-                    p->erased = false;
-                    no_of_erased--;
-                    return p->p.second = default_value;
+                    if(p->erased)
+                    {
+                        p->erased = false;
+                        no_of_erased--;
+                        return p->p.second = default_value;
+                    }
+                    return p->p.second;
                 }
-                return p->p.second;
             }
+            if(size_type(b.size()*max_load) <= v.size())
+            {
+                resize(static_cast<unsigned int>(b.size()*grow));
+                return operator[](k);
+            }
+            v.push_back(Entry(k, default_value,0,v.size()));
+            q->next = &v.back();
+            return q->p.second;
+        } else {
+            if(size_type(b.size()*max_load) <= v.size())
+            {
+                resize(static_cast<unsigned int>(b.size()*grow));
+                return operator[](k);
+            }
+            v.push_back(Entry(k,default_value,b[i],v.size()));
+            b[i] = &v.back();
+            return b[i]->p.second;
         }
-        if(size_type(b.size()*max_load) <= v.size())
-        {
-            resize(static_cast<unsigned int>(b.size()*grow));
-            return operator[](k);
-        }
-        v.push_back(Entry(k,default_value,b[i],v.size()));
-        b[i] = &v.back();
-        return b[i]->p.second;
     }
 
     template<class Key, class T, class H, class EQ, class A>
@@ -313,4 +346,3 @@ namespace ch17
         return std::make_pair(find(val.first), true);
     }
 }
-
