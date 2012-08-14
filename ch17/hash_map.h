@@ -1,3 +1,6 @@
+#ifndef __HASH_MAP_H__
+#define __HASH_MAP_H__
+
 #include <utility>
 #include <functional>
 #include <vector>
@@ -346,3 +349,5 @@ namespace ch17 {
         return std::make_pair(find(val.first), true);
     }
 }
+
+#endif

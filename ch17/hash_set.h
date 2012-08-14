@@ -1,3 +1,6 @@
+#ifndef __HASH_SET_H__
+#define __HASH_SET_H__
+
 #include <utility>
 #include <functional>
 #include <vector>
@@ -287,3 +290,5 @@ namespace ch17 {
         }
     }
 }
+
+#endif
