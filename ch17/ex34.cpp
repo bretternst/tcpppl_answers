@@ -1,6 +1,7 @@
 #include <iostream>
 #include "hash_set.h"
 #include "hash_multimap.h"
+#include "hash_multiset.h"
 
 int main() {
     using namespace ch17;
@@ -30,5 +31,22 @@ int main() {
 
     for(hash_multimap<int,int>::iterator i = hmm.begin(); i != hmm.end(); i++) {
         cout << i->first << " = " << i->second << endl;
+    }
+
+    cout << endl;
+
+
+    hash_multiset<int> hms;
+    for(int i = 0; i < 5; i++) {
+        hms.insert(i);
+    }
+    hms.insert(1);
+    hms.insert(2);
+    hms.insert(2);
+    hms.erase(4);
+    hms.erase(1);
+
+    for(hash_multiset<int>::iterator i = hms.begin(); i != hms.end(); i++) {
+        cout << *i << endl;
     }
 }
