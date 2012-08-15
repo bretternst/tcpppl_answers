@@ -1,0 +1,14 @@
+See http://en.wikipedia.org/wiki/Big_O_notation
+
+In order for an O(N^2) algorithm to be faster than O(N) for some N > 10, there
+would have to be a hefty constant cost associated with the O(N) algorithm. For
+example, perhaps the O(N) algorithm requires excessive amounts of memory that
+the O(N^2) algorithm does not, which comes with an associated performance
+penalty.
+
+With an N = 11, the O(N) algorithm would have to have a constant cost of more
+than 11 times that of the O(N^2)'s constant cost. Practically speaking, if the
+O(N^2)'s operations can be optimized and use only CPU cache, but the O(N)
+algorithm could not, then it would not be entirely unreasonable to have that
+constant cost difference. However, the advantage would quickly evaporate as N
+grows.
