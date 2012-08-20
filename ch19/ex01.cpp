@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-namespace ch18 {
+namespace ch19 {
     template<class Bi> void reverse(Bi first, Bi last) {
         // two checks necessary to handle even and odd lengths
         while((first != last) && (first != --last)) {
@@ -12,13 +12,13 @@ namespace ch18 {
 }
 
 int main() {
-    using namespace ch18;
+    using namespace ch19;
     using namespace std;
 
     string s("Hello World!");
-    ch18::reverse(s.begin(), s.end());
+    ch19::reverse(s.begin(), s.end());
     cout << s << endl;
     string s1("Hello World");
-    ch18::reverse(s1.begin(), s1.end());
+    ch19::reverse(s1.begin(), s1.end());
     cout << s1 << endl;
 }

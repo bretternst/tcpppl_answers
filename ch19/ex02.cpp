@@ -5,7 +5,7 @@
 // say a library function takes an output iterator to write log entries to.
 // If the consumer of the library does not wish to persist log entries, then
 // a Sink may be passed in to perform a task without writing log output.
-namespace ch18 {
+namespace ch19 {
     using namespace std;
 
     template<class T>
@@ -20,7 +20,7 @@ namespace ch18 {
 
 int main() {
     using namespace std;
-    using namespace ch18;
+    using namespace ch19;
 
     int arr[] = { 1, 2, 3, 4, 5 };
     copy(arr, arr + 5, Sink<int>());
