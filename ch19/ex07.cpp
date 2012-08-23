@@ -1,6 +1,12 @@
 #include <iostream>
 #include <vector>
 
+// Validation checks must be more frequent because the
+// container may have changed at any point (for example,
+// elements may have been erased). For that reason, the
+// valid() function must be called much more frequently.
+// This will add a lot of overhead for non-random-access
+// iterators.
 namespace ch19 {
     using namespace std;
 
