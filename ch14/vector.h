@@ -3,66 +3,6 @@
 
 namespace ch14
 {
-    template<class T> class Vector;
-
-    template<class T> class Iterator
-    {
-        int i;
-        Vector<T>* container;
-
-    public:
-        Iterator(int i, Vector<T>* container) : i(i), container(container) {}
-        T& operator*() { return (*container)[i]; }
-        const T& operator*() const { return *container[i]; }
-        T* operator->() { return &(*container)[i]; }
-        T const* operator->() const { return &*container[i]; }
-        Iterator<T>& operator++() { i++; return *this; }
-        Iterator<T> operator++(int) { Iterator<T> copy = *this; i++; return copy; }
-        Iterator<T>& operator--() { i--; return *this; }
-        Iterator<T> operator--(int) { Iterator<T> copy = *this; i--; return copy; }
-        Iterator<T>& operator+=(int x) { i += x; return *this; }
-        Iterator<T> operator+(int x) { Iterator<T> copy = *this; copy += x; return copy; }
-        Iterator<T>& operator-=(int x) { i -= x; return *this; }
-        Iterator<T> operator-(int x) { Iterator<T> copy = *this; copy -= x; return copy; }
-        bool operator<(const Iterator<T>& x) const { return i < x.i; }
-        bool operator>(const Iterator<T>& x) const { return i > x.i; }
-        bool operator<=(const Iterator<T>& x) const { return i <= x.i; }
-        bool operator>=(const Iterator<T>& x) const { return i >= x.i; }
-        bool operator==(const Iterator<T>& x) const { return i == x.i; }
-        bool operator!=(const Iterator<T>& x) const { return i != x.i; }
-        T& operator[](int idx) { return *container[i+idx]; }
-        const T& operator[](int idx) const { return *container[i+idx]; }
-    };
-
-    template<class T> class ReverseIterator
-    {
-        int i;
-        Vector<T>* container;
-
-    public:
-        ReverseIterator(int i, Vector<T>* container) : i(i), container(container) {}
-        T& operator*() { return (*container)[i]; }
-        const T& operator*() const { return *container[i]; }
-        T* operator->() { return &(*container)[i]; }
-        T const* operator->() const { return &*container[i]; }
-        ReverseIterator<T>& operator++() { i--; return *this; }
-        ReverseIterator<T> operator++(int) { ReverseIterator<T> copy = *this; i--; return copy; }
-        ReverseIterator<T>& operator--() { i++; return *this; }
-        ReverseIterator<T> operator--(int) { ReverseIterator<T> copy = *this; i++; return copy; }
-        ReverseIterator<T>& operator+=(int x) { i -= x; return *this; }
-        ReverseIterator<T> operator+(int x) { ReverseIterator<T> copy = *this; copy += x; return copy; }
-        ReverseIterator<T>& operator-=(int x) { i += x; return *this; }
-        ReverseIterator<T> operator-(int x) { ReverseIterator<T> copy = *this; copy -= x; return copy; }
-        bool operator<(const ReverseIterator<T>& x) const { return i < x.i; }
-        bool operator>(const ReverseIterator<T>& x) const { return i > x.i; }
-        bool operator<=(const ReverseIterator<T>& x) const { return i <= x.i; }
-        bool operator>=(const ReverseIterator<T>& x) const { return i >= x.i; }
-        bool operator==(const ReverseIterator<T>& x) const { return i == x.i; }
-        bool operator!=(const ReverseIterator<T>& x) const { return i != x.i; }
-        T& operator[](int idx) { return *container[i-idx]; }
-        const T& operator[](int idx) const { return *container[i-idx]; }
-    };
-
     template<class T> class Vector
     {
         static const int DefaultCapacity = 32;
@@ -76,10 +16,10 @@ namespace ch14
         class RangeError {};
         class SizeError {};
 
-        typedef Iterator<T> iterator;
-        typedef const Iterator<T> const_iterator;
-        typedef ReverseIterator<T> reverse_iterator;
-        typedef const ReverseIterator<T> const_reverse_iterator;
+        typedef T* iterator;
+        typedef const T* const_iterator;
+        typedef std::reverse_iterator<iterator> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
         Vector() : p(new T[DefaultCapacity]), sz(0), cp(DefaultCapacity) {}
         Vector(int size, const T& value = T()) ;
@@ -88,14 +28,14 @@ namespace ch14
         ~Vector() { delete[] p; }
 
         Vector<T>& operator=(const Vector<T>& x);
-        iterator begin() { return iterator(0, this); }
-        const_iterator begin() const { return iterator(0, this); }
-        iterator end() { return iterator(sz, this); }
-        const_iterator end() const { return iterator(sz, this); }
-        reverse_iterator rbegin() { return reverse_iterator(sz-1, this); }
-        const_reverse_iterator rbegin() const { return reverse_iterator(sz-1, this); }
-        reverse_iterator rend() { return reverse_iterator(-1, this); }
-        const_reverse_iterator rend() const { return reverse_iterator(-1, this); }
+        iterator begin() { return p; }
+        const_iterator begin() const { return p; }
+        iterator end() { return p + sz; }
+        const_iterator end() const { return p + sz; }
+        reverse_iterator rbegin() { return reverse_iterator(end()); }
+        const_reverse_iterator rbegin() const { return reverse_iterator(end()); }
+        reverse_iterator rend() { return reverse_iterator(begin()); }
+        const_reverse_iterator rend() const { return reverse_iterator(begin()); }
         int size() const { return sz; }
         int max_size() const { return std::numeric_limits<int>::max(); }
         void resize(int sz, T c = T());
@@ -224,7 +164,11 @@ namespace ch14
     typename Vector<T>::iterator Vector<T>::insert(iterator pos, const T& x)
     {
         iterator copy = pos;
-        if(sz==cp) reserve(sz+1);
+        if(sz==cp) {
+            int diff = pos - p;
+            reserve(sz+1);
+            pos = p + diff;
+        }
         sz++;
         T tmp = *pos;
         *pos = x;
@@ -239,7 +183,11 @@ namespace ch14
     template<class T>
     void Vector<T>::insert(iterator pos, int n, const T& x)
     {
-        if(sz + n > cp) reserve(sz + n);
+        if(sz + n > cp) {
+            int diff = pos - p;
+            reserve(sz + n);
+            pos = p + diff;
+        }
         sz += n;
         for(int i = sz-1; i >= sz-n-1; i--)
             p[i] = p[i-n];
