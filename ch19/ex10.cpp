@@ -1,71 +1,13 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <cstddef>
+#include <iterator>
 
 // This vector implementation is re-used from ch14 ex7, but modified
 // to use an allocator.
 namespace ch19 {
-    template<class T, class A = std::allocator<T> > class Vector;
-
-    template<class T> class Iterator
-    {
-        int i;
-        Vector<T>* container;
-
-    public:
-        Iterator(int i, Vector<T>* container) : i(i), container(container) {}
-        T& operator*() { return (*container)[i]; }
-        const T& operator*() const { return *container[i]; }
-        T* operator->() { return &(*container)[i]; }
-        T const* operator->() const { return &*container[i]; }
-        Iterator<T>& operator++() { i++; return *this; }
-        Iterator<T> operator++(int) { Iterator<T> copy = *this; i++; return copy; }
-        Iterator<T>& operator--() { i--; return *this; }
-        Iterator<T> operator--(int) { Iterator<T> copy = *this; i--; return copy; }
-        Iterator<T>& operator+=(int x) { i += x; return *this; }
-        Iterator<T> operator+(int x) { Iterator<T> copy = *this; copy += x; return copy; }
-        Iterator<T>& operator-=(int x) { i -= x; return *this; }
-        Iterator<T> operator-(int x) { Iterator<T> copy = *this; copy -= x; return copy; }
-        bool operator<(const Iterator<T>& x) const { return i < x.i; }
-        bool operator>(const Iterator<T>& x) const { return i > x.i; }
-        bool operator<=(const Iterator<T>& x) const { return i <= x.i; }
-        bool operator>=(const Iterator<T>& x) const { return i >= x.i; }
-        bool operator==(const Iterator<T>& x) const { return i == x.i; }
-        bool operator!=(const Iterator<T>& x) const { return i != x.i; }
-        T& operator[](int idx) { return *container[i+idx]; }
-        const T& operator[](int idx) const { return *container[i+idx]; }
-    };
-
-    template<class T> class ReverseIterator
-    {
-        int i;
-        Vector<T>* container;
-
-    public:
-        ReverseIterator(int i, Vector<T>* container) : i(i), container(container) {}
-        T& operator*() { return (*container)[i]; }
-        const T& operator*() const { return *container[i]; }
-        T* operator->() { return &(*container)[i]; }
-        T const* operator->() const { return &*container[i]; }
-        ReverseIterator<T>& operator++() { i--; return *this; }
-        ReverseIterator<T> operator++(int) { ReverseIterator<T> copy = *this; i--; return copy; }
-        ReverseIterator<T>& operator--() { i++; return *this; }
-        ReverseIterator<T> operator--(int) { ReverseIterator<T> copy = *this; i++; return copy; }
-        ReverseIterator<T>& operator+=(int x) { i -= x; return *this; }
-        ReverseIterator<T> operator+(int x) { ReverseIterator<T> copy = *this; copy += x; return copy; }
-        ReverseIterator<T>& operator-=(int x) { i += x; return *this; }
-        ReverseIterator<T> operator-(int x) { ReverseIterator<T> copy = *this; copy -= x; return copy; }
-        bool operator<(const ReverseIterator<T>& x) const { return i < x.i; }
-        bool operator>(const ReverseIterator<T>& x) const { return i > x.i; }
-        bool operator<=(const ReverseIterator<T>& x) const { return i <= x.i; }
-        bool operator>=(const ReverseIterator<T>& x) const { return i >= x.i; }
-        bool operator==(const ReverseIterator<T>& x) const { return i == x.i; }
-        bool operator!=(const ReverseIterator<T>& x) const { return i != x.i; }
-        T& operator[](int idx) { return *container[i-idx]; }
-        const T& operator[](int idx) const { return *container[i-idx]; }
-    };
-
-    template<class T, class A> class Vector
+    template<class T, class A = std::allocator<T> > class Vector
     {
         static const int DefaultCapacity = 32;
         static const int ReallocFactor = 2;
@@ -79,10 +21,10 @@ namespace ch19 {
         class RangeError {};
         class SizeError {};
 
-        typedef Iterator<T> iterator;
-        typedef const Iterator<T> const_iterator;
-        typedef ReverseIterator<T> reverse_iterator;
-        typedef const ReverseIterator<T> const_reverse_iterator;
+        typedef T* iterator;
+        typedef const T* const_iterator;
+        typedef std::reverse_iterator<iterator> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
         Vector() : sz(0), cp(DefaultCapacity) {
             p = alloc.allocate(DefaultCapacity);
@@ -90,17 +32,20 @@ namespace ch19 {
         Vector(int size, const T& value = T()) ;
         Vector(const Vector<T,A>& x);
         template<class InputIterator> Vector(InputIterator first, InputIterator last);
-        ~Vector() { alloc.deallocate(p, cp); }
+        ~Vector() {
+            for(int i = 0; i < sz; i++) alloc.destroy(p + i);
+            alloc.deallocate(p, cp);
+        }
 
         Vector<T,A>& operator=(const Vector<T,A>& x);
-        iterator begin() { return iterator(0, this); }
-        const_iterator begin() const { return iterator(0, this); }
-        iterator end() { return iterator(sz, this); }
-        const_iterator end() const { return iterator(sz, this); }
-        reverse_iterator rbegin() { return reverse_iterator(sz-1, this); }
-        const_reverse_iterator rbegin() const { return reverse_iterator(sz-1, this); }
-        reverse_iterator rend() { return reverse_iterator(-1, this); }
-        const_reverse_iterator rend() const { return reverse_iterator(-1, this); }
+        iterator begin() { return p; }
+        const_iterator begin() const { return p; }
+        iterator end() { return p + sz; }
+        const_iterator end() const { return p + sz; }
+        reverse_iterator rbegin() { return reverse_iterator(p + sz); }
+        const_reverse_iterator rbegin() const { return reverse_iterator(p + sz); }
+        reverse_iterator rend() { return reverse_iterator(p); }
+        const_reverse_iterator rend() const { return reverse_iterator(p); }
         int size() const { return sz; }
         int max_size() const { return std::numeric_limits<int>::max(); }
         void resize(int sz, T c = T());
@@ -123,7 +68,7 @@ namespace ch19 {
         template<class InputIterator> void insert(iterator pos, InputIterator first, InputIterator last);
         iterator erase(iterator pos);
         iterator erase(iterator first, iterator last);
-        void swap(Vector<T>& x);
+        void swap(Vector<T,A>& x);
         void clear();
     };
 
@@ -131,14 +76,14 @@ namespace ch19 {
     Vector<T,A>::Vector(int size, const T& value) : sz(size), cp(size)
     {
         p = alloc.allocate(size);
-        for(int i = 0; i < sz; i++) p[i] = value;
+        for(int i = 0; i < sz; i++) alloc.construct(p + i, value);
     }
 
     template<class T, class A>
     Vector<T,A>::Vector(const Vector<T,A>& x) : sz(x.sz), cp(x.sz)
     {
         p = alloc.allocate(size);
-        for(int i = 0; i < sz; i++) p[i] = x.p[i];
+        uninitialized_copy(x.begin, x.end(), p);
     }
 
     template<class T, class A>
@@ -160,7 +105,7 @@ namespace ch19 {
             alloc.deallocate(p, cp);
             cp = sz = x.sz;
             p = alloc.allocate(sz);
-            for(int i = 0; i < sz; i++) p[i] = x.p[i];
+            std::uninitialized_copy(x.begin(), x.end(), p);
         }
         return *this;
     }
@@ -168,23 +113,15 @@ namespace ch19 {
     template<class T, class A>
     void Vector<T,A>::resize(int size, T c)
     {
-        if(size > sz)
-        {
-            int oldcp = cp;
-            if(size > cp) cp = size;
-
-            T* newp = alloc.allocate(cp);
-            for(int i = 0; i < sz; i++) newp[i] = p[i];
-            for(int i = sz; i < size; i++) newp[i] = c;
-            alloc.deallocate(p, oldcp);
-            p = newp;
+        if(size > cp)
+            reserve(size);
+        if(size > sz) {
+            for(int i = sz; i < size; i++)
+                alloc.construct(p + i, c);
         }
-        else if (size < sz)
-        {
-            T* newp = alloc.allocate(cp);
-            for(int i = 0; i < size; i++) newp[i] = p[i];
-            alloc.deallocate(p, cp);
-            p = newp;
+        else if (size < sz) {
+            for(int i = size; i < sz; i++)
+                alloc.destroy(p + i);
         }
         sz = size;
     }
@@ -197,7 +134,9 @@ namespace ch19 {
             int oldcp = cp;
             cp = n;
             T* newp = alloc.allocate(cp);
-            for(int i = 0; i < sz; i++) newp[i] = p[i];
+            std::uninitialized_copy(p, p + sz, newp);
+            for(int i = 0; i < sz; i++)
+                alloc.destroy(p + i);
             alloc.deallocate(p, oldcp);
             p = newp;
         }
@@ -209,10 +148,12 @@ namespace ch19 {
         if(n > cp)
         {
             cp = n;
+            for(int i = 0; i < sz; i++)
+                alloc.destroy(p + i);
             alloc.deallocate(p, cp);
             p = alloc.allocate(cp);
         }
-        for(int i = 0; i < n; i++) p[i] = u;
+        for(int i = 0; i < n; i++) p[i] = alloc.construct(p + i, u);
         sz = n;
     }
 
@@ -220,7 +161,7 @@ namespace ch19 {
     void Vector<T,A>::push_back(const T& u)
     {
         if(sz == cp) reserve(ReallocFactor * sz);
-        p[sz++] = u;
+        alloc.construct(p + (sz++), u);
     }
 
     template<class T, class A>
@@ -233,28 +174,36 @@ namespace ch19 {
     template<class T, class A>
     typename Vector<T,A>::iterator Vector<T,A>::insert(iterator pos, const T& x)
     {
-        iterator copy = pos;
-        if(sz==cp) reserve(sz+1);
-        sz++;
-        T tmp = *pos;
-        *pos = x;
-        while(pos != end())
-        {
-            pos++;
-            std::swap(tmp, *pos);
+        if(sz==cp) {
+            int diff = pos - p;
+            reserve(ReallocFactor * sz);
+            pos = p + diff;
         }
-        return copy;
+        sz++;
+        for(iterator i = end() - 1; i != pos; --i) {
+            alloc.construct(i, *(i - 1));
+            alloc.destroy(i - 1);
+        }
+        alloc.construct(pos, x);
+        return pos;
     }
 
     template<class T, class A>
     void Vector<T,A>::insert(iterator pos, int n, const T& x)
     {
-        if(sz + n > cp) reserve(sz + n);
+        if(sz + n > cp) {
+            int diff = pos - p;
+            reserve(sz + n);
+            pos = p + diff;
+        }
         sz += n;
-        for(int i = sz-1; i >= sz-n-1; i--)
-            p[i] = p[i-n];
-        for(int i = 0; i < n; i++)
+        for(iterator i = end() - 1; i != pos + n - 1; --i) {
+            alloc.construct(i, *(i - n));
+            alloc.destroy(i - n);
+        }
+        for(int i = 0; i < n; i++) {
             *(pos++) = x;
+        }
     }
 
     template<class T, class A>
@@ -284,7 +233,8 @@ namespace ch19 {
     {
         while(pos != end())
         {
-            *pos = *(pos+1);
+            alloc.destroy(pos);
+            alloc.construct(pos, *(pos+1));
             pos++;
         }
         sz--;
@@ -302,7 +252,8 @@ namespace ch19 {
             removed++;
             if(i2 != end())
             {
-                *i = *i2;
+                alloc.destroy(i);
+                alloc.construct(i, *i2);
                 i2++;
             }
             i++;
@@ -312,7 +263,7 @@ namespace ch19 {
     }
 
     template<class T, class A>
-    void Vector<T,A>::swap(Vector<T>& x)
+    void Vector<T,A>::swap(Vector<T,A>& x)
     {
         std::swap(cp, x.cp);
         std::swap(sz, x.sz);
@@ -322,7 +273,8 @@ namespace ch19 {
     template<class T, class A>
     void Vector<T,A>::clear()
     {
-        for(int i = 0; i < sz; i++) p[i].~T();
+        for(int i = 0; i < sz; i++) 
+            alloc.destroy(p + i);
         sz = 0;
     }
 }
