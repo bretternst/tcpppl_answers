@@ -1,0 +1,42 @@
+The question doesn't state whether non-member functions could be friends of
+the string class (and thus access its internals). Since it asks about
+efficiency, I'm going to assume that they cannot be friends.
+
+The iterator functions begin/end/rbegin/rend require access to internals to
+create an appropriate iterator, and making them non-member functions would
+make strings inconsistent with every other container.
+
+Since string iterators are random access, size(), length(), and empty() could
+be implemented as non-member functions by calling begin() and end() and
+comparing the iterator. This would have some overhead cost because iterators
+would be created and compared instead of just examining the internal length
+field. It would also be notationally awkward: length(str) vs. str.length().
+This is similar to strlen() and is more consistent with C style than C++
+style.
+
+append(), push_back(), erase(), and insert() require access to internals
+because they modify the underlying string. It's possible that append and
+push_back could simply be wrappers for insert(), in which case they could be
+made non-member functions with very little loss in efficiency. Append could
+also be implemented using a back_inserter. It may be a little notationally
+awkward, however, especially since copy() with a back-inserter would do the
+same exact thing. There'd be no reason to have a separate append() function.
+It is much more intuitive to simply have append be a member of string.
+
+copy() could be made a non-member functions since it could easily use
+iterators to copy characters to the output string. However, because it takes a
+size_t, it would not be consistent with other <algorithm> functions.
+
+The find() family of functions could, likewise, be nonmember functions, but
+their overloads would also be inconsistent with other <algorithm> functions. I
+suspect that loss of efficiency would be minimal, since any find algorithm is
+going to require a traversal of the string data. The same thing goes for
+compare().
+
+Finally, substr() would be pretty easy to implement as a non-member function;
+all it needs to do is reserve an output string of the required size and use
+random access iterators to copy the characters into place. Since the iterators
+mostly likely just reduce down to char pointers, it's hard to see how this
+would be slower. However, again, this is a string-specific function whose
+parameters would not match those of other <algorithm> functions, and in fact,
+a simple copy() with offset iterators would do the same job.

@@ -1,0 +1,22 @@
+There are many operations missing from the previous exercise. Implementing
+them all would be a full time job, as regular expressions are a complex
+mini-language. Seems excessive for a 2.5-point exercise. I'll just outline the
+major things here:
+- Instead of basic glob matching, '.' should refer to any character, and '?'
+  '+' and '*' should be modifiers that specify the number of characters to match
+  (zero/one, one, zero/many).
+- Regex captures and "or" syntax, e.g. (foo|bar)
+- Match specific numbers of a sub-pattern or character, e.g. '{3,2}'
+- Character classes like \w, \s, etc.
+- Ranges, like [A-Za-z0-9]
+- "Not" character set, like [^A-Z]
+- Anchors: ^ and $
+- Escaping: \.
+- Pattern modifiers like /pattern/g or /pattern/gi for global or case-insensitive matching.
+- Non-greedy * matching
+
+It's likely that the implementation from the previous exercise is much faster
+than a full regex implementation simply because it's incredibly simple.
+However, regex libraries can do more optimization to make up for this (for
+example, in many environments, regular expressions actually compile to
+bytecode or machine code).

@@ -1,0 +1,29 @@
+The string constructor does not allow you to create a string from a single
+character, but does allow you to append a single character via +=, or via
+append(1, c). I'm not convinced this is actually an irregularity because you
+could construct a string with a character using the string(size_t,char)
+overload, simply specifying 1 for the size. What is irregular is the fact that
+you can assign a single char to a string using operator=. This seems like an
+odd choice. If one were to eliminate this operation, then it would be somewhat
+inconsistent with operator+=, which is probably a valuable function to have.
+Either way you slice it, there will be some inconsistency somewhere. I would
+say that string could do without operator=(char) but its inclusion doesn't
+seem like a big problem to me.
+
+It could be worth having a ctor take a char with a default size value of 1:
+string(char,size_t n = 1). Was this not done because of potential overload
+ambiguitiies?
+
+The two functions, length() and size() that both do the same thing seems a
+little odd; I wonder what the history is there. Seems to be merely due to
+common intuition that a string has a "length" while containers have a "size".
+The use of one vs. the other comes down to preference and removing one would
+not provide any significant advantage.
+
+You can assign a string to a char* but you can't assign a char* to a string.
+While this is an irregularity, I believe it is also a good choice. Converting
+a string to a C-style string is a special operation that should be done
+explicitly. Because operating on the buffer returned by c_str() is undefined,
+doing "char* p = str" might give the impression that you could operate on the
+memory pointed to by p and have the changes reflected in the string itself.
+This would be a dangerous assumption to make.

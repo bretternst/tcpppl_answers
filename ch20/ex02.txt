@@ -1,0 +1,27 @@
+The differences between vector and string fall into two categories. The first
+is the type of data used with each. A string has constraints that a vector
+does not; for example, data types with user-defined operator= and copy
+constructors are not supported. This is likely because string manipulation is
+optimized for sequences of simple character values, so implementations may
+manipulate them by directly working with segments of memory.
+
+The elements of a string have char traits that provide more information about
+the type than does a vector (which cares less about its value type).
+
+The second major difference is how the user interacts with a string vs. a
+vector. The interface is more suited to working with offsets, as this is
+natural for a string. For example, many of the manipulation functions such as
+insert and erase take integer positions in addition to iterators.
+
+It is more common to use string functions rather than using standard
+algorithms because, as the author notes, the string as a whole usually has
+some inherent meaning, and individual elements (characters) typically cannot
+be taken out of context. Therefore, as the author notes, standard algorithms
+like sort() are mostly useless for strings.
+
+Finally, strings have some manipulation functions that are not applicable to
+general containers such as vector. For example, append() and +=, substr(),
+compare(), c_str(), and data(). This includes overloads that convert from
+C-style strings (const char *) which have no equivalent in a standard vector
+but exist to allow interoperability with C-style libraries and the use of
+string literals.
