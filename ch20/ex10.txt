@@ -1,0 +1,12 @@
+This question is extremely vague. Text processing could include a lot of
+things. I suppose these facilities would be handy:
+
+- Regex matching using a variety of different options (line-by-line, global,
+  case insensitivity, etc.) This could include regular expression substring
+  matches (captures) to assist with extracting values from a parsed string.
+- If we want to parse the text as if it were a delimited data file, it would
+  be nice to have functions to split the text into rows and columns using a
+  viariety of delimiters (either basic strings or regular expressions).
+- Text parsing functions to output a stream of tokens, useful for parsing
+  things like JSON, YAML, XML. The text processor could convert a basic string
+  of characters into a token stream.
