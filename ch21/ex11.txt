@@ -1,0 +1,11 @@
+To use both of the C and C++ libraries together, it would be necessary to get
+the underlying file handle of the stream buffers in the C++ library and use
+them with C library functions. Also, it would be necessary to use unbuffered
+C++ streams to prevent a call to a C function from reading/writing data out of
+order.
+
+If one combined exercise 8 with exercise 10, turned off buffering (by
+supplying a null buffer pointer to streambuf) and exposed the underlying fd
+(file descriptor), a user could use fdopen() to get a FILE structure for the
+same fd that the streambuf uses. At that point, standard stream operations
+(<< and >>) could be used alongside functions like fprintf.

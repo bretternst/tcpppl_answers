@@ -197,6 +197,8 @@ namespace ch21 {
     public:
         enum iostate { eofbit = 1, failbit = 2 };
 
+        ios() : state(0) { }
+
         bool good() { return !state; }
         bool eof() { return !(state & eofbit); }
         bool fail() { return !(state & failbit); }
@@ -294,6 +296,8 @@ namespace ch21 {
             fb.setbuf(buf, 1024);
             fb.open(file, ios_base::out);
         }
+        ~ofstream() { close(); }
+        void close() { fb.close(); }
     };
 
     class ifstream : public istream {
@@ -304,17 +308,20 @@ namespace ch21 {
             fb.setbuf(buf, 1024);
             fb.open(file, ios_base::in);
         }
+        ~ifstream() { close(); }
+        void close() { fb.close(); }
     };
 }
 
 int main() {
     using namespace ch21;
 
-    ofstream out("ex21.txt");
+    ofstream out("ex08.txt");
     for(int i = 0; i < 5; i++)
         out << i << ' ';
+    out.close();
 
-    ifstream in("ex21.txt");
+    ifstream in("ex08.txt");
     int i;
     while(in >> i) {
         std::cout << i << " ";
