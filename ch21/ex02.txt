@@ -1,0 +1,9 @@
+john smith
+123 fake st.
+fakeville, WA 98272
+jane doe
+234 fake st.
+blahblah, WA 98036
+baz bot
+555 fake st.
+boourns, or 98222
