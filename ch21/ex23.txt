@@ -1,0 +1,43 @@
+Input:
+1. User presses a key on the keyboard. This generates an interrupt at the
+hardware level which is handled by the Linux kernel. The exact process depends
+on the type of keyboard (USB, PS/2, etc.). Alternatively, a packet is received
+by the kernel which is passed to the SSH daemon handling the session. The
+keystroke is then handled by the TTY/PTY driver.
+
+2. The keystroke is made available to the user application via the tty that
+the terminal is connected to. This TTY/PTY acts as a file with a file
+descriptor (0 for stdin).
+
+3. When the application was started, a static initializer class creates cin,
+which uses a filebuf connected to stdin. When this filebuf underflows because
+of an operator>> or other read operation, it waits for stdin to provide data.
+The keystroke is read via the filebuf and passed back to cin (an istream).
+
+4. When cin is receiving a multi-character value, it may wait for more
+characters. For a single character, it will return, passing the value back to
+the application.
+
+Output:
+1. A character or string of characters is passed to cout, cerr or clog via an
+operator<< or similar write operation. These streams are connected to stdout
+and stderr through the same static initializer as cin.
+
+2. The ostream passes the character(s) to the filebuf.
+
+3. When the filebuf overflows, or is synced (or, in the case of cerr,
+immediately) the character is written to the stdout or stderr device using the
+file descriptors 1 or 2.
+
+4. The stderr and stdout file descriptors are both attached to a TTY/PTY
+device.  These characters are passed via the TTY/PTY device to the console via
+a display device (terminal emulator) driver or to a daemon such as SSH for
+transmission over the network back to the receiving terminal.
+
+In cases where characters don't go in and out from a console directly, there
+is a PTY (pseudo terminal) involved. This virtual device has two sides: a
+master and a slave. A program such as xterm or sshd is attached to the master
+and the slave is opened by the programs the user runs (bash, a C++ exercise,
+etc.)
+
+See "man pty" for details.
