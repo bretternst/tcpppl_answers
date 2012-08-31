@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include <iterator>
-#include <valarray>
 
 // Array indexes start at 1.
 // Added one of the slice types here for illustration.
@@ -20,20 +19,20 @@ namespace ch22 {
     };
 
     template<class T>
-    class valarray;
+    class Fort_array;
 
     template<class T>
     class slice_array {
-        friend class valarray<T>;
+        friend class Fort_array<T>;
 
-        valarray<T>* v;
+        Fort_array<T>* v;
         slice s;
     public:
         typedef T value_type;
         void operator=(const T&);
     private:
         slice_array();
-        slice_array(valarray<T>* v, slice s) : v(v), s(s) { };
+        slice_array(Fort_array<T>* v, slice s) : v(v), s(s) { };
         slice_array(const slice_array&);
         slice_array& operator=(const slice_array&);
     };
@@ -45,24 +44,24 @@ namespace ch22 {
     }
 
     template<class T>
-    class valarray {
+    class Fort_array {
         T* p;
         size_t sz;
     public:
-        valarray() : p(0), sz(0) { }
-        valarray(size_t n) : sz(n), p(new T[n]) { }
-        valarray(const valarray& x) : sz(x.sz), p(new T[x.sz]) { std::copy(x.p, x.p + x.sz, p); }
-        valarray(const T* s, size_t n) : sz(n), p(new T[n]) { std::copy(s, s + n, p); }
-        ~valarray() { delete[] p; }
+        Fort_array() : p(0), sz(0) { }
+        Fort_array(size_t n) : sz(n), p(new T[n]) { }
+        Fort_array(const Fort_array& x) : sz(x.sz), p(new T[x.sz]) { std::copy(x.p, x.p + x.sz, p); }
+        Fort_array(const T* s, size_t n) : sz(n), p(new T[n]) { std::copy(s, s + n, p); }
+        ~Fort_array() { delete[] p; }
 
-        valarray& operator=(const valarray<T>& x);
+        Fort_array& operator=(const Fort_array<T>& x);
         T& operator[] (size_t n) { return p[n - 1]; }
         const T& operator[] (size_t n) const { return p[n - 1]; }
         slice_array<T> operator[](slice s) {
             return slice_array<T>(this, s);
         }
-        valarray<T> operator[](slice s) const {
-            valarray<T> tmp(s.size());
+        Fort_array<T> operator[](slice s) const {
+            Fort_array<T> tmp(s.size());
             for(int i = 0; i < s.size(); i++)
                 tmp[i+1] = *this[s.start() + i * s.stride()];
             return tmp;
@@ -72,7 +71,7 @@ namespace ch22 {
     };
 
     template<class T>
-    inline valarray<T>& valarray<T>::operator=(const valarray<T>& x) {
+    inline Fort_array<T>& Fort_array<T>::operator=(const Fort_array<T>& x) {
         delete[] p;
         sz = x.sz;
         p = new T[sz];
@@ -81,49 +80,49 @@ namespace ch22 {
     }
 
     template<class T>
-    inline valarray<T> operator+(const valarray<T>& x, const valarray<T>& y) {
-        valarray<T> res(x.size());
+    inline Fort_array<T> operator+(const Fort_array<T>& x, const Fort_array<T>& y) {
+        Fort_array<T> res(x.size());
         for(int i = 1; i <= x.size(); i++)
             res[i] = x[i] + y[i];
         return res;
     }
 
     template<class T>
-    inline valarray<T> operator+(const valarray<T>& x, const T& y) {
-        valarray<T> res(x.size());
+    inline Fort_array<T> operator+(const Fort_array<T>& x, const T& y) {
+        Fort_array<T> res(x.size());
         for(int i = 1; i <= x.size(); i++)
             res[i] = x[i] + y;
         return res;
     }
 
     template<class T>
-    inline valarray<T> operator+(const T& x, const valarray<T>& y) {
+    inline Fort_array<T> operator+(const T& x, const Fort_array<T>& y) {
         return y + x;
     }
 
     template<class T>
-    inline valarray<T> operator*(const valarray<T>& x, const valarray<T>& y) {
-        valarray<T> res(x.size());
+    inline Fort_array<T> operator*(const Fort_array<T>& x, const Fort_array<T>& y) {
+        Fort_array<T> res(x.size());
         for(int i = 1; i <= x.size(); i++)
             res[i] = x[i] * y[i];
         return res;
     }
 
     template<class T>
-    inline valarray<T> operator*(const valarray<T>& x, const T& y) {
-        valarray<T> res(x.size());
+    inline Fort_array<T> operator*(const Fort_array<T>& x, const T& y) {
+        Fort_array<T> res(x.size());
         for(int i = 1; i <= x.size(); i++)
             res[i] = x[i] * y;
         return res;
     }
 
     template<class T>
-    inline valarray<T> operator*(const T& x, const valarray<T>& y) {
+    inline Fort_array<T> operator*(const T& x, const Fort_array<T>& y) {
         return y * x;
     }
 
     template<class T>
-    std::ostream& operator<<(std::ostream& out, const valarray<T>& x) {
+    std::ostream& operator<<(std::ostream& out, const Fort_array<T>& x) {
         out << "[ ";
         std::copy(&x[1], &x[1] + x.size(), std::ostream_iterator<double>(out, " "));
         out << "]";
@@ -136,7 +135,7 @@ int main() {
 
     double arr1[] = { 0, 1, 2, 3, 4 };
 
-    ch22::valarray<double> x(arr1, 5);
+    ch22::Fort_array<double> x(arr1, 5);
     x[1] = 10;
     x[5] = 15;
     x[ch22::slice(2,3,1)] = 5;
