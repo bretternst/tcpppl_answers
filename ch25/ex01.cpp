@@ -24,7 +24,19 @@ namespace ch25 {
         static Io_obj* new_io(istream& s) { return new Io(s); }
     };
 
-    // For built-in scalar types
+    // Specialization for int (this would have to be repeated for each built-in type)
+    template<>
+    class Io<int> : public Io_obj {
+        int x;
+    public:
+        Io_obj* clone() const { return new Io(*this); }
+        Io(istream& s) { s >> x; }
+        operator int() const { return x; }
+        static Io_obj* new_io(istream& s) { return new Io(s); }
+    };
+
+    // Another way to do it; doesn't require specialization for every built-in type,
+    // but requires the use of a different template.
     template<class T>
     class Io_scalar : public Io_obj {
         T x;
@@ -64,7 +76,8 @@ namespace ch25 {
     }
 
     typedef Io<Test> Io_test;
-    typedef Io_scalar<int> Io_int;
+    typedef Io<int> Io_int;
+    typedef Io_scalar<int> Io_scalar_int;
 }
 
 int main() {
@@ -73,14 +86,18 @@ int main() {
 
     io_map["Test"] = Io_test::new_io;
     io_map["int"] = Io_int::new_io;
+    io_map["int_scalar"] = Io_scalar_int::new_io;
 
-    string data = "Test 42 int 43";
+    string data = "Test 42 int 43 int_scalar 44";
     istringstream in(data);
     Io_obj* to = get_obj(in);
     Test* t = dynamic_cast<Test*>(to);
     if(t)
         cout << t->get() << endl;
     to = get_obj(in);
-    int i = *dynamic_cast<Io_scalar<int>*>(to);
+    int i = *dynamic_cast<Io<int>*>(to);
+    cout << i << endl;
+    to = get_obj(in);
+    i = *dynamic_cast<Io_scalar<int>*>(to);
     cout << i << endl;
 }
