@@ -1,0 +1,52 @@
+Magick++
+-------------
+Concrete types: Blob (stores binary data for images, Color, Geometry, Image, Coordinate
+Abstract types: Drawable, Exception
+Node classes: DrawableCircle, DrawableRectangle, Warning, ErrorFileOpen
+Handle classes: In some ways, blob acts as a handle class because it is responsible for managing a large byte array internally.
+Interface classes: Pixels and PixelPacket provide an interface to manipulate areas of an image.
+
+Are abstract node classes and concrete classes used?
+Yes
+
+Is there a more appropriate classification for classes in these libraries?
+No
+
+Are fat interfaces used?
+No
+
+What facilities are provided for runtime type information?
+I did not find anything of particular note.
+
+What is the memory management strategy?
+From the user's perspective, the memory strategy is standard. The library does some reference counting on the image data so that it can be efficiently manipulated by several classes without duplication.
+
+
+OGRE 3D
+-------------
+Concrete types: Angle, BitArray, ColourValue, Matrix*, Vector*, AllocatedObject<T> (base of most 'game object' classes)
+Abstract types: Exception, GLES2Context, Renderable
+Node classes: IOException, InternalErrorException, etc., AndroidGLContext, Win32EGLContext, X11EGLContext, Resource, Font, Material, etc., Timer, VertexData, ....
+Handle classes:
+Interface classes:
+
+Are abstract node classes and concrete classes used?
+Yes
+
+Is there a more appropriate classification for classes in these libraries?
+Derivation from certain abstract classes classifies an object in a particular category, which is appropriate for OOP. For example, something deriving from Renderable is visible to the user; whereas things that do not are still entities but are invisible (e.g., Timer).
+
+Are fat interfaces used?
+No
+
+What facilities are provided for runtime type information?
+Standard C++ facilities. 
+
+What is the memory management strategy?
+Ogre provides several memory allocation strategies that can be used depending on the requirements of the target platform and the application. Classes that want to use the custom allocation policies must derive from Ogre::AllocatedObject<Alloc>. Alloc may be:
+StdAllocPolicy
+StdAlignedAllocPolicy
+NedAllocPolicy
+NedPoolingPolicy
+NedPoolingAlignedPolicy (these three use nedmalloc, a performance optimized memory allocator).
+The user can supply their own allocation policy as well.
