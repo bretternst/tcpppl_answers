@@ -22,9 +22,29 @@ namespace ch25 {
     };
 
     template<class O>
+    class Class;
+
+    template<class O>
     class Object {
+        Class<O>* cls;
         std::map<std::string, Oper<O> > m_opers;
         O obj;
+
+        template<class P>
+        friend class Class;
+
+        Object(Class<O>* cls) : cls(cls) { }
+    public:
+        void operator()(const std::string& id, void* arg) {
+            (*cls)(obj, id, arg);
+        }
+    };
+
+    // Well, this pattern is looking familiar!
+    template<class O>
+    class Class {
+        std::map<std::string, Oper<O> > m_opers;
+
     public:
         void add_oper(const Oper<O>& oper) {
             m_opers[oper.id()] = oper;
@@ -34,11 +54,15 @@ namespace ch25 {
             m_opers.erase(id);
         }
 
-        void operator()(const std::string& id, void* arg) {
+        void operator()(O& obj, const std::string& id, void* arg) {
             typename std::map<std::string, Oper<O> >::iterator i = m_opers.find(id);
             if(i != m_opers.end()) {
                 i->second.func()(obj, arg);
             }
+        }
+
+        Object<O> create() {
+            return Object<O>(this);
         }
     };
 
@@ -68,23 +92,24 @@ int main() {
 
     Func_push fpush;
     Func_pop fpop;
-    Object<String_vector> opers;
-    opers.add_oper(Oper<String_vector>("push", &fpush));
-    opers.add_oper(Oper<String_vector>("pop", &fpop));
+    Class<String_vector> cls;
+    cls.add_oper(Oper<String_vector>("push", &fpush));
+    cls.add_oper(Oper<String_vector>("pop", &fpop));
+    Object<String_vector> obj = cls.create();
 
     string s1("foo");
     string s2("bar");
     string s3("baz");
 
-    opers("push", &s1);
-    opers("push", &s2);
-    opers("push", &s3);
+    obj("push", &s1);
+    obj("push", &s2);
+    obj("push", &s3);
 
     string s;
-    opers("pop", &s);
+    obj("pop", &s);
     cout << "popped " << s << '\n';
-    opers("pop", &s);
+    obj("pop", &s);
     cout << "popped " << s << '\n';
-    opers("pop", &s);
+    obj("pop", &s);
     cout << "popped " << s << '\n';
 }
