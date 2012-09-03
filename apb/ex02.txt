@@ -1,0 +1,18 @@
+This one is far more trouble than it's worth. It requires either writing a
+simple C lexer or using some really gnarly regular expressions. To do
+efficient regex replace on my system, I'd have to link boost and stuff.
+Insted, I'm just going to describe a general (messy) approach here:
+
+- Replace C++ keywords with some kind of prefix. For example, replace "new"
+  with "c_new". One would need to capture possible surrounding chars. For
+  example:
+  [ \(\[,=]](new)[ \)\],=] -> replace () match with c_new
+
+- Replace (\w+)\s*\s(\w+)=\s*malloc\s\(.*\) with $1* $2 = new $1()
+  This of course assumes that only a single object is being allocated with
+  malloc and not an array.
+
+There are far too many corner cases to make this even remotely useful. Without
+writing a really advanced tool, it's much better for a human being to do this.
+Otherwise, you're going to spend more time fixing bugs than doing the
+conversion.
