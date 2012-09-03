@@ -1,0 +1,2 @@
+Rather than include someone else's code rewritten here, I'm going to skip this
+one and refer the reader to appendix C for the general principles involved.

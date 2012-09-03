@@ -1,0 +1,3 @@
+Ditto the previous exercise; finding some program converted to C++ and fixing
+it up and/or critisizing it should involve many of the issues discussed in
+appendix C.
