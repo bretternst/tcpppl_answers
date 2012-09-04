@@ -1,3 +1,4 @@
-See my comments for the previous exercise. This one is a bit more valid, but i
-just don't feel that this is productive. If flexible string-to-date processing
-is required, use a library.
+I don't feel like I'm getting much from this particular exercise other than a
+lot of potential bugs. My advice: if you want lots of date formatting
+flexibility, use a library. Otherwise, you will spend a lot of time fixing
+bugs.

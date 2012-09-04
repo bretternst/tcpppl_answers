@@ -1,0 +1,14 @@
+The second implementation of Season_io shifts some of the responibility for
+maintaining the names of seasons to the system rather than the application
+developer. I have mixed feelings on whether this is an appropriate use of the
+messages interface. The ability to display seasons seems like a very
+application-dependent requirement. Unlike dates, numbers, currency, etc., I've
+never seen the requirement before.
+
+It's likely that if an application needs to localize the names of seasons, it
+will need to localize a lot of other things too. It may be more appropriate to
+use some custom localized string database that can be deployed alongside each
+localized version of the app. Strings could be pulled in there and used with a
+season facet. I dislike applications that have to change the system
+configuration, such as localization files. It's less portable and more prone
+to trouble.
