@@ -1,0 +1,8 @@
+The "locale -a" command produces the following:
+C
+C.UTF-8
+en_US.utf8
+POSIX
+
+Most distributions have scripts to install additional language packs, which
+would add to this list.

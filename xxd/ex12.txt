@@ -1,0 +1,1 @@
+On my system, locales are available under /usr/share/i18n/locales

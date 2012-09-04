@@ -1,0 +1,3 @@
+See my comments for the previous exercise. This one is a bit more valid, but i
+just don't feel that this is productive. If flexible string-to-date processing
+is required, use a library.

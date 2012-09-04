@@ -1,0 +1,12 @@
+Rather than implement the answer as directed, I'm going to talk about why this
+is a bad idea. I don't believe programs should "guess" the intent of the user
+or input; rather, the user should be guided to produce a valid input. For
+example, a month drop-down or a field with immediate feedback when something
+invalid is input.
+
+Even when dealing with an input such as a text file, trying to guess the
+correct meaning of values and catching "most" of the mistakes is a bad idea.
+It's only going to lead to trouble. It could be worth writing something to
+assist with cleaning up ambiguous dates, but I don't believe this is
+appropriate for a locale facet. It would result in surprises, and stream input
+functions should not result in surprises.

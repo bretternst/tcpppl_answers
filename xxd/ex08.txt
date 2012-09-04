@@ -1,0 +1,12 @@
+Date outputs are formatted using a string, so it's quite flexible, but the
+"standard" formatting (format 'x') is also the format expected for inputs. On
+my system, the only format seems to be the following:
+
+MM/DD/YYYY or MM/DD/YY
+
+It's very strict about the length; MM and DD both have to be two digits, so
+it's necessary to pad it with zeros:
+01/05/84 or 01/05/1984
+
+On output, the year seems to always be truncated to two digits. Didn't we
+learn a lesson about that?
