@@ -1,8 +1,9 @@
 #include <locale>
 #include <iostream>
 
-// This page was very helpful:
-// http://rosettacode.org/wiki/Roman_numerals/Decode#C.2B.2B
+// This site was very helpful:
+// http://rosettacode.org/wiki/Roman_numerals/Encode
+// http://rosettacode.org/wiki/Roman_numerals/Decode
 namespace xxd {
     class Roman_numerals_get : public std::num_get<char> {
     public:
