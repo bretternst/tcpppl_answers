@@ -1,0 +1,7 @@
+bad_alloc
+any exception thrown by the default or copy ctor of X.
+any exception thrown by operator= of X.
+any exception thrown by operator< of X.
+
+Is the complete list of possible exceptions simply "all exceptions"? Am I
+missing something here?

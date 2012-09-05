@@ -1,0 +1,39 @@
+void f(vector<X>& v, const X& g) {
+    v[2] = g;
+    v.push_back(g);
+    sort(v.begin(), v.end());
+    vector<X> u = v;
+}
+
+* What happens if the assignment throws an exception while trying to copy g?
+The assignment will halt and an exception will propagate.
+
+* Will v be left with an invalid element?
+Only if the operator= method left the element in an invalid state. A properly
+written operator= will leave the element in a valid state, and preferrably and
+unmodified state.
+
+* What happens if the ctor that v.push_back() uses to copy g throws
+std::bad_alloc?
+The new element is not constructed, nothing is done to the vector, and an
+exception propagates. push_back() offers the strong guarantee.
+
+* Has the number of elements changed?
+No
+
+* Has an invalid element been added to the container?
+No
+
+* What happens if X's less-than operator throws an exception during the sort?
+The sort operation will stop and an exception will propagate.
+
+* Have the elements been partially sorted? 
+Possibly; the only guarantee is that the container and elements are in a valid
+state, but not necessarily the desired valid state. They may be sorted, mostly
+sorted, or not sorted at all.
+
+* Could an element have been removed from the container by the sorting algorithm
+and not put back?
+Algorithms do not remove elements from containers, but they may move them
+around or change their values. In this case, it's possible, for example, that
+the container may end up with a duplicated element.
