@@ -1,0 +1,6 @@
+As with the previos exercise, I don't believe this is feasible or worth the
+attempt. If an operation requires forward iteration and it fails, then either
+forward iteration (again) is required to clean it up, or backward iteration.
+You'll have no idea what state the iterator is in. You'd be left using a
+fresh copy of the iterator (from a function arg?) and hoping that it won't
+throw again at some other point.

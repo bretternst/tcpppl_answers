@@ -1,0 +1,5 @@
+I don't believe this is possible or even worth the attempt. If a destructor
+fails, then what? Keep going and try to destruct the rest of the elements and
+hope that's "close enough"? There's no feasible way to put the object back
+into a valid state if your tools for "backing out" of an operation can also
+throw.

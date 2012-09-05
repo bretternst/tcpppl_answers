@@ -1,0 +1,11 @@
+I took a look at QVector from the Qt library. It provides an interface
+extremely similar to the standard vector. 
+
+Qt containers are exception neutral (transparent).
+
+As with standard vector, a valid internal state is always guaranteed (Qt
+provides the basic guarantee). However, according to the documentation, for
+ALL containers, assignment and copy operations are expected not to throw or
+the contents of the container may be unexpected to the user.
+
+In summary, pretty much the same as the standard library.

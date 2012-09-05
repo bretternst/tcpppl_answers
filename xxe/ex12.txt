@@ -1,0 +1,3 @@
+I can't think of a way to do this without involving some temporary copy of the
+vector. Inserting at any place other than the end necessarily requires moving
+existing elements. Any of the copy constructors could throw.
