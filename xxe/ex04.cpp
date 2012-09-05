@@ -27,7 +27,7 @@ namespace xxe {
 
     template<class T, class A>
     void vector<T,A>::destroy_all() {
-        for(T* p = v; p != last; p++)
+        for(T* p = last - 1; p >= v; --p)
             alloc.destroy(p);
     }
 
@@ -40,13 +40,24 @@ namespace xxe {
         }
         catch(...) {
             alloc.deallocate(v, n);
+            std::cout << "ctor erroring out" << std::endl;
             throw;
         }
     }
 
     class Test_error { };
     struct Test {
+        static int count;
+        Test() { }
+        Test(const Test& x) {
+            if(++count == 5)
+                throw Test_error();
+        }
+        ~Test() {
+            std::cout << "destruct!" << std::endl;
+        }
     };
+    int Test::count = 0;
 }
 
 int main() {
