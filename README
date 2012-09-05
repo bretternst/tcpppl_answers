@@ -1,0 +1,7 @@
+This is a collection of my answers to exercises from "The C++ Programming Language" by Bjarne Stroustrup. 
+
+I do NOT claim to be a master of C++, so you may find some these answers to be incomplete, buggy or wrong. My goal was to learn and be comfortable with all facets of the language, but that was balanced by not wanting to spend the rest of my career on these exercises. Consequently, most of them contain only a few simple tests. I consider this repository a work in progress and would gladly accept new and better answers to any of the questions.
+
+Please note that many of the answers do not conform to best practice because not all principles were introduced at that point in the material. Some things could use much better techniques introduced at later points in the book. I felt it best to leave these as-is.
+
+My execution environment was Linux, so a number of the answers require GCC and X11 (and libraries not found on Windows).
