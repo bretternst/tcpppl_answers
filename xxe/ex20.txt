@@ -1,0 +1,19 @@
+Normal invariants:
+- v must point to an allocated area of memory
+- alloc must be a valid allocator for T
+- space must be equal to or greater than v
+- last must be equal to or greater than v and must point to one past the last
+  properly constructed element (or v if there are no elements)
+- all elements between v and last-1 must be valid
+
+Modified v = 0 variants:
+- v must be zero or point to an allocated area of memory
+- alloc must be a valid allocator for T
+- space must be equal to or greater than v, or zero if v is zero
+- last must be equal to or greater than v and must point to one past the last
+  properly constructed element, or v if there are no elements - or zero if v is zero
+- if v != 0, all elements between v and last-1 must be valid
+- if v == 0, the size of the container is 0 and there must be no constructed
+  elements
+- It is an error to access or modify elements when v = 0; begin() and end()
+  iterators must both return 0.

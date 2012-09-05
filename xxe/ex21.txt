@@ -1,0 +1,6 @@
+The implementation on my machine has the following guarantees:
+
+- operator= provides the strong guarantee if copy doesn't throw
+- multi-elem insert appears to provide the strong guarantee if copy doesn't
+  throw
+- resize provides a strong guarantee
