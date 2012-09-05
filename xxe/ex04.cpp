@@ -2,13 +2,7 @@
 #include <cstddef>
 #include <memory>
 
-// This exercise doesn't seem very useful. There are a few ways to make it "crash" - e.g. by
-// allocating tons of huge elements and running out of memory. But surely that's not what the
-// author meant. I also assume the author isn't talking about destructors throwing exceptions
-// or bogus values supplied to the constructor (like zero) or allocator copy ctors throwing.
-// All of these things could make it "crash" if unhandled, but those aren't errors in the ctor.
-//
-// If there is an error in the constructor, I can't find it.
+// I'd really love to know what the error is here; I must be missing something stupidly obvious!
 namespace xxe {
     template<class T, class A = std::allocator<T> >
     class vector {
