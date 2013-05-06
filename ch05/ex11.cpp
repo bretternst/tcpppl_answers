@@ -1,35 +1,34 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <set>
-
+#include <algorithm>
 using namespace std;
 
-int main()
-{
-    string s;
-    vector<string> words;
-    set<string> sortedWords;
+void display(const vector<string>& v ) {
+    typedef vector<string>::const_iterator vi;
+	
+	for(vi i=v.begin(); i!=v.end(); i++) cout << *i << "\t";
+	cout << endl;
+	}
 
-    cin >> s;
-    while (s != "Quit")
-    {
-        if (sortedWords.insert(s).second)
-        {
-            words.push_back(s);
-        }
-        cin >> s;
-    }
-
-    cout << "In entered order:" << endl;
-    for(vector<string>::const_iterator i = words.begin(); i != words.end(); i++)
-    {
-        cout << *i << endl;
-    }
-
-    cout << "In sorted order: " << endl;
-    for(set<string>::const_iterator i = sortedWords.begin(); i != sortedWords.end(); i++)
-    {
-        cout << *i << endl;
-    }
-}
+int main(void ) {
+	
+	string s;
+	vector<string> vs;
+	
+	cin >> s;
+	while(s != "quit" ) {
+		vs.push_back(s );
+		cin >> s;
+		}
+	
+	sort(vs.begin(), vs.end() );	
+	display(vs);
+	
+	vector<string> tmp;
+	unique_copy(vs.begin(), vs.end(), back_inserter(tmp) );
+	
+	display(tmp);
+	
+	return 0;
+	}
